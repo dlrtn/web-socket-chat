@@ -4,7 +4,11 @@ plugins {
 	id 'java'
 }
 
+<<<<<<< Updated upstream
 group = 'com.websocket'
+=======
+group = 'web-socket-chat'
+>>>>>>> Stashed changes
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -18,6 +22,7 @@ repositories {
 	mavenCentral()
 }
 
+<<<<<<< Updated upstream
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -36,5 +41,32 @@ dependencies {
 }
 
 tasks.named('test') {
+=======
+ext{
+	apache_common_version = "3.4"
+	springdoc_openapi_version = "1.5.2"
+}
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation "org.springframework.boot:spring-boot-starter-websocket"
+	implementation "org.springframework.boot:spring-boot-starter-validation"
+	implementation "org.apache.commons:commons-lang3:$rootProject.ext.apache_common_version"
+	implementation "org.springdoc:springdoc-openapi-ui:$rootProject.ext.springdoc_openapi_version"
+
+	compileOnly 'org.projectlombok:lombok'
+
+	runtimeOnly 'com.h2database:h2'
+
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+
+
+tasks('test') {
+>>>>>>> Stashed changes
 	useJUnitPlatform()
 }
