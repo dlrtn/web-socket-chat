@@ -20,7 +20,12 @@ repositories {
 
 ext{
 	apache_common_version = "3.4"
+	spring_jdbc = "5.3.14"
 	springdoc_openapi_version = "1.5.2"
+	mybatis_spring = "1.3.2"
+	mybatis_spring_boot_starter = "1.3.2"
+	mybatis_typehandlers_jsr310 = "1.0.2"
+	mariadb_java_client = "2.7.3"
 }
 
 dependencies {
@@ -29,6 +34,11 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-validation"
 	implementation "org.apache.commons:commons-lang3:$rootProject.ext.apache_common_version"
 	implementation "org.springdoc:springdoc-openapi-ui:$rootProject.ext.springdoc_openapi_version"
+	implementation "org.springframework:spring-jdbc:$rootProject.ext.spring_jdbc"
+	implementation "org.mybatis.spring.boot:$rootProject.ext.mybatis_spring_boot_starter"
+	implementation "org.mybatis:mybatis-typehandlers-jsr310:$rootProject.ext.mybatis_typehandlers_jsr310"
+	implementation "org.mariadb.jdbc:mariadb-java-client:$rootProject.ext.mariadb_java_client"
+	implementation "org.mybatis:mybatis-spring:$rootProject.ext.mybatis_spring"
 
 	compileOnly 'org.projectlombok:lombok'
 
