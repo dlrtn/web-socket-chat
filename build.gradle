@@ -19,6 +19,13 @@ repositories {
 }
 
 ext {
+    mariadb_java_client_version = "2.3.0"
+    mybatis_spring_boot_starter_version = "2.2.0"
+    mybatis_typehandlers_jsr310_version = "1.0.2"
+    mybatis_spring_version = "2.0.6"
+
+
+    // general development support library
     commons_collection_version = "4.4"
     commons_lang_version = "3.12.0"
     springdoc_openapi_version = "1.6.6"
@@ -29,6 +36,19 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-websocket"
     implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-jdbc"
+
+    // thymeleaf
+    implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
+
+    // mybatis
+    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatis_spring_boot_starter_version"
+    implementation "org.mybatis:mybatis-typehandlers-jsr310:$mybatis_typehandlers_jsr310_version"
+    implementation "org.mybatis:mybatis-spring:$mybatis_spring_version"
+
+    // mariadb
+    implementation "org.mariadb.jdbc:mariadb-java-client:$mariadb_java_client_version"
 
     // general development support library
     implementation "org.apache.commons:commons-collections4:$commons_collection_version"
@@ -36,6 +56,7 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-ui:$springdoc_openapi_version"
 
     runtimeOnly "com.h2database:h2"
+    runtimeOnly "mysql:mysql-connector-java:8.0.25"
 
     compileOnly "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"
