@@ -1,5 +1,4 @@
 springdoc:
-
   swagger-ui:
     display-request-duration: true
     doc-expansion: none
