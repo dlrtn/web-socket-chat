@@ -1,13 +1,13 @@
-package websocketchat.websocketchat;
+package com.dlrtn.websocket.chat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WebSocketChatApplication {
+public class WebsocketChatApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WebSocketChatApplication.class, args);
+		SpringApplication.run(WebsocketChatApplication.class, args);
 	}
 
 }
