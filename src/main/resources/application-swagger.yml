@@ -1,0 +1,6 @@
+springdoc:
+  swagger-ui:
+    display-request-duration: true
+    doc-expansion: none
+    operations-sorter: method
+    path: swagger.html
