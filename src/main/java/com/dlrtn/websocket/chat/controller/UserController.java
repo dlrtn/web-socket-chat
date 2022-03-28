@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.controller;
 
 import com.dlrtn.websocket.chat.service.UserService;
-import com.dlrtn.websocket.chat.vo.UserVo;
+import com.dlrtn.websocket.chat.vo.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,8 +31,8 @@ public class UserController {
      * @return
      */
     @PostMapping("/signUp")
-    public String signUp(UserVo userVo) {
-        userService.joinUser(userVo);
+    public String signUp(User user) {
+        userService.joinUser(user);
         return "redirect:/login"; //로그인 구현 예정
     }
 }

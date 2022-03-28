@@ -5,7 +5,22 @@
 <mapper namespace="com.dlrtn.websocket.chat.mapper.UserMapper">
     <insert id="saveUser" parameterType="com.dlrtn.websocket.chat.vo.UserVo">
         INSERT INTO TB_USER
-        (USER_ID, USER_PW, USER_NAME, USER_AUTH, APPEND_DATE, UPDATE_DATE)
-        VALUES(#{userId},#{userPw},#{userName},#{userAuth},#{appendDate},#{updateDate});
+        (
+        USER_ID,
+        USER_PW,
+        USER_NAME,
+        USER_AUTH,
+        APPEND_DATE,
+        UPDATE_DATE
+        )
+        VALUES
+        (
+        #{userId},
+        #{userPw},
+        #{userName},
+        #{userAuth},
+        #{appendDate},
+        #{updateDate}
+        );
     </insert>
 </mapper>
