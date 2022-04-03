@@ -19,4 +19,33 @@
 			#{updateAt}
 		)
 	</insert>
+
+	<select id="findUserByUsername" parameterType="String" resultType="User">
+	    SELECT
+            USER_NO,
+            USER_ID,
+            USER_PW,
+            USER_NAME,
+            USER_AUTH,
+            APPEND_DATE,
+            UPDATE_DATE
+        FROM
+            TB_USER
+        WHERE
+            USER_ID=#{username}
+	</select>
+
+
+	<select id="findAllUsers" resultType="User">
+		SELECT
+			USER_NO,
+			USER_ID,
+			USER_PW,
+			USER_NAME,
+			USER_AUTH,
+			APPEND_DATE,
+			UPDATE_DATE
+		FROM
+			TB_USER
+	</select>
 </mapper>
