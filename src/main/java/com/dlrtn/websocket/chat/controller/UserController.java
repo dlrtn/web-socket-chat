@@ -14,18 +14,18 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class UserController {
-	private final UserService userService;
+    private final UserService userService;
 
-	@Operation
-	@GetMapping("/signUp")
-	public String signUpForm() {
-		return "signup";
-	}
+    @Operation
+    @GetMapping("/signUp")
+    public String signUpForm() {
+        return "signup";
+    }
 
-	@Operation
-	@PostMapping("/signUp")
-	public String signUp(@RequestBody User user) {
-		userService.joinUser(user);
-		return "redirect:/login"; //로그인 구현 예정
-	}
+    @Operation
+    @PostMapping("/signUp")
+    public String signUp(@RequestBody User user) {
+        userService.joinUser(user);
+        return "redirect:/login"; //로그인 구현 예정
+    }
 }
