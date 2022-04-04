@@ -1,6 +1,6 @@
 spring:
   datasource:
     url: jdbc:mariadb://13.209.4.83:3306/study_db
-    username: dlrtn
+    username : dlrtn
     password: jj5514
     driver-class-name: org.mariadb.jdbc.Driver
