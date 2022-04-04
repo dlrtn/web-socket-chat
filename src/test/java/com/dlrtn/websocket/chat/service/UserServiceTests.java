@@ -20,9 +20,7 @@ public class UserServiceTests {
     User user;
 
     @Autowired
-    private  UserMapper userMapper;
-
-
+    private UserMapper userMapper;
     @Test
     void 마이바티스_테스트() {
         LocalDateTime now = LocalDateTime.now();
@@ -30,7 +28,7 @@ public class UserServiceTests {
 
         user.toBuilder()
                 .userNo(50)
-                .username("dlrtn")
+                .id("dlrtn")
                 .password("1234")
                 .realName("wndlrtn")
                 .authRole("user")
@@ -39,7 +37,6 @@ public class UserServiceTests {
                 .build();
 
         userMapper.saveUser(user);
-
-
     }
+
 }

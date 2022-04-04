@@ -2,26 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dlrtn.websocket.chat.mapper.UserMapper">
-	<insert id="saveUser" parameterType="User">
-		INSERT INTO TB_USER (
-			USER_ID,
-			USER_PW,
-			USER_NAME,
-			USER_AUTH,
-			APPEND_DATE,
-			UPDATE_DATE
-		) VALUES (
-		    #{username},
-			#{password},
-			#{realName},
-			#{authRole},
-			#{appendAt},
-			#{updateAt}
-		)
-	</insert>
+    <insert id="saveUser" parameterType="User">
+        INSERT INTO TB_USER (
+            USER_ID,
+            USER_PW,
+            USER_NAME,
+            USER_AUTH,
+            APPEND_DATE,
+            UPDATE_DATE
+        ) VALUES (
+            #{id},
+            #{password},
+            #{realName},
+            #{authRole},
+            #{appendAt},
+            #{updateAt}
+        )
+    </insert>
 
-	<select id="findUserByUsername" parameterType="String" resultType="User">
-	    SELECT
+    <select id="findUserById" parameterType="String" resultType="User">
+        SELECT
             USER_NO,
             USER_ID,
             USER_PW,
@@ -32,20 +32,20 @@
         FROM
             TB_USER
         WHERE
-            USER_ID=#{username}
-	</select>
+            USER_ID = #{id}
+    </select>
 
 
-	<select id="findAllUsers" resultType="User">
-		SELECT
-			USER_NO,
-			USER_ID,
-			USER_PW,
-			USER_NAME,
-			USER_AUTH,
-			APPEND_DATE,
-			UPDATE_DATE
-		FROM
-			TB_USER
-	</select>
+    <select id="findAllUsers" resultType="User">
+        SELECT
+            USER_NO,
+            USER_ID,
+            USER_PW,
+            USER_NAME,
+            USER_AUTH,
+            APPEND_DATE,
+            UPDATE_DATE
+        FROM
+            TB_USER
+    </select>
 </mapper>

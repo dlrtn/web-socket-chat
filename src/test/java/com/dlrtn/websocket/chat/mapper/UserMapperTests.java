@@ -20,7 +20,7 @@ public class UserMapperTests {
     private UserMapper userMapper;
 
     private final User TEST_USER = User.builder()
-            .username("test-user")
+            .id("test-user")
             .password("test-user-pw")
             .realName("test-name")
             .authRole("USER")
@@ -35,7 +35,7 @@ public class UserMapperTests {
         String formattedNow = TimeUtils.formatter.format(now);
 
         User user = TEST_USER.toBuilder()
-                .username("dlrtn")
+                .id("dlrtn")
                 .password("1234")
                 .realName("wndlrtn")
                 .authRole("user")
@@ -47,14 +47,15 @@ public class UserMapperTests {
 
         List<User> allUsers = userMapper.findAllUsers();
 
-        User foundUser = userMapper.findUserByUsername("dlrtn");
+        User foundUser = userMapper.findUserById("dlrtn");
 
-        Assertions.assertEquals(foundUser.getUsername(), user.getUsername());
-        Assertions.assertEquals(foundUser.getPassword(), user.getPassword());
-        Assertions.assertEquals(foundUser.getRealName(), user.getRealName());
-        Assertions.assertEquals(foundUser.getAuthRole(), user.getAuthRole());
-        Assertions.assertEquals(foundUser.getAppendAt(), user.getAppendAt());
-        Assertions.assertEquals(foundUser.getUpdateAt(), user.getUpdateAt());
+        Assertions.assertAll("user",
+                () -> Assertions.assertEquals(foundUser.getId(), "dlrtn"),
+                () -> Assertions.assertEquals(foundUser.getPassword(), "1234"),
+                () -> Assertions.assertEquals(foundUser.getRealName(), "wndlrtn"),
+                () -> Assertions.assertEquals(foundUser.getAuthRole(), "user"));
+
+
     }
 
 }
