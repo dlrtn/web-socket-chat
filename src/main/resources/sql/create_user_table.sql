@@ -1,5 +1,4 @@
-//ddl
-
+//create_user_table
 CREATE TABLE `TB_USER` (
   `USER_NO` int(11) NOT NULL AUTO_INCREMENT COMMENT '사용자번호',
   `USER_ID` varchar(255) NOT NULL COMMENT '아이디',
