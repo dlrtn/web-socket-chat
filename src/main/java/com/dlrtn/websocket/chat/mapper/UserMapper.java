@@ -11,8 +11,6 @@ public interface UserMapper {
 
     void saveUser(User user);
 
-    User findUserById(String id);
-
-    List<User> findAllUsers();
+    User findUserByUserId(String userId);
 
 }

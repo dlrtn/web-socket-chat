@@ -8,11 +8,13 @@ import lombok.ToString;
 @Builder(toBuilder = true)
 @ToString
 public class User {
+
     private final long userNo;
-    private final String id;
+    private final String userId;
     private final String password;
     private final String realName;
     private final String authRole;
-    private final String appendAt;
-    private final String updateAt;
+    private final String createdAt;
+    private final String updatedAt;
+
 }
