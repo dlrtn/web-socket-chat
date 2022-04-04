@@ -18,7 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation
+    @Operation(summary = "회원가입 페이지로 이동")
     @GetMapping("/signUp")
     public String signUpForm() {
         return "signup";
