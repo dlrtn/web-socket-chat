@@ -2,28 +2,30 @@ package com.dlrtn.websocket.chat.service;
 
 import com.dlrtn.websocket.chat.mapper.UserMapper;
 import com.dlrtn.websocket.chat.model.domain.User;
-import com.dlrtn.websocket.chat.util.TimeUtils;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserMapper userMapper;
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
-    @Transactional
-    public void joinUser(User user) {
-        LocalDateTime now = LocalDateTime.now();
-        String formattedNow = TimeUtils.formatter.format(now);
+	private final UserMapper userMapper;
 
-        User createdUser = user.toBuilder()
-                .appendAt(formattedNow)
-                .updateAt(formattedNow)
-                .build();
-
-        userMapper.saveUser(createdUser);
-    }
+	@Transactional
+	public void joinUser(User user) {
+		LocalDateTime now = LocalDateTime.now();
+		String formattedNow = formatter.format(now);
+		User createdUser = user.toBuilder()
+			.appendAt(formattedNow)
+			.updateAt(formattedNow)
+			.build();
+		userMapper.saveUser(createdUser);
+	}
 }
