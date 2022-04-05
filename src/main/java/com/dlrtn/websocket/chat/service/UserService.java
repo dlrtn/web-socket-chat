@@ -1,9 +1,8 @@
 package com.dlrtn.websocket.chat.service;
 
 import com.dlrtn.websocket.chat.mapper.UserMapper;
-import com.dlrtn.websocket.chat.vo.User;
+import com.dlrtn.websocket.chat.vo.UserVo;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -11,31 +10,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
-@Builder
 @RequiredArgsConstructor
 public class UserService {
     // 회원가입 시 저장시간을 넣어줄 DateTime 형
-    LocalDateTime time = LocalDateTime.now();
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:sss");
-    String localTime = dateTimeFormatter.format(time);
+    SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:sss");
+    Date time = new Date();
+    String localTime = format.format(time);
 
-    private final UserMapper userMapper;
+    @Autowired
+    UserMapper userMapper;
 
     @Transactional
-    public void joinUser(User user){
+    public void joinUser(UserVo userVo){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setUserPw(passwordEncoder.encode(user.getUserPw()));
-        user.setUserAuth("USER");
-        user.setAppendDate(localTime);
-        user.setUpdateDate(localTime);
-
-
-
-        userMapper.saveUser(user);
+        userVo.setUserPw(passwordEncoder.encode(userVo.getUserPw()));
+        userVo.setUserAuth("USER");
+        userVo.setAppendDate(localTime);
+        userVo.setUpdateDate(localTime);
+        userMapper.saveUser(userVo);
     }
-
 }

@@ -19,47 +19,51 @@ repositories {
 }
 
 ext {
-    // mybatis
+    mariadb_java_client_version = "2.3.0"
     mybatis_spring_boot_starter_version = "2.2.0"
+    mybatis_typehandlers_jsr310_version = "1.0.2"
+    mybatis_spring_version = "2.0.6"
+
 
     // general development support library
     commons_collection_version = "4.4"
     commons_lang_version = "3.12.0"
     springdoc_openapi_version = "1.6.6"
-
-    // mysql_connector
-    mysql_connector_java_version = "8.0.25"
 }
 
 dependencies {
     // spring boot starter
     implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.springframework.boot:spring-boot-starter-jdbc"
-    implementation "org.springframework.boot:spring-boot-starter-security"
-    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "org.springframework.boot:spring-boot-starter-websocket"
     implementation "org.springframework.boot:spring-boot-starter-validation"
-
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-jdbc"
 
     // thymeleaf
     implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
 
     // mybatis
     implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatis_spring_boot_starter_version"
+    implementation "org.mybatis:mybatis-typehandlers-jsr310:$mybatis_typehandlers_jsr310_version"
+    implementation "org.mybatis:mybatis-spring:$mybatis_spring_version"
+
+    // mariadb
+    implementation "org.mariadb.jdbc:mariadb-java-client:$mariadb_java_client_version"
 
     // general development support library
-    implementation "org.apache.commons:commons-lang3:$commons_lang_version"
     implementation "org.apache.commons:commons-collections4:$commons_collection_version"
+    implementation "org.apache.commons:commons-lang3:$commons_lang_version"
     implementation "org.springdoc:springdoc-openapi-ui:$springdoc_openapi_version"
 
-    runtimeOnly "mysql:mysql-connector-java:$mysql_connector_java_version"
+    runtimeOnly "com.h2database:h2"
+    runtimeOnly "mysql:mysql-connector-java:8.0.25"
 
     compileOnly "org.projectlombok:lombok"
-
     annotationProcessor "org.projectlombok:lombok"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
+
     testCompileOnly "org.projectlombok:lombok"
     testAnnotationProcessor "org.projectlombok:lombok"
 }
