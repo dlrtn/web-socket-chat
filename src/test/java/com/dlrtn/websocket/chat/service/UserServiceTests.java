@@ -21,7 +21,6 @@ public class UserServiceTests {
 
     @Autowired
     private UserMapper userMapper;
-
     @Test
     void 마이바티스_테스트() {
         LocalDateTime now = LocalDateTime.now();
