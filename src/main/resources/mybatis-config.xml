@@ -1,0 +1,3 @@
+<typeHandlers>
+    <typeHandler handler="org.mybatis.example.LocalDateTimeTypeHandler"/>
+</typeHandlers>
