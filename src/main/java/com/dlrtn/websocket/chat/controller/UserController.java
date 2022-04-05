@@ -1,6 +1,5 @@
 package com.dlrtn.websocket.chat.controller;
 
-import com.dlrtn.websocket.chat.model.domain.dto.SignUpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     @Operation
@@ -24,11 +22,10 @@ public class UserController {
         return "signup";
     }
 
-    @Operation(summary = "회원가입 후 로그인 페이지로 이동")
+    @Operation
     @PostMapping("/signUp")
-    public String signUp(SignUpRequest req) {
-        userService.signUp(req);
+    public String signUp(@RequestBody User user) {
+        userService.joinUser(user);
         return "redirect:/login"; //로그인 구현 예정
     }
-
 }

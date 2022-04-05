@@ -20,12 +20,12 @@ public class UserMapperTests {
     private UserMapper userMapper;
 
     private final User TEST_USER = User.builder()
-            .userId("test-user")
+            .id("test-user")
             .password("test-user-pw")
             .realName("test-name")
             .authRole("USER")
-            .createdAt("2022-01-01 00:00:00.0") // createdAt
-            .updatedAt("2022-01-01 00:00:00.0") // updatedAt
+            .appendAt("2022-01-01 00:00:00.0") // createdAt
+            .updateAt("2022-01-01 00:00:00.0") // updatedAt
             .build();
 
     @DisplayName("유저 저장 테스트")
@@ -35,20 +35,22 @@ public class UserMapperTests {
         String formattedNow = TimeUtils.formatter.format(now);
 
         User user = TEST_USER.toBuilder()
-                .userId("dlrtn")
+                .id("dlrtn")
                 .password("1234")
                 .realName("wndlrtn")
                 .authRole("user")
-                .createdAt(formattedNow)
-                .updatedAt(formattedNow)
+                .appendAt(formattedNow)
+                .updateAt(formattedNow)
                 .build();
 
         userMapper.saveUser(user);
 
-        User foundUser = userMapper.findUserByUserId("dlrtn");
+        List<User> allUsers = userMapper.findAllUsers();
+
+        User foundUser = userMapper.findUserById("dlrtn");
 
         Assertions.assertAll("user",
-                () -> Assertions.assertEquals(foundUser.getUserId(), "dlrtn"),
+                () -> Assertions.assertEquals(foundUser.getId(), "dlrtn"),
                 () -> Assertions.assertEquals(foundUser.getPassword(), "1234"),
                 () -> Assertions.assertEquals(foundUser.getRealName(), "wndlrtn"),
                 () -> Assertions.assertEquals(foundUser.getAuthRole(), "user"));

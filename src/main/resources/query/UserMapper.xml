@@ -5,34 +5,34 @@
     <insert id="saveUser" parameterType="User">
         INSERT INTO TB_USER (
             USER_ID,
-            PASSWORD,
+            USER_PW,
             USER_NAME,
-            AUTH_ROLE,
-            CREATED_DATE,
-            UPDATED_DATE
+            USER_AUTH,
+            APPEND_DATE,
+            UPDATE_DATE
         ) VALUES (
-            #{userId},
+            #{id},
             #{password},
             #{realName},
             #{authRole},
-            #{createdAt},
-            #{updatedAt}
+            #{appendAt},
+            #{updateAt}
         )
     </insert>
 
-    <select id="findUserByUserId" parameterType="String" resultType="User">
+    <select id="findUserById" parameterType="String" resultType="User">
         SELECT
             USER_NO,
             USER_ID,
-            PASSWORD,
+            USER_PW,
             USER_NAME,
-            AUTH_ROLE,
-            CREATED_DATE,
-            UPDATED_DATE
+            USER_AUTH,
+            APPEND_DATE,
+            UPDATE_DATE
         FROM
             TB_USER
         WHERE
-            USER_ID = #{userId}
+            USER_ID = #{id}
     </select>
 
 
@@ -40,11 +40,11 @@
         SELECT
             USER_NO,
             USER_ID,
-            PASSWORD,
+            USER_PW,
             USER_NAME,
-            AUTH_ROLE,
-            CREATED_DATE,
-            UPDATED_DATE
+            USER_AUTH,
+            APPEND_DATE,
+            UPDATE_DATE
         FROM
             TB_USER
     </select>
