@@ -39,6 +39,8 @@ public class UserMapperTests {
                 .password("1234")
                 .realName("wndlrtn")
                 .authRole("user")
+                .createdAt(formattedNow)
+                .updatedAt(formattedNow)
                 .build();
 
         userMapper.saveUser(user);
