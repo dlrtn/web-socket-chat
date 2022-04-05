@@ -1,21 +1,7 @@
 spring:
-  # database access information
-  datasource:
-    url: "jdbc:mariadb://13.209.4.83:3306/study_db"
-    username: "dlrtn"
-    password: "jj5514"
-    driver-class-name: "org.mariadb.jdbc.Driver"
-
   profiles:
     active:
       - swagger
-
-mybatis:
-  # mapper route appoint
-  # 카멜 케이스 사용하여 DTO? Mapper Query에서 Alias 해주는 과정?
-  mapper-locations: query/**/*.xml
-  configuration:
-    map-underscroe-to-camel-case: true
 
 server:
   port: 8010
