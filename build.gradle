@@ -32,18 +32,22 @@ ext {
 }
 
 dependencies {
-    // spring boot starter dependencies
+    // spring boot starter
+    implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-jdbc"
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-websocket"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
 
-    // unofficial spring boot starter dependencies
+
+    // thymeleaf
+    implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
+
+    // mybatis
     implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatis_spring_boot_starter_version"
 
-    // general development support library dependencies
+    // general development support library
     implementation "org.apache.commons:commons-lang3:$commons_lang_version"
     implementation "org.apache.commons:commons-collections4:$commons_collection_version"
     implementation "org.springdoc:springdoc-openapi-ui:$springdoc_openapi_version"
@@ -51,6 +55,7 @@ dependencies {
     runtimeOnly "mysql:mysql-connector-java:$mysql_connector_java_version"
 
     compileOnly "org.projectlombok:lombok"
+
     annotationProcessor "org.projectlombok:lombok"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
