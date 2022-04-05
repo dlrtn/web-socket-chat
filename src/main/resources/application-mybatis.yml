@@ -1,7 +1,0 @@
-mybatis:
-  # mapper route appoint
-  # 카멜 케이스 사용하여 DTO? Mapper Query에서 Alias 해주는 과정?
-  mapper-locations: query/**/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
-  type-aliases-package: com.dlrtn.websocket.chat.model.domain

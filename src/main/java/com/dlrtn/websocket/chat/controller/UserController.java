@@ -1,31 +1,38 @@
 package com.dlrtn.websocket.chat.controller;
 
+import com.dlrtn.websocket.chat.service.UserService;
+import com.dlrtn.websocket.chat.vo.User;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import com.dlrtn.websocket.chat.model.domain.User;
-import com.dlrtn.websocket.chat.service.UserService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
-	private final UserService userService;
+    @Autowired
+    UserService userService;
 
-	@Operation
-	@GetMapping("/signUp")
-	public String signUpForm() {
-		return "signup";
-	}
+    /**
+     * 회원가입 폼
+     * @return
+     */
+    @GetMapping("/signUp")
+    public String signUpForm() {
+        return "signup";
+    }
 
-	@Operation
-	@PostMapping("/signUp")
-	public String signUp(@RequestBody User user) {
-		userService.joinUser(user);
-		return "redirect:/login"; //로그인 구현 예정
-	}
+    /**
+     * 회원가입 진행
+     * @param user
+     * @return
+     */
+    @PostMapping("/signUp")
+    public String signUp(User user) {
+        userService.joinUser(user);
+        return "redirect:/login"; //로그인 구현 예정
+    }
 }
