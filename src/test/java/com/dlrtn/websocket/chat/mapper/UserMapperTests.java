@@ -51,6 +51,7 @@ public class UserMapperTests {
                 () -> Assertions.assertEquals(foundUser.getCreatedAt(), ""),
                 () -> Assertions.assertEquals(foundUser.getUpdatedAt(), ""));
 
+
     }
 
 }
