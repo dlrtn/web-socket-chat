@@ -24,8 +24,6 @@ public class UserMapperTests {
             .password("test-user-pw")
             .realName("test-name")
             .authRole("USER")
-            .createdAt("2022-01-01 00:00:00.0") // createdAt
-            .updatedAt("2022-01-01 00:00:00.0") // updatedAt
             .build();
 
     @DisplayName("유저 저장 테스트")
@@ -49,7 +47,9 @@ public class UserMapperTests {
                 () -> Assertions.assertEquals(foundUser.getUserId(), "dlrtn"),
                 () -> Assertions.assertEquals(foundUser.getPassword(), "1234"),
                 () -> Assertions.assertEquals(foundUser.getRealName(), "wndlrtn"),
-                () -> Assertions.assertEquals(foundUser.getAuthRole(), "user"));
+                () -> Assertions.assertEquals(foundUser.getAuthRole(), "user"),
+                () -> Assertions.assertEquals(foundUser.getCreatedAt(), ""),
+                () -> Assertions.assertEquals(foundUser.getUpdatedAt(), ""));
 
 
     }
