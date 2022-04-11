@@ -1,3 +1,3 @@
 <typeHandlers>
-    <typeHandler handler="org.mybatis.example.LocalDateTimeTypeHandler"/>
+    <typeHandler handler="com.dlrtn.websocket.chat.config.mybatis.CustomLocalDateTimeTypeHandler"/>
 </typeHandlers>
