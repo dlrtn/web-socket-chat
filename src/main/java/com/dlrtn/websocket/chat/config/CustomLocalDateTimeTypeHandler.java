@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.config.mybatis;
+package com.dlrtn.websocket.chat.config;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
