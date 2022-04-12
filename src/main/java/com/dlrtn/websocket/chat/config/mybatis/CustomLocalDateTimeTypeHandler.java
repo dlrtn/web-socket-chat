@@ -12,13 +12,14 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
+@Component
 @MappedTypes(LocalDateTime.class)
 @MappedJdbcTypes(JdbcType.VARCHAR)
 public class CustomLocalDateTimeTypeHandler extends BaseTypeHandler<LocalDateTime> {
 
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
     @Bean
     @Override
@@ -30,21 +31,18 @@ public class CustomLocalDateTimeTypeHandler extends BaseTypeHandler<LocalDateTim
     @Bean
     @Override
     public LocalDateTime getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        LocalDateTime localDateTime = LocalDateTime.parse(rs.getString(columnName), formatter);
-        return localDateTime;
+        return LocalDateTime.parse(rs.getString(columnName), formatter);
     }
 
     @Bean
     @Override
     public LocalDateTime getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-        LocalDateTime localDateTime = LocalDateTime.parse(rs.getString(columnIndex), formatter);
-        return localDateTime;
+        return LocalDateTime.parse(rs.getString(columnIndex), formatter);
     }
 
     @Bean
     @Override
     public LocalDateTime getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-        LocalDateTime localDateTime = LocalDateTime.parse(cs.getString(columnIndex), formatter);
-        return localDateTime;
+        return LocalDateTime.parse(cs.getString(columnIndex), formatter);
     }
 }
