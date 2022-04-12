@@ -2,9 +2,7 @@ package com.dlrtn.websocket.chat.handler;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
-import org.springframework.stereotype.Component;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -13,9 +11,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Component
 @MappedTypes(LocalDateTime.class)
-@MappedJdbcTypes(JdbcType.VARCHAR)
 public class LocalDateTimeVarCharTypeHandler extends BaseTypeHandler<LocalDateTime> {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");

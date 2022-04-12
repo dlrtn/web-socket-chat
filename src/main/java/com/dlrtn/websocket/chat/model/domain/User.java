@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder(toBuilder = true)
 @ToString
@@ -14,7 +16,7 @@ public class User {
     private final String password;
     private final String realName;
     private final String authRole;
-    private final String createdAt;
-    private final String updatedAt;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
 }

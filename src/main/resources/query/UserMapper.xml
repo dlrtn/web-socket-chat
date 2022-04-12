@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dlrtn.websocket.chat.mapper.UserMapper">
-    <insert id="saveUser" parameterType="User">
+    <insert id="save" parameterType="User">
         INSERT INTO TB_USER (
             USER_ID,
             PASSWORD,
@@ -20,7 +20,7 @@
         )
     </insert>
 
-    <select id="findUserByUserId" parameterType="String" resultType="User">
+    <select id="findByUserId" parameterType="String" resultType="User">
         SELECT
             USER_NO,
             USER_ID,
@@ -33,19 +33,5 @@
             TB_USER
         WHERE
             USER_ID = #{userId}
-    </select>
-
-
-    <select id="findAllUsers" resultType="User">
-        SELECT
-            USER_NO,
-            USER_ID,
-            PASSWORD,
-            REAL_NAME,
-            AUTH_ROLE,
-            CREATED_AT,
-            UPDATED_AT
-        FROM
-            TB_USER
     </select>
 </mapper>
