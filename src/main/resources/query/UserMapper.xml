@@ -6,10 +6,10 @@
         INSERT INTO TB_USER (
             USER_ID,
             PASSWORD,
-            USER_NAME,
+            REAL_NAME,
             AUTH_ROLE,
-            CREATED_DATE,
-            UPDATED_DATE
+            CREATED_AT,
+            UPDATED_AT
         ) VALUES (
             #{userId},
             #{password},
@@ -25,10 +25,10 @@
             USER_NO,
             USER_ID,
             PASSWORD,
-            USER_NAME,
+            REAL_NAME,
             AUTH_ROLE,
-            CREATED_DATE,
-            UPDATED_DATE
+            CREATED_AT,
+            UPDATED_AT
         FROM
             TB_USER
         WHERE
@@ -41,10 +41,10 @@
             USER_NO,
             USER_ID,
             PASSWORD,
-            USER_NAME,
+            REAL_NAME,
             AUTH_ROLE,
-            CREATED_DATE,
-            UPDATED_DATE
+            CREATED_AT,
+            UPDATED_AT
         FROM
             TB_USER
     </select>
