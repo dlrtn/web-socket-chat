@@ -7,8 +7,11 @@ import lombok.*;
 public class SignUpRequest {
 
     private String userId;
+
     private String password;
+
     private String realName;
+
     private String authRole;
 
 }
