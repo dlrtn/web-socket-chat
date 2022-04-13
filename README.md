@@ -1,2 +1,2 @@
-# websocket-chat-server
+# web-socket-chat
 DaddyProgrammer's websocket example 
