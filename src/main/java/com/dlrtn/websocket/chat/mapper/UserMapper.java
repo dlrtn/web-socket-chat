@@ -8,6 +8,10 @@ public interface UserMapper {
 
     void save(User user);
 
+    User login(User user);
+
     User findByUserId(String userId);
+
+
 
 }

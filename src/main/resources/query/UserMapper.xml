@@ -34,4 +34,21 @@
         WHERE
             USER_ID = #{userId}
     </select>
+
+    <select id="login" parameterType="String" resultType="User">
+        SELECT
+            USER_NO,
+            USER_ID,
+            PASSWORD,
+            REAL_NAME,
+            AUTH_ROLE,
+            CREATED_AT,
+            UPDATED_AT
+        FROM
+            TB_USER
+        WHERE
+            USER_ID = #{userId}
+            AND
+            PASSWORD = #{password}
+    </select>
 </mapper>

@@ -36,6 +36,7 @@ public class UserMapperTests {
         User foundUser = userMapper.findByUserId("dlrtn");
 
         LocalDateTime filteredNow = now.truncatedTo(ChronoUnit.SECONDS);
+
         Assertions.assertAll(
                 () -> Assertions.assertEquals("dlrtn", foundUser.getUserId()),
                 () -> Assertions.assertEquals("1234", foundUser.getPassword()),

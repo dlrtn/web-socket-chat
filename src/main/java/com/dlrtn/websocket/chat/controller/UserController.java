@@ -1,12 +1,11 @@
 package com.dlrtn.websocket.chat.controller;
 
+import com.dlrtn.websocket.chat.model.domain.dto.SignInRequest;
 import com.dlrtn.websocket.chat.model.domain.dto.SignUpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import com.dlrtn.websocket.chat.model.domain.User;
 import com.dlrtn.websocket.chat.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,9 +25,27 @@ public class UserController {
 
     @Operation(summary = "회원가입 후 로그인 페이지로 이동")
     @PostMapping("/signUp")
-    public String signUp(SignUpRequest req) {
-        userService.signUp(req);
-        return "redirect:/login"; //로그인 구현 예정
+    public String signUp(SignUpRequest request) {
+        userService.signUp(request);
+        return "redirect:/signin"; //로그인 구현 예정
+    }
+
+    @Operation(summary = "회원 로그인 페이지")
+    @GetMapping("/signIn")
+    public String signInForm(SignInRequest request) {
+        return "/signin"; //로그인 구현 예정
+    }
+
+    @Operation(summary = "회원 로그인 로직 처리")
+    @PostMapping("/signIn")
+    public String signIn(SignInRequest request) {
+
+        if (userService.signIn(request) == null) {
+            // 해당하는 유저가 없음
+            return "signin";
+        }
+
+        return "redirect:"; //로그인 성공 후 보낼 곳 찾아야됨
     }
 
 }
