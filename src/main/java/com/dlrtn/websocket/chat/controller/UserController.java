@@ -24,7 +24,7 @@ public class UserController {
     @Operation(summary = "회원가입 페이지로 이동")
     @GetMapping("/signUp")
     public String signUpForm() {
-        return "/signUp";
+        return "signup";
     }
 
     @Operation(summary = "회원가입 후 로그인 페이지로 이동")
@@ -37,7 +37,7 @@ public class UserController {
     @Operation(summary = "회원 로그인 페이지")
     @GetMapping("/signIn")
     public String signInForm(SignInRequest request) {
-        return "/signIn";
+        return "singin";
     }
 
     @Operation(summary = "회원 로그인 로직 처리")
