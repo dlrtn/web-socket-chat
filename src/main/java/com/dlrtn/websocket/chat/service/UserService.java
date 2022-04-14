@@ -1,27 +1,37 @@
 package com.dlrtn.websocket.chat.service;
 
 import com.dlrtn.websocket.chat.mapper.UserMapper;
+import com.dlrtn.websocket.chat.model.ResponseMessage;
+import com.dlrtn.websocket.chat.model.UserSessionCreation;
 import com.dlrtn.websocket.chat.model.domain.User;
-import com.dlrtn.websocket.chat.model.domain.dto.SignInRequest;
-import com.dlrtn.websocket.chat.model.domain.dto.SignUpRequest;
-
+import com.dlrtn.websocket.chat.model.payload.CommonResponse;
+import com.dlrtn.websocket.chat.model.payload.SignInRequest;
+import com.dlrtn.websocket.chat.model.payload.SignUpRequest;
+import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
 import lombok.RequiredArgsConstructor;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserMapper userMapper;
+    private final InMemorySessionRepository sessionRepository;
 
     @Transactional
-    public void signUp(SignUpRequest request) {
-        LocalDateTime now = LocalDateTime.now();
+    public CommonResponse signUp(SignUpRequest request) {
+        User foundUser = userMapper.findByUserId(request.getUserId());
+        if (Objects.nonNull(foundUser)) {
+            return CommonResponse.failWith(ResponseMessage.EXISTED_USER_ID);
+        }
 
+        LocalDateTime now = LocalDateTime.now();
         User user = User.builder()
                 .userId(request.getUserId())
                 .password(request.getPassword())
@@ -31,11 +41,32 @@ public class UserService {
                 .updatedAt(now)
                 .build();
 
-        userMapper.saveUser(user);
+        try {
+            userMapper.save(user);
+            return CommonResponse.success();
+        } catch (Exception e) {
+            // TODO 로깅 추가
+            return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+        }
     }
 
-    public User signIn(SignInRequest request) {
-        return userMapper.findByUserId(request.getUserId());
+    public UserSessionCreation signIn(String sessionId, SignInRequest request) {
+        if (sessionRepository.exists(sessionId)) {
+            return UserSessionCreation.successWith(sessionId);
+        }
+
+        User foundUser = userMapper.findByUserId(request.getUserId());
+        if (!validateUser(foundUser, request.getPassword())) {
+            return UserSessionCreation.failWith("User id or password mismatch");
+        }
+
+        String newSessionId = UUID.randomUUID().toString();
+        sessionRepository.put(newSessionId, foundUser);
+        return UserSessionCreation.successWith(newSessionId);
+    }
+
+    private boolean validateUser(User user, String password) {
+        return Objects.nonNull(user) && StringUtils.equals(user.getPassword(), password);
     }
 
 }

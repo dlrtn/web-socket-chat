@@ -1,16 +1,18 @@
-package com.dlrtn.websocket.chat.model.domain.dto;
+package com.dlrtn.websocket.chat.model.payload;
 
-import lombok.Getter;
-import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
-@Builder(toBuilder = true)
+@Data
+@ToString
 public class SignInRequest {
 
+    @NotBlank
     private String userId;
 
+    @NotBlank
     private String password;
 
 }
