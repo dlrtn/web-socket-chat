@@ -9,10 +9,8 @@ import javax.validation.constraints.NotBlank;
 @Builder(toBuilder = true)
 public class SignInRequest {
 
-    @NotBlank
     private String userId;
 
-    @NotBlank
     private String password;
 
 }
