@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,18 +19,7 @@ public class UserService {
 
     @Transactional
     public void signUp(SignUpRequest request) {
-        userMapper.save(joinUser(request));
-    }
-
-    public User signIn(SignInRequest request) {
-        return userMapper.login(findUser(request));
-    }
-
-    public User findUser(SignInRequest request) {
-        return User.builder()
-                .userId(request.getUserId())
-                .password(request.getPassword())
-                .build();
+        userMapper.saveUser(joinUser(request));
     }
 
     public User joinUser(SignUpRequest request) {
@@ -42,6 +32,21 @@ public class UserService {
                 .authRole(request.getAuthRole())
                 .createdAt(now)
                 .updatedAt(now)
+                .build();
+    }
+
+    public User signIn(SignInRequest request) {
+        User user = userMapper.login(findUser(request));
+        if (user == null) {
+            //널 처리 어떠헥
+        }
+        return userMapper.login(findUser(request));
+    }
+
+    public User findUser(SignInRequest request) {
+        return User.builder()
+                .userId(request.getUserId())
+                .password(request.getPassword())
                 .build();
     }
 

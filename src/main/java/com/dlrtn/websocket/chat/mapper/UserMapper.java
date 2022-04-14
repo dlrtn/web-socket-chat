@@ -6,10 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-    void save(User user);
+    void saveUser(User user);
 
     User login(User user);
 
     User findByUserId(String userId);
+
+
 
 }

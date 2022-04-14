@@ -31,7 +31,7 @@ public class UserMapperTests {
                 .updatedAt(now)
                 .build();
 
-        userMapper.save(user);
+        userMapper.saveUser(user);
 
         User foundUser = userMapper.findByUserId("dlrtn");
 

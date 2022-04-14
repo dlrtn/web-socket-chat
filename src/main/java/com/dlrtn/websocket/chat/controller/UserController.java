@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.controller;
 
+import com.dlrtn.websocket.chat.model.domain.User;
 import com.dlrtn.websocket.chat.model.domain.dto.SignInRequest;
 import com.dlrtn.websocket.chat.model.domain.dto.SignUpRequest;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,9 @@ import com.dlrtn.websocket.chat.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,14 +42,18 @@ public class UserController {
 
     @Operation(summary = "회원 로그인 로직 처리")
     @PostMapping("/signIn")
-    public String signIn(SignInRequest request) {
-
-        if (userService.signIn(request) == null) {
+    public String signIn(SignInRequest signinrequest, HttpServletRequest sessionrequest) {
+        User signinuser = userService.signIn(signinrequest);
+        if (signinuser == null) {
             // 해당하는 유저가 없음
-            return "signin";
+            return "redirect:/signIn";
         }
+        // 해당하는 유저를 찾았음..!
 
-        return "redirect:"; //로그인 성공 후 보낼 곳 찾아야됨
+        HttpSession session = sessionrequest.getSession();
+        session.setAttribute("signinuser", signinuser);
+
+        return "redirect:/userinfo"; //로그인 성공 후 보낼 곳 찾아야됨
     }
 
 }
