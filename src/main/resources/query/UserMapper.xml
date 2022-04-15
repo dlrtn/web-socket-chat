@@ -3,7 +3,7 @@
 
 <mapper namespace="com.dlrtn.websocket.chat.mapper.UserMapper">
 
-    <insert id="saveUser" parameterType="User">
+    <insert id="save" parameterType="User">
         INSERT INTO TB_USER (
             USER_ID,
             PASSWORD,
@@ -21,9 +21,8 @@
         )
     </insert>
 
-    <delete id="removeUser" parameterType="String">
-        DELETE
-        FROM
+    <delete id="delete" parameterType="String">
+        DELETE FROM
             TB_USER
         WHERE
             USER_ID = #{userId}
@@ -42,23 +41,6 @@
             TB_USER
         WHERE
             USER_ID = #{userId}
-    </select>
-
-    <select id="login" parameterType="String" resultType="User">
-        SELECT
-            USER_NO,
-            USER_ID,
-            PASSWORD,
-            REAL_NAME,
-            AUTH_ROLE,
-            CREATED_AT,
-            UPDATED_AT
-        FROM
-            TB_USER
-        WHERE
-            USER_ID = #{userId}
-            AND
-            PASSWORD = #{password}
     </select>
 
 </mapper>

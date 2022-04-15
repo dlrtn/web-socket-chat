@@ -1,6 +1,7 @@
 package com.dlrtn.websocket.chat.mapper;
 
 import com.dlrtn.websocket.chat.config.LightMyBatisTest;
+import com.dlrtn.websocket.chat.model.UserAuthRole;
 import com.dlrtn.websocket.chat.model.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -21,27 +22,25 @@ public class UserMapperTests {
     @Test
     void save_user_test() {
         LocalDateTime now = LocalDateTime.now();
+        LocalDateTime filteredNow = now.truncatedTo(ChronoUnit.SECONDS);
 
         User user = User.builder()
                 .userId("dlrtn")
                 .password("1234")
                 .realName("wndlrtn")
-                .authRole("user")
+                .authRole(UserAuthRole.USER)
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
 
-        userMapper.saveUser(user);
-
+        userMapper.save(user);
         User foundUser = userMapper.findByUserId("dlrtn");
-
-        LocalDateTime filteredNow = now.truncatedTo(ChronoUnit.SECONDS);
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals("dlrtn", foundUser.getUserId()),
                 () -> Assertions.assertEquals("1234", foundUser.getPassword()),
                 () -> Assertions.assertEquals("wndlrtn", foundUser.getRealName()),
-                () -> Assertions.assertEquals("user", foundUser.getAuthRole()),
+                () -> Assertions.assertEquals(UserAuthRole.USER, foundUser.getAuthRole()),
                 () -> Assertions.assertEquals(filteredNow, foundUser.getCreatedAt().truncatedTo(ChronoUnit.SECONDS)),
                 () -> Assertions.assertEquals(filteredNow, foundUser.getUpdatedAt().truncatedTo(ChronoUnit.SECONDS))
         );

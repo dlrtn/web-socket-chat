@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.model.domain;
 
+import com.dlrtn.websocket.chat.model.UserAuthRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,7 +20,7 @@ public class User {
 
     private final String realName;
 
-    private final String authRole;
+    private final UserAuthRole authRole;
 
     private final LocalDateTime createdAt;
 
