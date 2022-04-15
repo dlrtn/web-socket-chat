@@ -4,6 +4,7 @@ import com.dlrtn.websocket.chat.model.UserAuthRole;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
@@ -18,7 +19,7 @@ public class SignUpRequest {
     @NotBlank
     private String realName;
 
-    @NotBlank
+    @NotNull
     private UserAuthRole authRole;
 
 }

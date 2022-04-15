@@ -2,6 +2,7 @@ package com.dlrtn.websocket.chat.repository;
 
 import com.dlrtn.websocket.chat.model.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
@@ -21,6 +22,6 @@ public class InMemorySessionRepository {
     }
 
     public boolean exists(String sessionId) {
-        return sessions.containsKey(sessionId);
+        return StringUtils.isNotEmpty(sessionId) && sessions.containsKey(sessionId);
     }
 }

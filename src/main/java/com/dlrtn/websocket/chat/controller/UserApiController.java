@@ -9,16 +9,16 @@ import com.dlrtn.websocket.chat.service.UserService;
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-@Controller
+@RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserApiController {
@@ -31,7 +31,7 @@ public class UserApiController {
             @Valid @RequestBody SignUpRequest signUpRequest
     ) {
         return userService.signUp(signUpRequest);
-    } // TODO redirect 수행은 프론트에서 처리할 것
+    }
 
     @Operation(summary = "회원 로그인")
     @PostMapping("/sign-in")
