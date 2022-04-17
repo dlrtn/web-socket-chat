@@ -13,7 +13,7 @@ import org.springframework.util.StopWatch;
 @Slf4j
 public class LogAop {
 
-    @Pointcut("execution(public * com.dlrtn.websocket.chat.service..*(..))")
+    @Pointcut("execution(public * com.dlrtn.websocket.chat.service..*(..))") //service 로직 밑의 모든 로직들에 적용 //로그는 어케 찍음 ㅅㅂ?
     private void publicTarget() {
     }
 
