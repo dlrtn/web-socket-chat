@@ -30,11 +30,11 @@
             USER_ID = #{userId}
     </update>
 
-    <update id="updatePassword" parameterType="com.dlrtn.websocket.chat.model.payload.PassWordUpdateRequest">
+    <update id="updatePassword" parameterType="User">
         UPDATE
             TB_USER
         SET
-            PASSWORD = #{newPassword}, UPDATED_AT = #{updatedAt}
+            PASSWORD = #{password}, UPDATED_AT = #{updatedAt}
         WHERE
             USER_ID = #{userId}
     </update>

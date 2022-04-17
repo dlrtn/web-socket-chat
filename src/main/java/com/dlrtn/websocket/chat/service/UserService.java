@@ -64,23 +64,26 @@ public class UserService {
     }
 
     public CommonResponse updateUserInfo(String sessionId, UserInfoUpdateRequest request) {
+        LocalDateTime now = LocalDateTime.now();
+        User user = User.builder()
+                .userId(request.getUserId())
+                .realName(request.getRealName())
+                .updatedAt(now)
+                .build();
+
         if (!sessionRepository.exists(sessionId)) {
             return CommonResponse.failWith("User is not exist or sign-in first");
         }
 
-        LocalDateTime now = LocalDateTime.now();
-        User user = User.builder()
-                .realName(request.getRealName())
-                .updatedAt(now)
-                .build();
         userMapper.updateUserInfo(user);
         return CommonResponse.success();
     }
 
     public CommonResponse updatePassWord(PassWordUpdateRequest request) {
         LocalDateTime now = LocalDateTime.now();
-
-        request.builder()
+        User user = User.builder()
+                .userId(request.getUserId())
+                .password(request.getNewPassword())
                 .updatedAt(now)
                 .build();
 
@@ -88,7 +91,7 @@ public class UserService {
 
         if (validateUser(foundUser, request.getExistingPassword())) {
             try {
-                userMapper.updatePassword(request);
+                userMapper.updatePassword(user);
                 return CommonResponse.success();
             } catch (Exception e) {
                 return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);

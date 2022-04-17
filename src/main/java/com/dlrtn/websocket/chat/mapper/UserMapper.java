@@ -4,6 +4,8 @@ import com.dlrtn.websocket.chat.model.domain.User;
 import com.dlrtn.websocket.chat.model.payload.PassWordUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDateTime;
+
 @Mapper
 public interface UserMapper {
 
@@ -15,6 +17,8 @@ public interface UserMapper {
 
     void updateUserInfo(User user);
 
-    void updatePassword(PassWordUpdateRequest request);
+    void updatePassword(User user);
+
+    void updateUpdatedAt(User user);
 
 }
