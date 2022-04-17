@@ -21,6 +21,24 @@
         )
     </insert>
 
+    <update id="updateUserInfo" parameterType="User">
+        UPDATE
+            TB_USER
+        SET
+            REAL_NAME = #{realName}, UPDATED_AT = #{updatedAt}
+        WHERE
+            USER_ID = #{userId}
+    </update>
+
+    <update id="updatePassword" parameterType="com.dlrtn.websocket.chat.model.payload.PassWordUpdateRequest">
+        UPDATE
+            TB_USER
+        SET
+            PASSWORD = #{newPassword}, UPDATED_AT = #{updatedAt}
+        WHERE
+            USER_ID = #{userId}
+    </update>
+
     <delete id="delete" parameterType="String">
         DELETE FROM
             TB_USER

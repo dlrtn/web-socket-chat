@@ -4,9 +4,7 @@ import com.dlrtn.websocket.chat.mapper.UserMapper;
 import com.dlrtn.websocket.chat.model.ResponseMessage;
 import com.dlrtn.websocket.chat.model.UserSessionCreation;
 import com.dlrtn.websocket.chat.model.domain.User;
-import com.dlrtn.websocket.chat.model.payload.CommonResponse;
-import com.dlrtn.websocket.chat.model.payload.SignInRequest;
-import com.dlrtn.websocket.chat.model.payload.SignUpRequest;
+import com.dlrtn.websocket.chat.model.payload.*;
 import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -63,6 +61,40 @@ public class UserService {
         String newSessionId = UUID.randomUUID().toString();
         sessionRepository.put(newSessionId, foundUser);
         return UserSessionCreation.successWith(newSessionId);
+    }
+
+    public CommonResponse updateUserInfo(String sessionId, UserInfoUpdateRequest request) {
+        if (!sessionRepository.exists(sessionId)) {
+            return CommonResponse.failWith("User is not exist or sign-in first");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        User user = User.builder()
+                .realName(request.getRealName())
+                .updatedAt(now)
+                .build();
+        userMapper.updateUserInfo(user);
+        return CommonResponse.success();
+    }
+
+    public CommonResponse updatePassWord(PassWordUpdateRequest request) {
+        LocalDateTime now = LocalDateTime.now();
+
+        request.builder()
+                .updatedAt(now)
+                .build();
+
+        User foundUser = userMapper.findByUserId(request.getUserId());
+
+        if (validateUser(foundUser, request.getExistingPassword())) {
+            try {
+                userMapper.updatePassword(request);
+                return CommonResponse.success();
+            } catch (Exception e) {
+                return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+            }
+        }
+        return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
     }
 
     private boolean validateUser(User user, String password) {

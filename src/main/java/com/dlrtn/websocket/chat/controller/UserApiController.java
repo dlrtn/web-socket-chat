@@ -2,9 +2,7 @@ package com.dlrtn.websocket.chat.controller;
 
 import com.dlrtn.websocket.chat.model.UserSessionConstants;
 import com.dlrtn.websocket.chat.model.UserSessionCreation;
-import com.dlrtn.websocket.chat.model.payload.CommonResponse;
-import com.dlrtn.websocket.chat.model.payload.SignInRequest;
-import com.dlrtn.websocket.chat.model.payload.SignUpRequest;
+import com.dlrtn.websocket.chat.model.payload.*;
 import com.dlrtn.websocket.chat.service.UserService;
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 
 
 @RestController
@@ -59,6 +56,30 @@ public class UserApiController {
         } else {
             return CommonResponse.failWith(sessionCreation.getFailReason());
         }
+    }
+
+    @Operation(summary = "회원 정보수정")
+    @PostMapping("/update-info")
+    public CommonResponse updateUserInfo(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid @RequestBody UserInfoUpdateRequest requestBody
+    ) {
+        LOGGER.info("[Update RequestBody] userid : {}, realName : {}", requestBody.getUserId(), requestBody.getRealName());
+        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
+        return userService.updateUserInfo(sessionId, requestBody);
+    }
+
+    @Operation(summary = "회원 비밀번호 변경")
+    @PostMapping("/update-password")
+    public CommonResponse updatePassword(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid @RequestBody PassWordUpdateRequest requestBody
+    ) {
+        LOGGER.info("[Update RequestBody] userid : {}, userPW : {}", requestBody.getUserId(), requestBody.getExistingPassword());
+        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
+        return userService.updatePassWord(requestBody);
     }
 
 }
