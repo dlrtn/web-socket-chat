@@ -9,7 +9,8 @@ public class ChatController {
 
     @Operation(summary = "채팅 내용 수신!!")
     @GetMapping("/chat")
-    public String chatGET(){
+    public String chatGET() {
         return "chat";
     }
+
 }

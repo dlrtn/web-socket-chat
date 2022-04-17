@@ -4,6 +4,7 @@ spring:
       - datasource
       - mybatis
       - swagger
+      - logging
 
 server:
   port: 8010
