@@ -94,10 +94,10 @@ public class UserService {
                 userMapper.updatePassword(user);
                 return CommonResponse.success();
             } catch (Exception e) {
-                return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+                return CommonResponse.failWith("Password update failed");
             }
         }
-        return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+        return CommonResponse.failWith("Password not correct");
     }
 
     private boolean validateUser(User user, String password) {
@@ -112,7 +112,7 @@ public class UserService {
         User foundUser = userMapper.findByUserId(request.getUserId());
 
         if (!sessionRepository.exists(sessionId)) {
-            return CommonResponse.failWith("Not Login State");
+            return CommonResponse.failWith("Not Login State, please sign-in first");
         }
 
         if (validateUser(foundUser, request.getPassword())) {
@@ -123,7 +123,7 @@ public class UserService {
                 return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
             }
         }
-        return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+        return CommonResponse.failWith("Password not correct");
 
     }
 
