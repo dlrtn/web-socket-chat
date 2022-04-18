@@ -29,7 +29,7 @@ public class UserPageController {
         return "update-info";
     }
 
-    @Operation(summary = "회원 정보 수정 페이지")
+    @Operation(summary = "회원 비밀번호 수정 페이지")
     @GetMapping("/update-password")
     public String getUpdateUserPasswordPage() {
         return "update-password";

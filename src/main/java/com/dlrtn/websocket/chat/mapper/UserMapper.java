@@ -19,6 +19,4 @@ public interface UserMapper {
 
     void updatePassword(User user);
 
-    void updateUpdatedAt(User user);
-
 }

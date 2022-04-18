@@ -26,8 +26,4 @@ public class InMemorySessionRepository {
         return StringUtils.isNotEmpty(sessionId) && sessions.containsKey(sessionId);
     }
 
-    public void update(String sessionId, User user) {
-        sessions.put(sessionId, user);
-    }
-
 }
