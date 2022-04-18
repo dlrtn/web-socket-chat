@@ -63,35 +63,39 @@ public class UserService {
         return UserSessionCreation.successWith(newSessionId);
     }
 
-    public CommonResponse updateUserInfo(String sessionId, UserInfoUpdateRequest request) {
-        LocalDateTime now = LocalDateTime.now();
-        User user = User.builder()
-                .userId(request.getUserId())
-                .realName(request.getRealName())
-                .updatedAt(now)
-                .build();
-
+    public CommonResponse update(String sessionId, UserInfoUpdateRequest request) {
         if (!sessionRepository.exists(sessionId)) {
-            return CommonResponse.failWith("User is not exist or sign-in first");
+            return CommonResponse.failWith("please login frist");
         }
 
-        userMapper.updateUserInfo(user);
-        return CommonResponse.success();
-    }
-
-    public CommonResponse updatePassWord(PassWordUpdateRequest request) {
         LocalDateTime now = LocalDateTime.now();
-        User user = User.builder()
-                .userId(request.getUserId())
-                .password(request.getNewPassword())
-                .updatedAt(now)
-                .build();
 
         User foundUser = userMapper.findByUserId(request.getUserId());
 
+        String newRealName = foundUser.getRealName();
+        String newPassWord = foundUser.getPassword();
+
+        if (request.getNewPassword() != "" && request.getNewrealName() != "") { // 둘다 변경하고자 값을 삽입한 경우..
+            newRealName = request.getNewrealName();
+            newPassWord = request.getNewPassword();
+        }
+        else if (request.getNewPassword() != "") { // 패스워드 변경만 원할 경우,
+            newPassWord = request.getNewPassword();
+        }
+        else if (request.getNewrealName() != "") { // 실명 변경만 원할 경우,
+            newRealName = request.getNewrealName();
+        }
+
+        User user = User.builder()
+                .userId(request.getUserId())
+                .realName(newRealName)
+                .password(newPassWord)
+                .updatedAt(now)
+                .build();
+
         if (validateUser(foundUser, request.getExistingPassword())) {
             try {
-                userMapper.updatePassword(user);
+                userMapper.update(user);
                 return CommonResponse.success();
             } catch (Exception e) {
                 return CommonResponse.failWith("Password update failed");
@@ -120,7 +124,7 @@ public class UserService {
                 userMapper.delete(user);
                 return CommonResponse.success();
             } catch (Exception e) {
-                return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+                return CommonResponse.failWith(ResponseMessage.SERVER_ERROR); // 유저 삭제에 실패.. 흠
             }
         }
         return CommonResponse.failWith("Password not correct");

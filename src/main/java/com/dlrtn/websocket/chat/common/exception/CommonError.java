@@ -8,7 +8,6 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-@AllArgsConstructor
 public class CommonError {
 
     private final int code;

@@ -58,45 +58,15 @@ public class UserApiController {
         }
     }
 
-    @Operation(summary = "회원 로그인")
-    @PostMapping("/signoutn")
-    public CommonResponse singOUt(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            @Valid @RequestBody SignInRequest requestBody
-    ) {
-        LOGGER.info("[Request Body] userid : {}, userPW : {}", requestBody.getUserId(), requestBody.getPassword());
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
-        UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
-
-        if (sessionCreation.isSuccess()) {
-            CookieUtils.setCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, sessionCreation.getSessionId());
-            return CommonResponse.success();
-        } else {
-            return CommonResponse.failWith(sessionCreation.getFailReason());
-        }
-    }
-
     @Operation(summary = "회원 정보수정")
-    @PostMapping("/update-info")
-    public CommonResponse updateUserInfo(
+    @PostMapping("/update")
+    public CommonResponse update(
             HttpServletRequest request,
             @Valid @RequestBody UserInfoUpdateRequest requestBody
     ) {
-        LOGGER.info("[Update RequestBody] userid : {}, realName : {}", requestBody.getUserId(), requestBody.getRealName());
+        LOGGER.info("[Update RequestBody] userid : {}, password : {}, realName : {}, newPassword : {}", requestBody.getUserId(), requestBody.getExistingPassword(), requestBody.getNewrealName(), requestBody.getNewPassword());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
-        return userService.updateUserInfo(sessionId, requestBody);
-    }
-
-    @Operation(summary = "회원 비밀번호 변경")
-    @PostMapping("/update-password")
-    public CommonResponse updatePassword(
-            HttpServletRequest request,
-            @Valid @RequestBody PassWordUpdateRequest requestBody
-    ) {
-        LOGGER.info("[Update RequestBody] userid : {}, userPW : {}", requestBody.getUserId(), requestBody.getExistingPassword());
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
-        return userService.updatePassWord(requestBody);
+        return userService.update(sessionId, requestBody);
     }
 
     @Operation(summary = "회원 정보 삭제")
