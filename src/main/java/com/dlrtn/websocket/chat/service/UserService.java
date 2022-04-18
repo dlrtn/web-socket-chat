@@ -104,4 +104,23 @@ public class UserService {
         return Objects.nonNull(user) && StringUtils.equals(user.getPassword(), password);
     }
 
+    public CommonResponse deleteUser(String sessionId, DeleteUserRequest request) {
+        User user = User.builder()
+                .userId(request.getUserId())
+                .build();
+
+        User foundUser = userMapper.findByUserId(request.getUserId());
+
+        if (validateUser(foundUser, request.getPassword())) {
+            try {
+                userMapper.delete(user);
+                return CommonResponse.success();
+            } catch (Exception e) {
+                return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+            }
+        }
+        return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+
+    }
+
 }
