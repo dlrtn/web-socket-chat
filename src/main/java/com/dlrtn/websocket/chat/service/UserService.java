@@ -111,6 +111,10 @@ public class UserService {
 
         User foundUser = userMapper.findByUserId(request.getUserId());
 
+        if (!sessionRepository.exists(sessionId)) {
+            return CommonResponse.failWith("Not Login State");
+        }
+
         if (validateUser(foundUser, request.getPassword())) {
             try {
                 userMapper.delete(user);
