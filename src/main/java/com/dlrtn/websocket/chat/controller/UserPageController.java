@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class UserPageController {
 
-    @Operation(summary = "회원가입 페이지로 이동")
+    @Operation(summary = "회원 가입 페이지")
     @GetMapping("/sign-up")
     public String getSignUpPage() {
         return "signup";
@@ -21,6 +21,18 @@ public class UserPageController {
     @GetMapping("/sing-in")
     public String getSignInPage() {
         return "signin";
+    }
+
+    @Operation(summary = "회원 정보 수정 페이지")
+    @GetMapping("/update-info")
+    public String getUpdateUserInfoPage() {
+        return "update-info";
+    }
+
+    @Operation(summary = "회원 비밀번호 수정 페이지")
+    @GetMapping("/update-password")
+    public String getUpdateUserPasswordPage() {
+        return "update-password";
     }
 
 }

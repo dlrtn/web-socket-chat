@@ -2,9 +2,9 @@ spring:
   profiles:
     active:
       - datasource
+      - logging
       - mybatis
       - swagger
-      - logging
 
 server:
   port: 8010

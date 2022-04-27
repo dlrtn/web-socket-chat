@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 @RequiredArgsConstructor
 public class InMemorySessionRepository {
+
     private final Map<String, User> sessions = new ConcurrentHashMap<>();
 
     public void put(String sessionId, User user) {
@@ -24,4 +25,5 @@ public class InMemorySessionRepository {
     public boolean exists(String sessionId) {
         return StringUtils.isNotEmpty(sessionId) && sessions.containsKey(sessionId);
     }
+
 }
