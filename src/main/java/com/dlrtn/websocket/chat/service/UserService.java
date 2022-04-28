@@ -115,7 +115,7 @@ public class UserService {
 
         User foundUser = userMapper.findByUserId(request.getUserId());
 
-        if (ObjectUtils.isEmpty(foundUser) || !sessionRepository.exists(sessionId)) {
+        if (ObjectUtils.isEmpty(foundUser) || !sessionRepository.exists(sessionId)) { // 수정
             return CommonResponse.failWith("Can't Find User or Not Login State");
         }
 
@@ -132,9 +132,7 @@ public class UserService {
     }
 
     public User findOne(String userId) {
-
         return userMapper.findByUserId(userId);
-
     }
 
 }
