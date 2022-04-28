@@ -5,6 +5,7 @@ import com.dlrtn.websocket.chat.model.ResponseMessage;
 import com.dlrtn.websocket.chat.model.UserAuthRole;
 import com.dlrtn.websocket.chat.model.UserSessionConstants;
 import com.dlrtn.websocket.chat.model.payload.CommonResponse;
+import com.dlrtn.websocket.chat.model.payload.DeleteUserRequest;
 import com.dlrtn.websocket.chat.model.payload.SignInRequest;
 import com.dlrtn.websocket.chat.model.payload.SignUpRequest;
 import com.dlrtn.websocket.chat.util.CookieUtils;
@@ -24,7 +25,7 @@ public class UserServiceTests {
     @Autowired
     private UserService userService;
 
-    @DisplayName("유저 회원가입 테스트")
+    @DisplayName("유저 회원가입 기능 부분 테스트")
     @Test
     void join_user_test() {
 
@@ -40,5 +41,7 @@ public class UserServiceTests {
         Assertions.assertEquals(ResponseMessage.SUCCESS, commonResponse.getMessage());
 
     }
+
+
 
 }

@@ -7,9 +7,11 @@ import com.dlrtn.websocket.chat.model.domain.User;
 import com.dlrtn.websocket.chat.model.payload.*;
 import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.TextUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -113,8 +115,8 @@ public class UserService {
 
         User foundUser = userMapper.findByUserId(request.getUserId());
 
-        if (!sessionRepository.exists(sessionId)) {
-            return CommonResponse.failWith("Not Login State, please sign-in first");
+        if (ObjectUtils.isEmpty(foundUser) || !sessionRepository.exists(sessionId)) {
+            return CommonResponse.failWith("Can't Find User or Not Login State");
         }
 
         if (validateUser(foundUser, request.getPassword())) {
