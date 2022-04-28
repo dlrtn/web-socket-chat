@@ -78,11 +78,9 @@ public class UserService {
         if (request.getNewPassword() != "" && request.getNewrealName() != "") { // 둘다 변경하고자 값을 삽입한 경우..
             newRealName = request.getNewrealName();
             newPassWord = request.getNewPassword();
-        }
-        else if (request.getNewPassword() != "") { // 패스워드 변경만 원할 경우,
+        } else if (StringUtils.isNotEmpty(request.getNewPassword())) { // 패스워드 변경만 원할 경우,
             newPassWord = request.getNewPassword();
-        }
-        else if (request.getNewrealName() != "") { // 실명 변경만 원할 경우,
+        } else if (StringUtils.isNotEmpty(request.getNewrealName())) { // 실명 변경만 원할 경우,
             newRealName = request.getNewrealName();
         }
 
@@ -128,6 +126,12 @@ public class UserService {
             }
         }
         return CommonResponse.failWith("Password not correct");
+
+    }
+
+    public User findOne(String userId) {
+
+        return userMapper.findByUserId(userId);
 
     }
 
