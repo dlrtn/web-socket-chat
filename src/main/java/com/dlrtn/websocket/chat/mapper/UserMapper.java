@@ -8,10 +8,10 @@ public interface UserMapper {
 
     void save(User user);
 
+    void update(User user);
+
     void delete(User user);
 
     User findByUserId(String userId);
-
-    void update(User user);
 
 }
