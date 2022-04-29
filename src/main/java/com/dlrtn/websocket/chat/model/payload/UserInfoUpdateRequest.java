@@ -10,7 +10,7 @@ public class UserInfoUpdateRequest {
     @NotBlank
     private String userId;
 
-    private String newrealName; // 이름 변경 안할 경우
+    private String newRealName; // 이름 변경 안할 경우
 
     @NotBlank
     private String existingPassword;

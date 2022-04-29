@@ -65,7 +65,7 @@ public class UserService {
 
     public CommonResponse update(String sessionId, UserInfoUpdateRequest request) {
         if (!sessionRepository.exists(sessionId)) {
-            return CommonResponse.failWith("please login frist");
+            return CommonResponse.failWith("please login first");
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -75,13 +75,13 @@ public class UserService {
         String newRealName = foundUser.getRealName();
         String newPassWord = foundUser.getPassword();
 
-        if (request.getNewPassword() != "" && request.getNewrealName() != "") { // 둘다 변경하고자 값을 삽입한 경우..
-            newRealName = request.getNewrealName();
+        if (StringUtils.isNoneEmpty(request.getNewRealName(), request.getNewPassword())) {
+            newRealName = request.getNewRealName();
             newPassWord = request.getNewPassword();
-        } else if (request.getNewPassword() != "") { // 패스워드 변경만 원할 경우,
+        } else if (StringUtils.isNotEmpty(request.getNewPassword())) {
             newPassWord = request.getNewPassword();
-        } else if (request.getNewrealName() != "") { // 실명 변경만 원할 경우,
-            newRealName = request.getNewrealName();
+        } else if (StringUtils.isNotEmpty(request.getNewRealName())) {
+            newRealName = request.getNewRealName();
         }
 
         User user = User.builder()
@@ -107,6 +107,7 @@ public class UserService {
     }
 
     public CommonResponse deleteUser(String sessionId, DeleteUserRequest request) {
+
         User user = User.builder()
                 .userId(request.getUserId())
                 .build();

@@ -8,7 +8,6 @@ import com.dlrtn.websocket.chat.util.CookieUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +26,6 @@ import javax.validation.Valid;
 public class UserApiController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserApiController.class);
-
 
     private final UserService userService;
 
@@ -64,7 +62,7 @@ public class UserApiController {
             HttpServletRequest request,
             @Valid @RequestBody UserInfoUpdateRequest requestBody
     ) {
-        LOGGER.info("[Update RequestBody] userid : {}, password : {}, realName : {}, newPassword : {}", requestBody.getUserId(), requestBody.getExistingPassword(), requestBody.getNewrealName(), requestBody.getNewPassword());
+        LOGGER.info("[Update RequestBody] userid : {}, password : {}, realName : {}, newPassword : {}", requestBody.getUserId(), requestBody.getExistingPassword(), requestBody.getNewRealName(), requestBody.getNewPassword());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         return userService.update(sessionId, requestBody);
     }
