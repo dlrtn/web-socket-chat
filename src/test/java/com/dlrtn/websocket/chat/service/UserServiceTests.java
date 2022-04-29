@@ -42,4 +42,27 @@ public class UserServiceTests {
 
     }
 
+    @DisplayName("유저 로그인 테스트")
+    @Test
+    void login_user_test() {
+
+        SignInRequest request = new SignInRequest();
+
+        request.setUserId("dlrtn");
+        request.setPassword("1234");
+
+        CommonResponse commonResponse = userService.signIn(request);
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals("Success", commonResponse)
+        );
+
+    }
+
+    @DisplayName("유저 회원탈퇴 테스트")
+    @Test
+    void delete_user_test() {
+
+    }
+
 }
