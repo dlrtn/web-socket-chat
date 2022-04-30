@@ -14,13 +14,13 @@ public class UserPageController {
     @Operation(summary = "회원 가입 페이지")
     @GetMapping("/sign-up")
     public String getSignUpPage() {
-        return "signup";
+        return "sign-up";
     }
 
     @Operation(summary = "회원 로그인 페이지")
     @GetMapping("/sing-in")
     public String getSignInPage() {
-        return "signin";
+        return "sign-in";
     }
 
     @Operation(summary = "회원 정보 수정 페이지")
@@ -29,10 +29,10 @@ public class UserPageController {
         return "update-info";
     }
 
-    @Operation(summary = "회원 비밀번호 수정 페이지")
-    @GetMapping("/update-password")
-    public String getUpdateUserPasswordPage() {
-        return "update-password";
+    @Operation(summary = "회원 탈퇴 페이지")
+    @GetMapping("/withdrawal")
+    public String getWithdrawalUserPage() {
+        return "withdrawal";
     }
 
 }
