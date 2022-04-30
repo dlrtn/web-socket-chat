@@ -30,7 +30,7 @@
             USER_ID = #{userId}
     </update>
 
-    <delete id="delete" parameterType="User">
+    <delete id="delete" parameterType="String">
         DELETE FROM
             TB_USER
         WHERE

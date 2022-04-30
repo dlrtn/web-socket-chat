@@ -6,12 +6,12 @@ import com.dlrtn.websocket.chat.model.UserSessionCreation;
 import com.dlrtn.websocket.chat.model.domain.User;
 import com.dlrtn.websocket.chat.model.payload.*;
 import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.TextUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -65,6 +65,7 @@ public class UserService {
         return UserSessionCreation.successWith(newSessionId);
     }
 
+    @Transactional
     public CommonResponse update(String sessionId, UserInfoUpdateRequest request) {
         if (!sessionRepository.exists(sessionId)) {
             return CommonResponse.failWith("please login first");
@@ -74,17 +75,8 @@ public class UserService {
 
         User foundUser = userMapper.findByUserId(request.getUserId());
 
-        String newRealName = foundUser.getRealName();
-        String newPassWord = foundUser.getPassword();
-
-        if (StringUtils.isNoneEmpty(request.getNewRealName(), request.getNewPassword())) {
-            newRealName = request.getNewRealName();
-            newPassWord = request.getNewPassword();
-        } else if (StringUtils.isNotEmpty(request.getNewPassword())) {
-            newPassWord = request.getNewPassword();
-        } else if (StringUtils.isNotEmpty(request.getNewRealName())) {
-            newRealName = request.getNewRealName();
-        }
+        String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), foundUser.getRealName());
+        String newPassWord = StringUtils.defaultIfEmpty(request.getNewPassword(), foundUser.getPassword());
 
         User user = User.builder()
                 .userId(request.getUserId())
@@ -108,6 +100,11 @@ public class UserService {
         return Objects.nonNull(user) && StringUtils.equals(user.getPassword(), password);
     }
 
+    public User findOne(String userId) {
+        return userMapper.findByUserId(userId);
+    }
+
+    @Transactional
     public CommonResponse deleteUser(String sessionId, DeleteUserRequest request) {
 
         User user = User.builder()
@@ -116,24 +113,21 @@ public class UserService {
 
         User foundUser = userMapper.findByUserId(request.getUserId());
 
-        if (ObjectUtils.isEmpty(foundUser) || !sessionRepository.exists(sessionId)) { // 수정
+        if (Objects.isNull(foundUser) || !sessionRepository.exists(sessionId)) {
             return CommonResponse.failWith("Can't Find User or Not Login State");
         }
 
         if (validateUser(foundUser, request.getPassword())) {
             try {
-                userMapper.delete(user);
+                userMapper.delete(request.getUserId());
                 return CommonResponse.success();
             } catch (Exception e) {
-                return CommonResponse.failWith(ResponseMessage.SERVER_ERROR); // 유저 삭제에 실패.. 흠
+                return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
             }
         }
         return CommonResponse.failWith("Password not correct");
 
     }
 
-    public User findOne(String userId) {
-        return userMapper.findByUserId(userId);
-    }
 
 }
