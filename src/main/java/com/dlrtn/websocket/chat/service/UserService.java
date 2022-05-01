@@ -22,6 +22,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserMapper userMapper;
+
     private final InMemorySessionRepository sessionRepository;
 
     @Transactional

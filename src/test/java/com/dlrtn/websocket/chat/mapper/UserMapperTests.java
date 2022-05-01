@@ -82,7 +82,7 @@ public class UserMapperTests {
                 .userId("1")
                 .build();
 
-        userMapper.delete(user);
+        userMapper.delete(user.getUserId());
 
         User foundUser = userMapper.findByUserId("1");
 
