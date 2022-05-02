@@ -65,7 +65,7 @@ public class UserApiController {
     }
 
     @Operation(summary = "회원 정보 삭제")
-    @DeleteMapping("/sign-out")
+    @DeleteMapping("/withdrawal")
     public CommonResponse deleteUser(
             HttpServletRequest request,
             @Valid @RequestBody DeleteUserRequest requestBody
