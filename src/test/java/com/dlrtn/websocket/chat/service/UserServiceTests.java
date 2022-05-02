@@ -2,25 +2,33 @@ package com.dlrtn.websocket.chat.service;
 
 import com.dlrtn.websocket.chat.model.ResponseMessage;
 import com.dlrtn.websocket.chat.model.UserAuthRole;
+import com.dlrtn.websocket.chat.model.UserSessionConstants;
+import com.dlrtn.websocket.chat.model.UserSessionCreation;
 import com.dlrtn.websocket.chat.model.payload.CommonResponse;
 import com.dlrtn.websocket.chat.model.payload.SignInRequest;
 import com.dlrtn.websocket.chat.model.payload.SignUpRequest;
 
+import com.dlrtn.websocket.chat.util.CookieUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockCookie;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
+
+import java.util.UUID;
 
 @SpringBootTest
 public class UserServiceTests {
 
-    protected MockHttpSession session;
-    protected MockHttpServletRequest mockHttpRequest;
-
+    private MockHttpSession session;
+    private MockHttpServletRequest request;
+    private MockHttpServletResponse response;
+    private MockCookie cookie;
     @Autowired
     private UserService userService;
 
@@ -45,18 +53,21 @@ public class UserServiceTests {
     @Test
     void login_user_test() {
 
-        SignInRequest request = new SignInRequest();
+        SignInRequest requestBody = new SignInRequest();
 
-        request.setUserId("11");
-        request.setPassword("22");
+        requestBody.setUserId("11");
+        requestBody.setPassword("22");
 
-        session = new MockHttpSession();
-        session.setAttribute("request", request);
+        cookie = new MockCookie("SSID", "Random");
+        response = new MockHttpServletResponse();
+        request = new MockHttpServletRequest("POST", "/sign-in");
 
-        mockHttpRequest = new MockHttpServletRequest();
-        mockHttpRequest.setSession(session);
+        CookieUtils.setCookie(response, "SSID", String.valueOf(UUID.randomUUID()));
 
-        
+        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
+        UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
+
+        Assertions.assertEquals(true, sessionCreation.isSuccess());
 
     }
 
