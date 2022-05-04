@@ -54,7 +54,7 @@ public class UserApiController {
     }
 
     @Operation(summary = "회원 정보수정")
-    @PutMapping("/update")
+    @PatchMapping("/modifying")
     public CommonResponse update(
             HttpServletRequest request,
             @Valid @RequestBody UserInfoUpdateRequest requestBody
