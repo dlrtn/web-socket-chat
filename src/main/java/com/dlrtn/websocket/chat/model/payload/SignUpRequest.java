@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class SignUpRequest {
 
     @NotBlank
-    private String userId;
+    private String username;
 
     @NotBlank
     private String password;

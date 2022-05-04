@@ -29,14 +29,14 @@ public class UserService {
 
     @Transactional
     public CommonResponse signUp(SignUpRequest request) {
-        User foundUser = userMapper.findByUserId(request.getUserId());
+        User foundUser = userMapper.findByusername(request.getusername());
         if (Objects.nonNull(foundUser)) {
             return CommonResponse.failWith(ResponseMessage.EXISTED_USER_ID);
         }
 
         LocalDateTime now = LocalDateTime.now();
         User user = User.builder()
-                .userId(request.getUserId())
+                .username(request.getusername())
                 .password(request.getPassword())
                 .realName(request.getRealName())
                 .authRole(request.getAuthRole())
@@ -58,7 +58,7 @@ public class UserService {
             return UserSessionCreation.successWith(sessionId);
         }
 
-        User foundUser = userMapper.findByUserId(request.getUserId());
+        User foundUser = userMapper.findByusername(request.getusername());
         if (!validateUser(foundUser, request.getPassword())) {
             return UserSessionCreation.failWith("User id or password mismatch");
         }
@@ -76,13 +76,13 @@ public class UserService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        User foundUser = userMapper.findByUserId(request.getUserId());
+        User foundUser = userMapper.findByusername(request.getusername());
 
         String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), foundUser.getRealName());
         String newPassWord = StringUtils.defaultIfEmpty(request.getNewPassword(), foundUser.getPassword());
 
         User user = User.builder()
-                .userId(request.getUserId())
+                .username(request.getusername())
                 .realName(newRealName)
                 .password(newPassWord)
                 .updatedAt(now)
@@ -103,20 +103,20 @@ public class UserService {
         return Objects.nonNull(user) && StringUtils.equals(user.getPassword(), password);
     }
 
-    public User findOne(String userId) throws UsernameNotFoundException {
-        return Optional.ofNullable(userId)
-                .map(userMapper::findByUserId)
-                .orElseThrow(() -> new UsernameNotFoundException(userId));
+    public User findOne(String username) throws UsernameNotFoundException {
+        return Optional.ofNullable(username)
+                .map(userMapper::findByusername)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     @Transactional
     public CommonResponse deleteUser(String sessionId, DeleteUserRequest request) {
 
         User user = User.builder()
-                .userId(request.getUserId())
+                .username(request.getusername())
                 .build();
 
-        User foundUser = userMapper.findByUserId(request.getUserId());
+        User foundUser = userMapper.findByusername(request.getusername());
 
         if (Objects.isNull(foundUser) || !sessionRepository.exists(sessionId)) {
             return CommonResponse.failWith("Can't Find User or Not Login State");
@@ -124,7 +124,7 @@ public class UserService {
 
         if (validateUser(foundUser, request.getPassword())) {
             try {
-                userMapper.delete(request.getUserId());
+                userMapper.delete(request.getusername());
                 return CommonResponse.success();
             } catch (Exception e) {
                 return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);

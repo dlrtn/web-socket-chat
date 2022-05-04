@@ -14,7 +14,7 @@ public class User {
 
     private final long userNo;
 
-    private final String userId;
+    private final String username;
 
     private final String password;
 

@@ -12,7 +12,7 @@
             CREATED_AT,
             UPDATED_AT
         ) VALUES (
-            #{userId},
+            #{username},
             #{password},
             #{realName},
             #{authRole},
@@ -27,17 +27,17 @@
         SET
             PASSWORD = #{password}, REAL_NAME = #{realName}, UPDATED_AT = #{updatedAt}
         WHERE
-            USER_ID = #{userId}
+            USER_ID = #{username}
     </update>
 
     <delete id="delete" parameterType="String">
         DELETE FROM
             TB_USER
         WHERE
-            USER_ID = #{userId}
+            USER_ID = #{username}
     </delete>
 
-    <select id="findByUserId" parameterType="String" resultType="User">
+    <select id="findByusername" parameterType="String" resultType="User">
         SELECT
             USER_NO,
             USER_ID,
@@ -49,7 +49,7 @@
         FROM
             TB_USER
         WHERE
-            USER_ID = #{userId}
+            USER_ID = #{username}
     </select>
 
 </mapper>

@@ -43,7 +43,7 @@ public class UserServiceTests {
 
         SignInRequest requestBody = new SignInRequest();
 
-        requestBody.setUserId("66");
+        requestBody.setusername("66");
         requestBody.setPassword("77");
 
         UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
@@ -60,7 +60,7 @@ public class UserServiceTests {
 
         SignUpRequest requestBody = new SignUpRequest();
 
-        requestBody.setUserId("66");
+        requestBody.setusername("66");
         requestBody.setPassword("77");
         requestBody.setRealName("wndlrtn");
         requestBody.setAuthRole(UserAuthRole.USER);
@@ -80,7 +80,7 @@ public class UserServiceTests {
 
         SignUpRequest requestBody = new SignUpRequest();
 
-        requestBody.setUserId("66");
+        requestBody.setusername("66");
         requestBody.setPassword("77");
         requestBody.setRealName("wndlrtn");
         requestBody.setAuthRole(UserAuthRole.USER);
@@ -95,9 +95,9 @@ public class UserServiceTests {
     @Test
     void find_user_test() {
 
-        String userId = "11";
+        String username = "11";
 
-        User foundUser = userService.findOne(userId);
+        User foundUser = userService.findOne(username);
 
     }
 
@@ -111,7 +111,7 @@ public class UserServiceTests {
 
         SignInRequest requestBody = new SignInRequest();
 
-        requestBody.setUserId("66");
+        requestBody.setusername("66");
         requestBody.setPassword("77");
 
         UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
@@ -128,24 +128,24 @@ public class UserServiceTests {
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         SignInRequest signInRequest = new SignInRequest();
 
-        signInRequest.setUserId("11");
+        signInRequest.setusername("11");
         signInRequest.setPassword("22");
 
         userService.signIn(sessionId, signInRequest);
 
         UserInfoUpdateRequest requestBody = new UserInfoUpdateRequest();
 
-        requestBody.setUserId("11");
+        requestBody.setusername("11");
         requestBody.setExistingPassword("22");
         requestBody.setNewRealName("1234");
         requestBody.setNewPassword("123");
 
         CommonResponse commonResponse = userService.update(sessionId, requestBody);
 
-        User foundUser = userService.findOne(requestBody.getUserId());
+        User foundUser = userService.findOne(requestBody.getusername());
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(requestBody.getUserId(), foundUser.getUserId()),
+                () -> Assertions.assertEquals(requestBody.getusername(), foundUser.getusername()),
                 () -> Assertions.assertEquals(requestBody.getNewPassword(), foundUser.getPassword()),
                 () -> Assertions.assertEquals(requestBody.getNewRealName(), foundUser.getRealName()));
 
@@ -159,17 +159,17 @@ public class UserServiceTests {
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         SignInRequest signInRequest = new SignInRequest();
 
-        signInRequest.setUserId("11");
+        signInRequest.setusername("11");
         signInRequest.setPassword("22");
 
         userService.signIn(sessionId, signInRequest);
 
         DeleteUserRequest requestBody = new DeleteUserRequest();
 
-        requestBody.setUserId("66");
+        requestBody.setusername("66");
         requestBody.setPassword("77");
 
-        User foundUser = userService.findOne(requestBody.getUserId());
+        User foundUser = userService.findOne(requestBody.getusername());
 
         CommonResponse commonResponse = userService.deleteUser(sessionId, requestBody);
 

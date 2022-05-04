@@ -28,7 +28,7 @@ public class UserMapperTests {
         LocalDateTime filteredNow = now.truncatedTo(ChronoUnit.SECONDS);
 
         User user = User.builder()
-                .userId("1")
+                .username("1")
                 .password("1")
                 .realName("1234")
                 .authRole(UserAuthRole.USER)
@@ -37,10 +37,10 @@ public class UserMapperTests {
                 .build();
 
         userMapper.save(user);
-        User foundUser = userMapper.findByUserId("1");
+        User foundUser = userMapper.findByusername("1");
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals("1", foundUser.getUserId()),
+                () -> Assertions.assertEquals("1", foundUser.getusername()),
                 () -> Assertions.assertEquals("1", foundUser.getPassword()),
                 () -> Assertions.assertEquals("1234", foundUser.getRealName()),
                 () -> Assertions.assertEquals(UserAuthRole.USER, foundUser.getAuthRole()),
@@ -55,7 +55,7 @@ public class UserMapperTests {
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); //이게 맞나..
 
         User user = User.builder()
-                .userId("1")
+                .username("1")
                 .password("1")
                 .realName("1234")
                 .updatedAt(now)
@@ -63,11 +63,11 @@ public class UserMapperTests {
 
         userMapper.update(user);
 
-        User foundUser = userMapper.findByUserId("1");
+        User foundUser = userMapper.findByusername("1");
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(user.getUserId(), foundUser.getUserId()),
-                () -> Assertions.assertEquals(user.getPassword(), foundUser.getUserId()),
+                () -> Assertions.assertEquals(user.getusername(), foundUser.getusername()),
+                () -> Assertions.assertEquals(user.getPassword(), foundUser.getusername()),
                 () -> Assertions.assertEquals(user.getRealName(), foundUser.getRealName()),
                 () -> Assertions.assertEquals(user.getUpdatedAt(), foundUser.getUpdatedAt())
         );
@@ -79,12 +79,12 @@ public class UserMapperTests {
     void delete_user_test() {
 
         User user = User.builder()
-                .userId("1")
+                .username("1")
                 .build();
 
-        userMapper.delete(user.getUserId());
+        userMapper.delete(user.getusername());
 
-        User foundUser = userMapper.findByUserId("1");
+        User foundUser = userMapper.findByusername("1");
 
         Assertions.assertEquals(null, foundUser);
 
