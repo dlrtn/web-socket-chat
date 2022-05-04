@@ -58,14 +58,14 @@ public class UserServiceTests {
         request.setCookies(response.getCookies());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
 
-        SignUpRequest request = new SignUpRequest();
+        SignUpRequest requestBody = new SignUpRequest();
 
-        request.setUserId("66");
-        request.setPassword("77");
-        request.setRealName("wndlrtn");
-        request.setAuthRole(UserAuthRole.USER);
+        requestBody.setUserId("66");
+        requestBody.setPassword("77");
+        requestBody.setRealName("wndlrtn");
+        requestBody.setAuthRole(UserAuthRole.USER);
 
-        CommonResponse commonResponse = userService.signUp(request);
+        CommonResponse commonResponse = userService.signUp(requestBody);
 
         Assertions.assertEquals(ResponseMessage.SUCCESS, commonResponse.getMessage());
 
@@ -78,16 +78,14 @@ public class UserServiceTests {
         request = new MockHttpServletRequest("POST", "/sign-up");
         request.setCookies(response.getCookies());
 
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
+        SignUpRequest requestBody = new SignUpRequest();
 
-        SignUpRequest request = new SignUpRequest();
+        requestBody.setUserId("66");
+        requestBody.setPassword("77");
+        requestBody.setRealName("wndlrtn");
+        requestBody.setAuthRole(UserAuthRole.USER);
 
-        request.setUserId("66");
-        request.setPassword("77");
-        request.setRealName("wndlrtn");
-        request.setAuthRole(UserAuthRole.USER);
-
-        CommonResponse commonResponse = userService.signUp(request);
+        CommonResponse commonResponse = userService.signUp(requestBody);
 
         Assertions.assertEquals(ResponseMessage.EXISTED_USER_ID, commonResponse.getMessage());
 
@@ -125,7 +123,7 @@ public class UserServiceTests {
     @DisplayName("유저 회원정보 변경 기능 부분 테스트")
     @Test
     void update_user_test() {
-        request = new MockHttpServletRequest("POST", "/sign-in");
+        request = new MockHttpServletRequest("POST", "/modifying");
         request.setCookies(response.getCookies());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         SignInRequest signInRequest = new SignInRequest();
@@ -156,7 +154,7 @@ public class UserServiceTests {
     @DisplayName("유저 회원탈퇴 기능 부분 테스트")
     @Test
     void withdrawal_user_test() {
-        request = new MockHttpServletRequest("POST", "/sign-in");
+        request = new MockHttpServletRequest("POST", "/withdrawal");
         request.setCookies(response.getCookies());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         SignInRequest signInRequest = new SignInRequest();

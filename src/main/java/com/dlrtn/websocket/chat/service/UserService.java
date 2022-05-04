@@ -10,11 +10,13 @@ import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -101,8 +103,10 @@ public class UserService {
         return Objects.nonNull(user) && StringUtils.equals(user.getPassword(), password);
     }
 
-    public User findOne(String userId) {
-        return userMapper.findByUserId(userId);
+    public User findOne(String userId) throws UsernameNotFoundException {
+        return Optional.ofNullable(userId)
+                .map(userMapper::findByUserId)
+                .orElseThrow(() -> new UsernameNotFoundException(userId));
     }
 
     @Transactional
