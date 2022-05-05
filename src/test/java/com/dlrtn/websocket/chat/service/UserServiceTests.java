@@ -1,6 +1,5 @@
 package com.dlrtn.websocket.chat.service;
 
-import com.dlrtn.websocket.chat.mapper.UserMapper;
 import com.dlrtn.websocket.chat.model.ResponseMessage;
 import com.dlrtn.websocket.chat.model.UserAuthRole;
 import com.dlrtn.websocket.chat.model.UserSessionConstants;
@@ -8,7 +7,6 @@ import com.dlrtn.websocket.chat.model.UserSessionCreation;
 import com.dlrtn.websocket.chat.model.domain.User;
 import com.dlrtn.websocket.chat.model.payload.*;
 
-import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import org.junit.jupiter.api.*;
 
@@ -43,7 +41,7 @@ public class UserServiceTests {
 
         SignInRequest requestBody = new SignInRequest();
 
-        requestBody.setusername("66");
+        requestBody.setUsername("66");
         requestBody.setPassword("77");
 
         UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
@@ -60,7 +58,7 @@ public class UserServiceTests {
 
         SignUpRequest requestBody = new SignUpRequest();
 
-        requestBody.setusername("66");
+        requestBody.setUsername("66");
         requestBody.setPassword("77");
         requestBody.setRealName("wndlrtn");
         requestBody.setAuthRole(UserAuthRole.USER);
@@ -80,7 +78,7 @@ public class UserServiceTests {
 
         SignUpRequest requestBody = new SignUpRequest();
 
-        requestBody.setusername("66");
+        requestBody.setUsername("66");
         requestBody.setPassword("77");
         requestBody.setRealName("wndlrtn");
         requestBody.setAuthRole(UserAuthRole.USER);
@@ -111,7 +109,7 @@ public class UserServiceTests {
 
         SignInRequest requestBody = new SignInRequest();
 
-        requestBody.setusername("66");
+        requestBody.setUsername("66");
         requestBody.setPassword("77");
 
         UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
@@ -128,24 +126,24 @@ public class UserServiceTests {
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         SignInRequest signInRequest = new SignInRequest();
 
-        signInRequest.setusername("11");
+        signInRequest.setUsername("11");
         signInRequest.setPassword("22");
 
         userService.signIn(sessionId, signInRequest);
 
         UserInfoUpdateRequest requestBody = new UserInfoUpdateRequest();
 
-        requestBody.setusername("11");
+        requestBody.setUsername("11");
         requestBody.setExistingPassword("22");
         requestBody.setNewRealName("1234");
         requestBody.setNewPassword("123");
 
         CommonResponse commonResponse = userService.update(sessionId, requestBody);
 
-        User foundUser = userService.findOne(requestBody.getusername());
+        User foundUser = userService.findOne(requestBody.getUsername());
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(requestBody.getusername(), foundUser.getusername()),
+                () -> Assertions.assertEquals(requestBody.getUsername(), foundUser.getUsername()),
                 () -> Assertions.assertEquals(requestBody.getNewPassword(), foundUser.getPassword()),
                 () -> Assertions.assertEquals(requestBody.getNewRealName(), foundUser.getRealName()));
 
@@ -159,17 +157,17 @@ public class UserServiceTests {
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         SignInRequest signInRequest = new SignInRequest();
 
-        signInRequest.setusername("11");
+        signInRequest.setUsername("11");
         signInRequest.setPassword("22");
 
         userService.signIn(sessionId, signInRequest);
 
         DeleteUserRequest requestBody = new DeleteUserRequest();
 
-        requestBody.setusername("66");
+        requestBody.setUsername("66");
         requestBody.setPassword("77");
 
-        User foundUser = userService.findOne(requestBody.getusername());
+        User foundUser = userService.findOne(requestBody.getUsername());
 
         CommonResponse commonResponse = userService.deleteUser(sessionId, requestBody);
 

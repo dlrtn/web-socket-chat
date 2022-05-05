@@ -3,9 +3,6 @@ package com.dlrtn.websocket.chat.mapper;
 import com.dlrtn.websocket.chat.config.LightMyBatisTest;
 import com.dlrtn.websocket.chat.model.UserAuthRole;
 import com.dlrtn.websocket.chat.model.domain.User;
-import com.dlrtn.websocket.chat.model.payload.CommonResponse;
-import com.dlrtn.websocket.chat.model.payload.DeleteUserRequest;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +37,7 @@ public class UserMapperTests {
         User foundUser = userMapper.findByusername("1");
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals("1", foundUser.getusername()),
+                () -> Assertions.assertEquals("1", foundUser.getUsername()),
                 () -> Assertions.assertEquals("1", foundUser.getPassword()),
                 () -> Assertions.assertEquals("1234", foundUser.getRealName()),
                 () -> Assertions.assertEquals(UserAuthRole.USER, foundUser.getAuthRole()),
@@ -66,8 +63,8 @@ public class UserMapperTests {
         User foundUser = userMapper.findByusername("1");
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(user.getusername(), foundUser.getusername()),
-                () -> Assertions.assertEquals(user.getPassword(), foundUser.getusername()),
+                () -> Assertions.assertEquals(user.getUsername(), foundUser.getUsername()),
+                () -> Assertions.assertEquals(user.getPassword(), foundUser.getPassword()),
                 () -> Assertions.assertEquals(user.getRealName(), foundUser.getRealName()),
                 () -> Assertions.assertEquals(user.getUpdatedAt(), foundUser.getUpdatedAt())
         );
@@ -82,7 +79,7 @@ public class UserMapperTests {
                 .username("1")
                 .build();
 
-        userMapper.delete(user.getusername());
+        userMapper.delete(user.getUsername());
 
         User foundUser = userMapper.findByusername("1");
 
