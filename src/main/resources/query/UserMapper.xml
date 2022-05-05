@@ -5,14 +5,14 @@
 
     <insert id="save" parameterType="User">
         INSERT INTO TB_USER (
-            USER_ID,
+            USERNAME,
             PASSWORD,
             REAL_NAME,
             AUTH_ROLE,
             CREATED_AT,
             UPDATED_AT
         ) VALUES (
-            #{userId},
+            #{username},
             #{password},
             #{realName},
             #{authRole},
@@ -27,20 +27,20 @@
         SET
             PASSWORD = #{password}, REAL_NAME = #{realName}, UPDATED_AT = #{updatedAt}
         WHERE
-            USER_ID = #{userId}
+            USERNAME = #{username}
     </update>
 
     <delete id="delete" parameterType="String">
         DELETE FROM
             TB_USER
         WHERE
-            USER_ID = #{userId}
+            USERNAME = #{username}
     </delete>
 
-    <select id="findByUserId" parameterType="String" resultType="User">
+    <select id="findByusername" parameterType="String" resultType="User">
         SELECT
             USER_NO,
-            USER_ID,
+            USERNAME,
             PASSWORD,
             REAL_NAME,
             AUTH_ROLE,
@@ -49,7 +49,7 @@
         FROM
             TB_USER
         WHERE
-            USER_ID = #{userId}
+            USERNAME = #{username}
     </select>
 
 </mapper>

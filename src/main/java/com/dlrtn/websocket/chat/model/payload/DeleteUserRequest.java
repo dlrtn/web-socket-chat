@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 public class DeleteUserRequest {
 
     @NotBlank
-    private String userId;
+    private String username;
 
     @NotBlank
     private String password;

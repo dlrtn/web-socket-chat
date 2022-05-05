@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 public class UserInfoUpdateRequest {
 
     @NotBlank
-    private String userId;
+    private String username;
 
     private String newRealName; // 이름 변경 안할 경우
 

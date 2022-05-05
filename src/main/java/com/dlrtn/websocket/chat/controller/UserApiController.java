@@ -41,7 +41,7 @@ public class UserApiController {
             HttpServletResponse response,
             @Valid @RequestBody SignInRequest requestBody
     ) {
-        LOGGER.info("[Request Body] userid : {}, userPW : {}", requestBody.getUserId(), requestBody.getPassword());
+        LOGGER.info("[Request Body] username : {}, userPW : {}", requestBody.getUsername(), requestBody.getPassword());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
 
@@ -59,7 +59,7 @@ public class UserApiController {
             HttpServletRequest request,
             @Valid @RequestBody UserInfoUpdateRequest requestBody
     ) {
-        LOGGER.info("[Update RequestBody] userid : {}, password : {}, realName : {}, newPassword : {}", requestBody.getUserId(), requestBody.getExistingPassword(), requestBody.getNewRealName(), requestBody.getNewPassword());
+        LOGGER.info("[Update RequestBody] username : {}, password : {}, realName : {}, newPassword : {}", requestBody.getUsername(), requestBody.getExistingPassword(), requestBody.getNewRealName(), requestBody.getNewPassword());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         return userService.update(sessionId, requestBody);
     }
@@ -70,7 +70,7 @@ public class UserApiController {
             HttpServletRequest request,
             @Valid @RequestBody DeleteUserRequest requestBody
     ) {
-        LOGGER.info("[Update RequestBody] userid : {}, userPW : {}", requestBody.getUserId(), requestBody.getPassword());
+        LOGGER.info("[Update RequestBody] username : {}, userPW : {}", requestBody.getUsername(), requestBody.getPassword());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         return userService.deleteUser(sessionId, requestBody);
     }

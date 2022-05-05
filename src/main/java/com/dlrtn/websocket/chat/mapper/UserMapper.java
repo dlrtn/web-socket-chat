@@ -10,8 +10,8 @@ public interface UserMapper {
 
     void update(User user);
 
-    void delete(String userId);
+    void delete(String username);
 
-    User findByUserId(String userId);
+    User findByUsername(String username);
 
 }
