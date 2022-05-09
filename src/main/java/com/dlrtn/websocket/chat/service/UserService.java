@@ -109,7 +109,7 @@ public class UserService {
     }
 
     private boolean validateUser(User user, String password) {
-        return Objects.nonNull(user) && passwordEncoder.matches(user.getPassword(), password);
+        return Objects.nonNull(user) && passwordEncoder.matches(password, user.getPassword());
     }
 
     public User findOne(String username) throws UsernameNotFoundException {
