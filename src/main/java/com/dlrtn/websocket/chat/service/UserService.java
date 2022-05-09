@@ -31,19 +31,17 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AuthenticationManager authenticationManager;
-
     @Transactional
     public CommonResponse signUp(SignUpRequest request) {
         User foundUser = userMapper.findByUsername(request.getUsername());
         if (Objects.nonNull(foundUser)) {
             return CommonResponse.failWith(ResponseMessage.EXISTED_USER_ID);
         }
-
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
         LocalDateTime now = LocalDateTime.now();
         User user = User.builder()
                 .username(request.getUsername())
-                .password(request.getPassword())
+                .password(encodedPassword)
                 .realName(request.getRealName())
                 .authRole(request.getAuthRole())
                 .createdAt(now)
@@ -57,15 +55,6 @@ public class UserService {
             // TODO 로깅 추가
             return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
         }
-    }
-
-    @Transactional
-    public void encryptPassword(String password){
-        String encodedPassword = passwordEncoder.encode(password);
-        User user = User.builder()
-                .password(encodedPassword)
-                .build();
-        userMapper.save(user);
     }
 
     public UserSessionCreation signIn(String sessionId, SignInRequest request) {
@@ -126,10 +115,6 @@ public class UserService {
 
     @Transactional
     public CommonResponse deleteUser(String sessionId, DeleteUserRequest request) {
-
-        User user = User.builder()
-                .username(request.getUsername())
-                .build();
 
         User foundUser = userMapper.findByUsername(request.getUsername());
 
