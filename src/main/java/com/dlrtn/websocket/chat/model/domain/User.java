@@ -4,6 +4,7 @@ import com.dlrtn.websocket.chat.model.UserAuthRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class User {
 
     private final String username;
 
-    private final String password;
+    private String password;
 
     private final String realName;
 
@@ -25,5 +26,9 @@ public class User {
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;
+
+    public void encryptPassword(PasswordEncoder passwordEncoder) {
+        password = passwordEncoder.encode(password);
+    }
 
 }
