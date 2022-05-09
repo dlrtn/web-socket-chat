@@ -34,7 +34,7 @@ public class UserMapperTests {
                 .build();
 
         userMapper.save(user);
-        User foundUser = userMapper.findByusername("1");
+        User foundUser = userMapper.findByUsername("1");
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals("1", foundUser.getUsername()),
@@ -60,7 +60,7 @@ public class UserMapperTests {
 
         userMapper.update(user);
 
-        User foundUser = userMapper.findByusername("1");
+        User foundUser = userMapper.findByUsername("1");
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(user.getUsername(), foundUser.getUsername()),
@@ -81,7 +81,7 @@ public class UserMapperTests {
 
         userMapper.delete(user.getUsername());
 
-        User foundUser = userMapper.findByusername("1");
+        User foundUser = userMapper.findByUsername("1");
 
         Assertions.assertEquals(null, foundUser);
 
