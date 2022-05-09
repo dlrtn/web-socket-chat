@@ -30,7 +30,7 @@ public class SecurityController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return "redirect:/sign-up";
+        return "redirect:/sign-in";
 
     }
 
