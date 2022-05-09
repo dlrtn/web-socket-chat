@@ -10,7 +10,9 @@ import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,10 @@ public class UserService {
     private final UserMapper userMapper;
 
     private final InMemorySessionRepository sessionRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final AuthenticationManager authenticationManager;
 
     @Transactional
     public CommonResponse signUp(SignUpRequest request) {
@@ -51,6 +57,15 @@ public class UserService {
             // TODO 로깅 추가
             return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
         }
+    }
+
+    @Transactional
+    public void encryptPassword(String password){
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = User.builder()
+                .password(encodedPassword)
+                .build();
+        userMapper.save(user);
     }
 
     public UserSessionCreation signIn(String sessionId, SignInRequest request) {
@@ -100,7 +115,7 @@ public class UserService {
     }
 
     private boolean validateUser(User user, String password) {
-        return Objects.nonNull(user) && StringUtils.equals(user.getPassword(), password);
+        return Objects.nonNull(user) && passwordEncoder.matches(user.getPassword(), password);
     }
 
     public User findOne(String username) throws UsernameNotFoundException {
