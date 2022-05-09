@@ -37,8 +37,10 @@ public class UserService {
         if (Objects.nonNull(foundUser)) {
             return CommonResponse.failWith(ResponseMessage.EXISTED_USER_ID);
         }
+
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         LocalDateTime now = LocalDateTime.now();
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(encodedPassword)
@@ -63,17 +65,20 @@ public class UserService {
         }
 
         User foundUser = userMapper.findByUsername(request.getUsername());
+
         if (!validateUser(foundUser, request.getPassword())) {
             return UserSessionCreation.failWith("User id or password mismatch");
         }
 
         String newSessionId = UUID.randomUUID().toString();
         sessionRepository.put(newSessionId, foundUser);
+
         return UserSessionCreation.successWith(newSessionId);
     }
 
     @Transactional
     public CommonResponse update(String sessionId, UserInfoUpdateRequest request) {
+
         if (!sessionRepository.exists(sessionId)) {
             return CommonResponse.failWith("please login first");
         }

@@ -17,7 +17,7 @@ public class User {
 
     private final String username;
 
-    private String password;
+    private final String password;
 
     private final String realName;
 
@@ -27,8 +27,6 @@ public class User {
 
     private final LocalDateTime updatedAt;
 
-    public void encryptPassword(PasswordEncoder passwordEncoder) {
-        password = passwordEncoder.encode(password);
-    }
+
 
 }
