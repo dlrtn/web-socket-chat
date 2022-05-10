@@ -10,7 +10,9 @@ import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,8 @@ public class UserService {
 
     private final InMemorySessionRepository sessionRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public CommonResponse signUp(SignUpRequest request) {
         User foundUser = userMapper.findByUsername(request.getUsername());
@@ -34,10 +38,12 @@ public class UserService {
             return CommonResponse.failWith(ResponseMessage.EXISTED_USER_ID);
         }
 
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
         LocalDateTime now = LocalDateTime.now();
+
         User user = User.builder()
                 .username(request.getUsername())
-                .password(request.getPassword())
+                .password(encodedPassword)
                 .realName(request.getRealName())
                 .authRole(request.getAuthRole())
                 .createdAt(now)
@@ -59,17 +65,20 @@ public class UserService {
         }
 
         User foundUser = userMapper.findByUsername(request.getUsername());
+
         if (!validateUser(foundUser, request.getPassword())) {
             return UserSessionCreation.failWith("User id or password mismatch");
         }
 
         String newSessionId = UUID.randomUUID().toString();
         sessionRepository.put(newSessionId, foundUser);
+
         return UserSessionCreation.successWith(newSessionId);
     }
 
     @Transactional
     public CommonResponse update(String sessionId, UserInfoUpdateRequest request) {
+
         if (!sessionRepository.exists(sessionId)) {
             return CommonResponse.failWith("please login first");
         }
@@ -100,7 +109,7 @@ public class UserService {
     }
 
     private boolean validateUser(User user, String password) {
-        return Objects.nonNull(user) && StringUtils.equals(user.getPassword(), password);
+        return Objects.nonNull(user) && passwordEncoder.matches(password, user.getPassword());
     }
 
     public User findOne(String username) throws UsernameNotFoundException {
@@ -111,10 +120,6 @@ public class UserService {
 
     @Transactional
     public CommonResponse deleteUser(String sessionId, DeleteUserRequest request) {
-
-        User user = User.builder()
-                .username(request.getUsername())
-                .build();
 
         User foundUser = userMapper.findByUsername(request.getUsername());
 
