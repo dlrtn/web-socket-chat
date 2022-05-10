@@ -4,7 +4,6 @@ import com.dlrtn.websocket.chat.model.UserAuthRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +25,5 @@ public class User {
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;
-
-
 
 }

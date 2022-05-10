@@ -6,33 +6,35 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.dlrtn.websocket.chat.model.PagePathConstants.*;
+
 @Controller
-@RequestMapping("/users")
+@RequestMapping(USER)
 @RequiredArgsConstructor
 public class UserPageController {
 
     @Operation(summary = "회원 가입 페이지")
-    @GetMapping("/sign-up")
+    @GetMapping(SIGNUP)
     public String getSignUpPage() {
-        return "sign-up";
+        return SIGNUP;
     }
 
     @Operation(summary = "회원 로그인 페이지")
-    @GetMapping("/sing-in")
+    @GetMapping(LOGIN)
     public String getSignInPage() {
-        return "sign-in";
+        return LOGIN;
     }
 
     @Operation(summary = "회원 정보 수정 페이지")
-    @GetMapping("/update-info")
+    @GetMapping(MODIFYING)
     public String getUpdateUserInfoPage() {
-        return "update-info";
+        return MODIFYING;
     }
 
     @Operation(summary = "회원 탈퇴 페이지")
-    @GetMapping("/withdrawal")
+    @GetMapping(WITHDRAWAL)
     public String getWithdrawalUserPage() {
-        return "withdrawal";
+        return WITHDRAWAL;
     }
 
 }

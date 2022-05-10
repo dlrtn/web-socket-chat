@@ -16,9 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import static com.dlrtn.websocket.chat.model.PagePathConstants.*;
+
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(API + USER)
 @RequiredArgsConstructor
 public class UserApiController {
 
@@ -27,7 +29,7 @@ public class UserApiController {
     private final UserService userService;
 
     @Operation(summary = "회원가입")
-    @PostMapping("/sign-up")
+    @PostMapping(SIGNUP)
     public CommonResponse signUp(
             @Valid @RequestBody SignUpRequest signUpRequest
     ) {
@@ -35,7 +37,7 @@ public class UserApiController {
     }
 
     @Operation(summary = "회원 로그인")
-    @PostMapping("/sign-in")
+    @PostMapping(LOGIN)
     public CommonResponse signIn(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -54,7 +56,7 @@ public class UserApiController {
     }
 
     @Operation(summary = "회원 정보수정")
-    @PatchMapping("/modifying")
+    @PatchMapping(MODIFYING)
     public CommonResponse update(
             HttpServletRequest request,
             @Valid @RequestBody UserInfoUpdateRequest requestBody
@@ -65,7 +67,7 @@ public class UserApiController {
     }
 
     @Operation(summary = "회원 정보 삭제")
-    @DeleteMapping("/withdrawal")
+    @DeleteMapping(WITHDRAWAL)
     public CommonResponse deleteUser(
             HttpServletRequest request,
             @Valid @RequestBody DeleteUserRequest requestBody
