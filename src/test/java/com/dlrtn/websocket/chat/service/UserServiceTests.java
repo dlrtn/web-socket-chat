@@ -18,33 +18,29 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.util.UUID;
 
+import static com.dlrtn.websocket.chat.model.PagePathConstants.*;
+import static com.dlrtn.websocket.chat.model.RestApiConstants.*;
+
 @SpringBootTest
 public class UserServiceTests {
 
-    private MockHttpServletRequest request;
-    private MockHttpServletResponse response;
     String sessionId;
 
     @Autowired
     private UserService userService;
 
     @BeforeAll()
-    void createHttpServlet() {
+    public static void createHttpServlet() {
 
+        MockHttpServletRequest request;
+        MockHttpServletResponse response;
+
+        request = new MockHttpServletRequest(POST, LOGIN);
         response = new MockHttpServletResponse();
+
         CookieUtils.setCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, String.valueOf(UUID.randomUUID()));
-
-    }
-
-    @BeforeEach
-    void login() {
-
-        SignInRequest requestBody = new SignInRequest();
-
-        requestBody.setUsername("66");
-        requestBody.setPassword("77");
-
-        UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
+        request.setCookies(response.getCookies());
+        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
 
     }
 
@@ -52,14 +48,11 @@ public class UserServiceTests {
     @Test
     void join_user_test() {
 
-        request = new MockHttpServletRequest("POST", "/sign-up");
-        request.setCookies(response.getCookies());
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
 
         SignUpRequest requestBody = new SignUpRequest();
 
-        requestBody.setUsername("66");
-        requestBody.setPassword("77");
+        requestBody.setUsername("123");
+        requestBody.setPassword("123");
         requestBody.setRealName("wndlrtn");
         requestBody.setAuthRole(UserAuthRole.USER);
 
@@ -72,9 +65,6 @@ public class UserServiceTests {
     @DisplayName("유저 회원가입 기능 부분 테스트")
     @Test
     void join_user_test_existed_user() {
-
-        request = new MockHttpServletRequest("POST", "/sign-up");
-        request.setCookies(response.getCookies());
 
         SignUpRequest requestBody = new SignUpRequest();
 
@@ -103,10 +93,6 @@ public class UserServiceTests {
     @Test
     void login_user_test() {
 
-        request = new MockHttpServletRequest("POST", "/sign-in");
-        request.setCookies(response.getCookies());
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
-
         SignInRequest requestBody = new SignInRequest();
 
         requestBody.setUsername("66");
@@ -121,9 +107,7 @@ public class UserServiceTests {
     @DisplayName("유저 회원정보 변경 기능 부분 테스트")
     @Test
     void update_user_test() {
-        request = new MockHttpServletRequest("POST", "/modifying");
-        request.setCookies(response.getCookies());
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
+
         SignInRequest signInRequest = new SignInRequest();
 
         signInRequest.setUsername("11");
@@ -152,9 +136,7 @@ public class UserServiceTests {
     @DisplayName("유저 회원탈퇴 기능 부분 테스트")
     @Test
     void withdrawal_user_test() {
-        request = new MockHttpServletRequest("POST", "/withdrawal");
-        request.setCookies(response.getCookies());
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
+
         SignInRequest signInRequest = new SignInRequest();
 
         signInRequest.setUsername("11");

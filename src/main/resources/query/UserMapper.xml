@@ -37,7 +37,7 @@
             USERNAME = #{username}
     </delete>
 
-    <select id="findByusername" parameterType="String" resultType="User">
+    <select id="findByUsername" parameterType="String" resultType="User">
         SELECT
             USER_NO,
             USERNAME,
