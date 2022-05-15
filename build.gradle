@@ -1,7 +1,10 @@
 plugins {
     id "org.springframework.boot" version "2.6.4"
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id 'nu.studer.jooq' version '7.1.1'
     id "java"
+
+
 }
 
 group = "web-socket-chat"
@@ -40,7 +43,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-websocket"
     implementation "org.springframework.boot:spring-boot-starter-aop"
-
+    implementation "org.springframework.boot:spring-boot-starter-jooq"
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.0'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:3.0.1'
     // unofficial spring boot starter dependencies
     implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatis_spring_boot_starter_version"
 
@@ -51,7 +56,6 @@ dependencies {
 
     implementation "org.mariadb.jdbc:mariadb-java-client:$mariadb_connector_version"
 
-
     compileOnly "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
@@ -60,6 +64,35 @@ dependencies {
     testImplementation "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:$mybatis_spring_boot_starter_version"
     testCompileOnly "org.projectlombok:lombok"
     testAnnotationProcessor "org.projectlombok:lombok"
+}
+
+jooq {
+    configurations {
+        main {
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.INFO
+                jdbc {
+                    driver = 'com.mysql.cj.jdbc.Driver'
+                    url = 'jdbc:mariadb://13.209.4.83:3306'
+                    user = 'dlrtn'
+                    password = 'jj5514'
+                }
+                generator {
+                    strategy {
+                        name = 'org.jooq.codegen.example.DefaultGeneratorStrategy'
+                    }
+                    database {
+                        name = 'org.jooq.meta.mariadb.MariaDBDatabase'
+                        includes = 'study_db.*'
+                        excludes = ''
+                    }
+                    target {
+                        packageName = 'com.dlrtn.websocket.chat.model.domain.generated'
+                    }
+                }
+            }
+        }
+    }
 }
 
 test {
