@@ -127,6 +127,7 @@ public class UserServiceTests {
         User foundUser = userService.findOne(requestBody.getUsername());
 
         Assertions.assertAll(
+                () -> Assertions.assertEquals(true, commonResponse.isSuccess()),
                 () -> Assertions.assertEquals(requestBody.getUsername(), foundUser.getUsername()),
                 () -> Assertions.assertEquals(requestBody.getNewPassword(), foundUser.getPassword()),
                 () -> Assertions.assertEquals(requestBody.getNewRealName(), foundUser.getRealName()));
