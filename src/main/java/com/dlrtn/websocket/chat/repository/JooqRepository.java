@@ -15,14 +15,7 @@ public class JooqRepository {
 
     private final DSLContext dslContext;
 
-    public User findByUsername(String username) {
-        return dslContext.select()
-                .from(TB_USER)
-                .where(TB_USER.USERNAME.eq(username))
-                .fetchOneInto(User.class);
-    }
-
-//    void save(User user) {
+    //    void save(User user) {
 //        return dslContext.insertInto(TB_USER,
 //                        TB_USER.USERNAME, TB_USER.PASSWORD, TB_USER.REAL_NAME, TB_USER.AUTH_ROLE, TB_USER.CREATED_AT, TB_USER.UPDATED_AT)
 //                .values(user.getUsername(), user.getPassword(), user.getRealName(), user.getAuthRole(), user.getCreatedAt(), user.getUpdatedAt())
@@ -30,11 +23,13 @@ public class JooqRepository {
 //
 //    }
 
-    int delete(User user) {
-        return dslContext.delete(TB_USER)
-                .where(TB_USER.USERNAME.eq(user.getUsername()))
-                .execute();
+    public User findByUsername(String username) {
+        return dslContext.select()
+                .from(TB_USER)
+                .where(TB_USER.USERNAME.eq(username))
+                .fetchOneInto(User.class);
     }
+
 
     int update(User user) {
         return dslContext.update(TB_USER)
@@ -43,5 +38,12 @@ public class JooqRepository {
                 .where(TB_USER.USERNAME.eq(user.getUsername()))
                 .execute();
     }
+
+    int delete(User user) {
+        return dslContext.delete(TB_USER)
+                .where(TB_USER.USERNAME.eq(user.getUsername()))
+                .execute();
+    }
+
 
 }
