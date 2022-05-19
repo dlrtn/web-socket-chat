@@ -1,22 +1,20 @@
 package com.dlrtn.websocket.chat.model.domain;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import java.awt.*;
 
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
 public class ChatMessage {
 
-    private String chatRoomId;
+    public enum MessageType {
+        ENTER, TALK
+    }
 
-    private String writer;
+    private MessageType type;
+
+    private String roomId;
+
+    private String sender;
 
     private String message;
-
-    private TrayIcon.MessageType type;
 
 }
