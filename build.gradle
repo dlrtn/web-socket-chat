@@ -70,7 +70,7 @@ jooq {
     configurations {
         main {
             generationTool {
-                logging = org.jooq.meta.jaxb.Logging.INFO
+                logging = org.jooq.meta.jaxb.Logging.ERROR
                 jdbc {
                     driver = 'org.mariadb.jdbc.Driver'
                     url = 'jdbc:mariadb://13.209.4.83:3306'
