@@ -1,33 +1,29 @@
 package com.dlrtn.websocket.chat.controller;
 
-import com.dlrtn.websocket.chat.model.domain.ChatMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.dlrtn.websocket.chat.model.domain.ChatRoom;
+import com.dlrtn.websocket.chat.service.ChatService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-import static com.dlrtn.websocket.chat.model.PagePathConstants.*;
+import java.util.List;
 
-@Controller
+import static com.dlrtn.websocket.chat.model.PagePathConstants.CHAT;
+
+@RequiredArgsConstructor
+@RestController
 @RequestMapping(CHAT)
 public class ChatController {
 
-    private final SimpMessagingTemplate template;
+    private final ChatService chatService;
 
-    @Autowired
-    public ChatController(SimpMessagingTemplate template) {
-        this.template = template;
+    @PostMapping
+    public ChatRoom createRoom(@RequestParam String name) {
+        return chatService.createRoom(name);
     }
 
-    @MessageMapping("/join")
-    public void join(ChatMessage message) {
-        message.setMessage(message.getWriter() + "님이 입장하셨습니다.");
-        template.convertAndSend("/subscribe/chat/room/" + message.getChatRoomId(), message);
+    @GetMapping
+    public List<ChatRoom> findAllRoom() {
+        return chatService.findAllRoom();
     }
 
-    @MessageMapping("/message")
-    public void message(ChatMessage message) {
-        template.convertAndSend("/subscribe/chat/room/" + message.getChatRoomId(), message);
-    }
 }
