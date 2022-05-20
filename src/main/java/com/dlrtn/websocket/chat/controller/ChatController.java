@@ -1,22 +1,29 @@
 package com.dlrtn.websocket.chat.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
+import com.dlrtn.websocket.chat.model.domain.ChatRoom;
+import com.dlrtn.websocket.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import static com.dlrtn.websocket.chat.model.PagePathConstants.*;
+import java.util.List;
 
-@Controller
-@RequestMapping(CHAT)
+import static com.dlrtn.websocket.chat.model.PagePathConstants.CHAT;
+
 @RequiredArgsConstructor
+@RestController
+@RequestMapping(CHAT)
 public class ChatController {
 
-    @Operation(summary = "채팅 내용 수신!!")
-    @GetMapping(MAIN)
-    public String chatGET() {
-        return MAIN;
+    private final ChatService chatService;
+
+    @PostMapping
+    public ChatRoom createRoom(@RequestParam String name) {
+        return chatService.createRoom(name);
+    }
+
+    @GetMapping
+    public List<ChatRoom> findAllRoom() {
+        return chatService.findAllRoom();
     }
 
 }
