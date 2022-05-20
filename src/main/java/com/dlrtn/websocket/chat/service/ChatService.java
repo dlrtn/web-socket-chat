@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.service;
 
+import com.dlrtn.websocket.chat.model.domain.ChatMessage;
 import com.dlrtn.websocket.chat.model.domain.ChatRoom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,6 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class ChatService {
-
-    private final ObjectMapper objectMapper;
 
     private Map<String, ChatRoom> chatRooms;
 
@@ -47,12 +46,6 @@ public class ChatService {
         return chatRoom;
     }
 
-    public <T> void sendMessage(WebSocketSession session, T message) {
-        try {
-            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
+
 
 }
