@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.repository;
 
-import com.dlrtn.websocket.chat.model.domain.User;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

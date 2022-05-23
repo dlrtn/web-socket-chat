@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.mapper;
 
-import com.dlrtn.websocket.chat.model.domain.User;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

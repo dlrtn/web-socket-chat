@@ -1,9 +1,9 @@
-package com.dlrtn.websocket.chat.controller;
+package com.dlrtn.websocket.chat.business.user.api;
 
-import com.dlrtn.websocket.chat.model.UserSessionConstants;
-import com.dlrtn.websocket.chat.model.UserSessionCreation;
-import com.dlrtn.websocket.chat.model.payload.*;
-import com.dlrtn.websocket.chat.service.UserService;
+import com.dlrtn.websocket.chat.business.user.model.payload.*;
+import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
+import com.dlrtn.websocket.chat.business.user.model.UserSessionCreation;
+import com.dlrtn.websocket.chat.business.user.application.UserService;
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

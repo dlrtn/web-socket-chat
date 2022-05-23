@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.model;
+package com.dlrtn.websocket.chat.business.user.model;
 
 public class UserSessionConstants {
 

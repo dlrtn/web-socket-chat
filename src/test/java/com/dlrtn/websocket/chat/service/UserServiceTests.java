@@ -1,11 +1,12 @@
 package com.dlrtn.websocket.chat.service;
 
+import com.dlrtn.websocket.chat.business.user.application.UserService;
+import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.model.ResponseMessage;
-import com.dlrtn.websocket.chat.model.UserAuthRole;
-import com.dlrtn.websocket.chat.model.UserSessionConstants;
-import com.dlrtn.websocket.chat.model.UserSessionCreation;
-import com.dlrtn.websocket.chat.model.domain.User;
-import com.dlrtn.websocket.chat.model.payload.*;
+import com.dlrtn.websocket.chat.business.user.model.UserAuthRole;
+import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
+import com.dlrtn.websocket.chat.business.user.model.UserSessionCreation;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import org.junit.jupiter.api.*;

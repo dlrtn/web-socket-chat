@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.config;
 
+import com.dlrtn.websocket.chat.config.datasouce.MybatisConfig;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;

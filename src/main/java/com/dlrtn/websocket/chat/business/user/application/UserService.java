@@ -1,16 +1,15 @@
-package com.dlrtn.websocket.chat.service;
+package com.dlrtn.websocket.chat.business.user.application;
 
+import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.mapper.UserMapper;
 import com.dlrtn.websocket.chat.model.ResponseMessage;
-import com.dlrtn.websocket.chat.model.UserSessionCreation;
-import com.dlrtn.websocket.chat.model.domain.User;
-import com.dlrtn.websocket.chat.model.payload.*;
+import com.dlrtn.websocket.chat.business.user.model.UserSessionCreation;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.repository.InMemorySessionRepository;
 
 import lombok.RequiredArgsConstructor;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

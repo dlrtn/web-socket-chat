@@ -4,4 +4,4 @@ mybatis:
   mapper-locations: query/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
-  type-aliases-package: com.dlrtn.websocket.chat.model.domain
+  type-aliases-package: com.dlrtn.websocket.chat.business.chat.model.domain

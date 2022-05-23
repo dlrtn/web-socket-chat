@@ -1,8 +1,8 @@
 package com.dlrtn.websocket.chat.repository;
 
-import com.dlrtn.websocket.chat.model.domain.User;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 
-import static com.dlrtn.websocket.chat.model.domain.generated.study_db.tables.TbUser.TB_USER;
+import static com.dlrtn.websocket.chat.business.chat.model.domain.generated.study_db.tables.TbUser.TB_USER;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;

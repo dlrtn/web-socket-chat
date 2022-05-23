@@ -1,6 +1,5 @@
-package com.dlrtn.websocket.chat.model.domain;
+package com.dlrtn.websocket.chat.business.chat.model.domain;
 
-import com.dlrtn.websocket.chat.service.ChatService;
 import lombok.Data;
 import lombok.Builder;
 import org.springframework.web.socket.WebSocketSession;

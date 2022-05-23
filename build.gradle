@@ -87,7 +87,7 @@ jooq {
                         excludes = ''
                     }
                     target {
-                        packageName = 'com.dlrtn.websocket.chat.model.domain.generated'
+                        packageName = 'com.dlrtn.websocket.chat.business.chat.model.domain.generated'
                     }
                 }
             }

@@ -1,8 +1,8 @@
 package com.dlrtn.websocket.chat.mapper;
 
 import com.dlrtn.websocket.chat.config.LightMyBatisTest;
-import com.dlrtn.websocket.chat.model.UserAuthRole;
-import com.dlrtn.websocket.chat.model.domain.User;
+import com.dlrtn.websocket.chat.business.user.model.UserAuthRole;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

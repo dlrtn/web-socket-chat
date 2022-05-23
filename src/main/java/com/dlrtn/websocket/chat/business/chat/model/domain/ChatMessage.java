@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.model.domain;
+package com.dlrtn.websocket.chat.business.chat.model.domain;
 
 import lombok.Data;
 

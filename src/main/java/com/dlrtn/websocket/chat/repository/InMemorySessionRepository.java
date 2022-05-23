@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.repository;
 
-import com.dlrtn.websocket.chat.model.domain.User;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;

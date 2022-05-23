@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.controller;
+package com.dlrtn.websocket.chat.business.user.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,6 @@
-package com.dlrtn.websocket.chat.config;
+package com.dlrtn.websocket.chat.config.datasouce;
 
 import org.jooq.impl.DefaultDSLContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

@@ -1,6 +1,6 @@
-package com.dlrtn.websocket.chat.controller;
+package com.dlrtn.websocket.chat.business.chat.api;
 
-import com.dlrtn.websocket.chat.model.domain.ChatMessage;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

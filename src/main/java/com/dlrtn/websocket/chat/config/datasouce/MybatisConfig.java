@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.config;
+package com.dlrtn.websocket.chat.config.datasouce;
 
 import com.dlrtn.websocket.chat.handler.LocalDateTimeVarCharTypeHandler;
 import org.springframework.context.annotation.Bean;

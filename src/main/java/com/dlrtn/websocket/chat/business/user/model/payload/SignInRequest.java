@@ -1,11 +1,13 @@
-package com.dlrtn.websocket.chat.model.payload;
+package com.dlrtn.websocket.chat.business.user.model.payload;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class DeleteUserRequest {
+@ToString
+public class SignInRequest {
 
     @NotBlank
     private String username;

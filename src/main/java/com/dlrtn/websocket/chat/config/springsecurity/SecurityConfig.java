@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.config;
+package com.dlrtn.websocket.chat.config.springsecurity;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package com.dlrtn.websocket.chat.model.domain;
+package com.dlrtn.websocket.chat.business.user.model.domain;
 
-import com.dlrtn.websocket.chat.model.UserAuthRole;
+import com.dlrtn.websocket.chat.business.user.model.UserAuthRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
