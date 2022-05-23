@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
-import com.dlrtn.websocket.chat.repository.ChatRoomRepository;
+import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class ChatService {
         return chatRooms.get(roomId);
     }
 
-    public ChatRoom createRoom(M) {
+    public ChatRoom createRoom(String name) {
         String randomId = UUID.randomUUID().toString();
 
         ChatRoom chatRoom = ChatRoom.builder()
@@ -47,7 +47,6 @@ public class ChatService {
     public boolean delete(String roomId) {
         return chatRoomRepository.delete(roomId);
     }
-
 
 
 }

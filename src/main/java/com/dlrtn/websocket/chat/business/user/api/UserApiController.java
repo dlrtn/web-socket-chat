@@ -1,30 +1,26 @@
 package com.dlrtn.websocket.chat.business.user.api;
 
-import com.dlrtn.websocket.chat.business.user.model.payload.*;
+import com.dlrtn.websocket.chat.business.user.application.UserService;
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
 import com.dlrtn.websocket.chat.business.user.model.UserSessionCreation;
-import com.dlrtn.websocket.chat.business.user.application.UserService;
+import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import static com.dlrtn.websocket.chat.model.PagePathConstants.*;
+import static com.dlrtn.websocket.chat.common.model.PagePathConstants.*;
 
-
+@Slf4j
 @RestController
 @RequestMapping(API + USER)
 @RequiredArgsConstructor
 public class UserApiController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(UserApiController.class);
 
     private final UserService userService;
 
@@ -43,7 +39,7 @@ public class UserApiController {
             HttpServletResponse response,
             @Valid @RequestBody SignInRequest requestBody
     ) {
-        LOGGER.info("[Request Body] username : {}, userPW : {}", requestBody.getUsername(), requestBody.getPassword());
+        log.info("[Request Body] username : {}, userPW : {}", requestBody.getUsername(), requestBody.getPassword());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
 
@@ -61,7 +57,7 @@ public class UserApiController {
             HttpServletRequest request,
             @Valid @RequestBody UserInfoUpdateRequest requestBody
     ) {
-        LOGGER.info("[Update RequestBody] username : {}, password : {}, realName : {}, newPassword : {}", requestBody.getUsername(), requestBody.getExistingPassword(), requestBody.getNewRealName(), requestBody.getNewPassword());
+        log.info("[Update RequestBody] username : {}, password : {}, realName : {}, newPassword : {}", requestBody.getUsername(), requestBody.getExistingPassword(), requestBody.getNewRealName(), requestBody.getNewPassword());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         return userService.update(sessionId, requestBody);
     }
@@ -72,7 +68,7 @@ public class UserApiController {
             HttpServletRequest request,
             @Valid @RequestBody DeleteUserRequest requestBody
     ) {
-        LOGGER.info("[Update RequestBody] username : {}, userPW : {}", requestBody.getUsername(), requestBody.getPassword());
+        log.info("[Update RequestBody] username : {}, userPW : {}", requestBody.getUsername(), requestBody.getPassword());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         return userService.deleteUser(sessionId, requestBody);
     }

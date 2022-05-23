@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.repository;
+package com.dlrtn.websocket.chat.business.user.repository;
 
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 
@@ -10,10 +10,10 @@ import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
 
 
 @JooqTest
-public class JooqRepositoryTests {
+public class UserRepositoryTests {
 
     @Autowired
-    JooqRepository jooqRepository;
+    UserRepository userRepository;
 
     @DisplayName("유저 저장 테스트")
     @Test
@@ -31,12 +31,11 @@ public class JooqRepositoryTests {
                 .realName("11")
                 .build();
 
-        int numberUserUpdated = jooqRepository.update(user);
+        userRepository.update(user);
 
-        User foundUser = jooqRepository.findByUsername(user.getUsername());
+        User foundUser = userRepository.findByUsername(user.getUsername());
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(numberUserUpdated, 1),
                 () -> Assertions.assertEquals(user.getUsername(), foundUser.getUsername()),
                 () -> Assertions.assertEquals(user.getPassword(), foundUser.getPassword()),
                 () -> Assertions.assertEquals(user.getRealName(), foundUser.getRealName())
@@ -47,20 +46,16 @@ public class JooqRepositoryTests {
     @DisplayName("유저 삭제 테스트")
     @Test
     void delete_user_test() {
+        String username = "11";
 
-        User user = User.builder()
-                .username("11")
-                .build();
+        userRepository.delete(username);
 
-        int numberUserDeleted = jooqRepository.delete(user);
-
-        User foundUser = jooqRepository.findByUsername(user.getUsername());
+        User foundUser = userRepository.findByUsername(username);
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(numberUserDeleted, 1),
-                () -> Assertions.assertEquals(user.getUsername(), null),
-                () -> Assertions.assertEquals(user.getPassword(), null)
+                () -> Assertions.assertNull(foundUser.getUsername()),
+                () -> Assertions.assertNull(foundUser.getPassword())
         );
-
     }
+
 }

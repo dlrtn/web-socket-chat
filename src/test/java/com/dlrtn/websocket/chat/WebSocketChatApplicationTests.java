@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @Builder
 @SpringBootTest
-class WebsocketChatApplicationTests {
+class WebSocketChatApplicationTests {
 
     @Test
     void contextLoads() {

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.dlrtn.websocket.chat.model.PagePathConstants.CHAT;
+import static com.dlrtn.websocket.chat.common.model.PagePathConstants.CHAT;
 
 @RequiredArgsConstructor
 @RestController

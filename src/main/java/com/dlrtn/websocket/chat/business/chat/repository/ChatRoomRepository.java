@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.repository;
+package com.dlrtn.websocket.chat.business.chat.repository;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +14,7 @@ public class ChatRoomRepository {
     private final DSLContext dslContext;
 
     public boolean makeRoom(ChatRoom chatRoom) {
-
-
-
+        return false;
     }
 
     public ChatRoom findByRoomId(String roomId) {

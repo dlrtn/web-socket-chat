@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.model;
+package com.dlrtn.websocket.chat.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.repository;
+package com.dlrtn.websocket.chat.business.user.repository;
 
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import lombok.RequiredArgsConstructor;

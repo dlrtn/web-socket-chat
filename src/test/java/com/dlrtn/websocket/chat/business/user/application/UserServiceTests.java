@@ -1,26 +1,25 @@
-package com.dlrtn.websocket.chat.service;
+package com.dlrtn.websocket.chat.business.user.application;
 
-import com.dlrtn.websocket.chat.business.user.application.UserService;
-import com.dlrtn.websocket.chat.business.user.model.payload.*;
-import com.dlrtn.websocket.chat.model.ResponseMessage;
-import com.dlrtn.websocket.chat.business.user.model.UserAuthRole;
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
 import com.dlrtn.websocket.chat.business.user.model.UserSessionCreation;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
-
+import com.dlrtn.websocket.chat.business.user.model.domain.UserAuthRole;
+import com.dlrtn.websocket.chat.business.user.model.payload.*;
+import com.dlrtn.websocket.chat.common.model.ResponseMessage;
 import com.dlrtn.websocket.chat.util.CookieUtils;
-import org.junit.jupiter.api.*;
-
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 import java.util.UUID;
 
-import static com.dlrtn.websocket.chat.model.PagePathConstants.*;
-import static com.dlrtn.websocket.chat.model.RestApiConstants.*;
+import static com.dlrtn.websocket.chat.common.model.PagePathConstants.LOGIN;
 
 @SpringBootTest
 public class UserServiceTests {
@@ -32,24 +31,20 @@ public class UserServiceTests {
 
     @BeforeAll()
     public static void createHttpServlet() {
-
         MockHttpServletRequest request;
         MockHttpServletResponse response;
 
-        request = new MockHttpServletRequest(POST, LOGIN);
+        request = new MockHttpServletRequest(HttpMethod.POST.name(), LOGIN);
         response = new MockHttpServletResponse();
 
         CookieUtils.setCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, String.valueOf(UUID.randomUUID()));
         request.setCookies(response.getCookies());
         String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
-
     }
 
     @DisplayName("유저 회원가입 기능 부분 테스트")
     @Test
     void join_user_test() {
-
-
         SignUpRequest requestBody = new SignUpRequest();
 
         requestBody.setUsername("123");
@@ -60,13 +55,11 @@ public class UserServiceTests {
         CommonResponse commonResponse = userService.signUp(requestBody);
 
         Assertions.assertEquals(ResponseMessage.SUCCESS, commonResponse.getMessage());
-
     }
 
     @DisplayName("유저 회원가입 기능 부분 테스트")
     @Test
     void join_user_test_existed_user() {
-
         SignUpRequest requestBody = new SignUpRequest();
 
         requestBody.setUsername("66");
@@ -77,23 +70,19 @@ public class UserServiceTests {
         CommonResponse commonResponse = userService.signUp(requestBody);
 
         Assertions.assertEquals(ResponseMessage.EXISTED_USER_ID, commonResponse.getMessage());
-
     }
 
     @DisplayName("유저 찾기 기능 부분 테스트")
     @Test
     void find_user_test() {
-
         String username = "11";
 
         User foundUser = userService.findOne(username);
-
     }
 
     @DisplayName("유저 로그인 기능 부분 테스트")
     @Test
     void login_user_test() {
-
         SignInRequest requestBody = new SignInRequest();
 
         requestBody.setUsername("66");
@@ -101,14 +90,12 @@ public class UserServiceTests {
 
         UserSessionCreation sessionCreation = userService.signIn(sessionId, requestBody);
 
-        Assertions.assertEquals(true, sessionCreation.isSuccess());
-
+        Assertions.assertTrue(sessionCreation.isSuccess());
     }
 
     @DisplayName("유저 회원정보 변경 기능 부분 테스트")
     @Test
     void update_user_test() {
-
         SignInRequest signInRequest = new SignInRequest();
 
         signInRequest.setUsername("11");
@@ -128,17 +115,15 @@ public class UserServiceTests {
         User foundUser = userService.findOne(requestBody.getUsername());
 
         Assertions.assertAll(
-                () -> Assertions.assertEquals(true, commonResponse.isSuccess()),
+                () -> Assertions.assertTrue(commonResponse.isSuccess()),
                 () -> Assertions.assertEquals(requestBody.getUsername(), foundUser.getUsername()),
                 () -> Assertions.assertEquals(requestBody.getNewPassword(), foundUser.getPassword()),
                 () -> Assertions.assertEquals(requestBody.getNewRealName(), foundUser.getRealName()));
-
     }
 
     @DisplayName("유저 회원탈퇴 기능 부분 테스트")
     @Test
     void withdrawal_user_test() {
-
         SignInRequest signInRequest = new SignInRequest();
 
         signInRequest.setUsername("11");
@@ -155,8 +140,7 @@ public class UserServiceTests {
 
         CommonResponse commonResponse = userService.deleteUser(sessionId, requestBody);
 
-        Assertions.assertEquals(ResponseMessage.SUCCESS, commonResponse.getDescription());
-
+        Assertions.assertEquals(ResponseMessage.SUCCESS.name(), commonResponse.getDescription());
     }
 
 }

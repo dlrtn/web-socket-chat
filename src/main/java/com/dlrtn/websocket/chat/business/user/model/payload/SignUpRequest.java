@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.business.user.model.payload;
 
-import com.dlrtn.websocket.chat.business.user.model.UserAuthRole;
+import com.dlrtn.websocket.chat.business.user.model.domain.UserAuthRole;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
