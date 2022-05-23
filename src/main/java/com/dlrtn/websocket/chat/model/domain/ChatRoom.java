@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 public class ChatRoom {
 
-    private int roomId;
+    private String roomId;
 
     private String name;
 

@@ -14,16 +14,16 @@ public class ChatRoomRepository {
     private final DSLContext dslContext;
 
 
-    public ChatRoom findByRoomId(int roomId) {
+    public ChatRoom findByRoomId(String roomId) {
         return dslContext.select()
                 .from(TB_CHATROOM)
                 .where(TB_CHATROOM.ROOMID.equal(roomId))
                 .fetchOneInto(ChatRoom.class);
     }
 
-    public boolean delete(int roomId) {
+    public boolean delete(String roomId) {
         return dslContext.delete(TB_CHATROOM)
-                .where(TB_CHATROOM.ROOMID.equal(roomId))
+                .where(TB_CHATROOM.ROOMID.equals(roomId))
                 .execute() == 1;
     }
 
