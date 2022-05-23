@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.model;
+package com.dlrtn.websocket.chat.business.user.model.payload;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class UserSessionCreation {
+public class SignInResponse {
 
     private final boolean success;
 
@@ -14,11 +14,11 @@ public class UserSessionCreation {
 
     private final String failReason;
 
-    public static UserSessionCreation successWith(String sessionId) {
+    public static SignInResponse successWith(String sessionId) {
         return of(true, sessionId, null);
     }
 
-    public static UserSessionCreation failWith(String failReason) {
+    public static SignInResponse failWith(String failReason) {
         return of(false, null, failReason);
     }
 

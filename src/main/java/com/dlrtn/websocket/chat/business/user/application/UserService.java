@@ -1,11 +1,11 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
-import com.dlrtn.websocket.chat.business.user.model.UserSessionCreation;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.repository.InMemorySessionRepository;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
 import com.dlrtn.websocket.chat.common.model.ResponseMessage;
+import com.dlrtn.websocket.chat.util.LocalDateTimeUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,15 +29,15 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public CommonResponse signUp(SignUpRequest request) {
+    public SignUpResponse signUp(SignUpRequest request) {
         User foundUser = userRepository.findByUsername(request.getUsername());
+
         if (Objects.nonNull(foundUser)) {
-            return CommonResponse.failWith(ResponseMessage.EXISTED_USER_ID);
+            return SignUpResponse.failWith(ResponseMessage.EXISTED_USER_ID);
         }
 
+        LocalDateTime now = LocalDateTimeUtils.setLocalDateTime();
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        LocalDateTime now = LocalDateTime.now();
-
         User user = User.builder()
                 .username(request.getUsername())
                 .password(encodedPassword)
@@ -48,92 +48,87 @@ public class UserService {
                 .build();
 
         try {
-//            userRepository.save(user); TODO user save 로직 구현 후 주석 제거
-            return CommonResponse.success();
+            userRepository.save(user); //TODO 구현 덜 끝남
+            return SignUpResponse.success();
         } catch (Exception e) {
-            // TODO 로깅 추가
-            return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+            return SignUpResponse.failWith(ResponseMessage.SERVER_ERROR);
         }
     }
 
-    public UserSessionCreation signIn(String sessionId, SignInRequest request) {
+    public SignInResponse signIn(String sessionId, SignInRequest request) {
         if (sessionRepository.exists(sessionId)) {
-            return UserSessionCreation.successWith(sessionId);
+            return SignInResponse.successWith(sessionId);
         }
 
         User foundUser = userRepository.findByUsername(request.getUsername());
 
-        if (!validateUser(foundUser, request.getPassword())) {
-            return UserSessionCreation.failWith("User id or password mismatch");
+        if (!validate(foundUser, request.getPassword())) {
+            return SignInResponse.failWith("user id or password mismatch");
         }
 
         String newSessionId = UUID.randomUUID().toString();
         sessionRepository.put(newSessionId, foundUser);
 
-        return UserSessionCreation.successWith(newSessionId);
+        return SignInResponse.successWith(newSessionId);
     }
 
     @Transactional
-    public CommonResponse update(String sessionId, UserInfoUpdateRequest request) {
+    public UpdateResponse update(String sessionId, UpdateRequest request) {
 
         if (!sessionRepository.exists(sessionId)) {
-            return CommonResponse.failWith("please login first");
+            return UpdateResponse.failWith("please login first");
         }
 
-        LocalDateTime now = LocalDateTime.now();
-
         User foundUser = userRepository.findByUsername(request.getUsername());
-
         String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), foundUser.getRealName());
         String newPassWord = StringUtils.defaultIfEmpty(request.getNewPassword(), foundUser.getPassword());
-
         User user = User.builder()
                 .username(request.getUsername())
                 .realName(newRealName)
                 .password(newPassWord)
-                .updatedAt(now)
+                .updatedAt(LocalDateTimeUtils.setLocalDateTime())
                 .build();
 
-        if (validateUser(foundUser, request.getExistingPassword())) {
+        if (validate(foundUser, request.getExistingPassword())) {
             try {
                 userRepository.update(user);
-                return CommonResponse.success();
+                return UpdateResponse.success();
             } catch (Exception e) {
-                return CommonResponse.failWith("Password update failed");
+                return UpdateResponse.failWith("password update failed");
             }
         }
-        return CommonResponse.failWith("Password not correct");
+
+        return UpdateResponse.failWith("password not correct");
     }
 
-    private boolean validateUser(User user, String password) {
+    private boolean validate(User user, String password) {
         return Objects.nonNull(user) && passwordEncoder.matches(password, user.getPassword());
     }
 
-    public User findOne(String username) throws UsernameNotFoundException {
+    public User find(String username) throws UsernameNotFoundException {
         return Optional.ofNullable(username)
                 .map(userRepository::findByUsername)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     @Transactional
-    public CommonResponse deleteUser(String sessionId, DeleteUserRequest request) {
+    public DeleteResponse delete(String sessionId, DeleteRequest request) {
         User foundUser = userRepository.findByUsername(request.getUsername());
 
         if (Objects.isNull(foundUser) || !sessionRepository.exists(sessionId)) {
-            return CommonResponse.failWith("Can't Find User or Not Login State");
+            return DeleteResponse.failWith("can't find user or not login state");
         }
 
-        if (validateUser(foundUser, request.getPassword())) {
+        if (validate(foundUser, request.getPassword())) {
             try {
                 userRepository.delete(request.getUsername());
-                return CommonResponse.success();
+                return DeleteResponse.success();
             } catch (Exception e) {
-                return CommonResponse.failWith(ResponseMessage.SERVER_ERROR);
+                return DeleteResponse.failWith(ResponseMessage.SERVER_ERROR);
             }
         }
 
-        return CommonResponse.failWith("Password not correct");
+        return DeleteResponse.failWith("password not correct");
     }
-
 
 }

@@ -14,6 +14,12 @@ public class UserRepository {
 
     private final DSLContext dslContext;
 
+    public void save(User user) {
+        dslContext.insertInto(TB_USER)
+                .values()
+                .execute();
+    }
+
     public User findByUsername(String username) {
         return dslContext.select()
                 .from(TB_USER)

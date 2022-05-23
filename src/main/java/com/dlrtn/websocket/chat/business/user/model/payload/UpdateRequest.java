@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class UserInfoUpdateRequest {
+public class UpdateRequest {
 
     @NotBlank
     private String username;
