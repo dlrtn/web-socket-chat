@@ -5,15 +5,13 @@ import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.repository.InMemorySessionRepository;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
 import com.dlrtn.websocket.chat.common.model.ResponseMessage;
-import com.dlrtn.websocket.chat.util.LocalDateTimeUtils;
-import com.dlrtn.websocket.chat.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +24,8 @@ public class UserService {
 
     private final InMemorySessionRepository sessionRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public SignUpResponse signUp(SignUpRequest request) {
         User foundUser = userRepository.findByUsername(request.getUsername());
@@ -34,9 +34,11 @@ public class UserService {
             return SignUpResponse.failWith(ResponseMessage.EXISTED_USER_ID);
         }
 
+        LocalDateTime now = LocalDateTime.now();
+
         User user = User.builder()
                 .username(request.getUsername())
-                .password(SecurityUtils.encode(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .realName(request.getRealName())
                 .authRole(request.getAuthRole())
                 .createdAt(now)
@@ -58,7 +60,7 @@ public class UserService {
 
         User foundUser = userRepository.findByUsername(request.getUsername());
 
-        if (!validate(foundUser, request.getPassword())) {
+        if (hasNotMatchedPassword(foundUser, request.getPassword())) {
             return SignInResponse.failWith("user id or password mismatch");
         }
 
@@ -69,62 +71,39 @@ public class UserService {
     }
 
     @Transactional
-    public UpdateResponse update(String sessionId, UpdateRequest request) {
-
-        if (!sessionRepository.exists(sessionId)) {
-            return UpdateResponse.failWith("please login first");
+    public ChangeUserProfileResponse changeUserProfile(User user, ChangeUserProfileRequest request) {
+        if (hasNotMatchedPassword(user, request.getExistingPassword())) {
+            return ChangeUserProfileResponse.failWith("password not correct");
         }
 
-        User foundUser = userRepository.findByUsername(request.getUsername());
-        String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), foundUser.getRealName());
-        String newPassWord = StringUtils.defaultIfEmpty(request.getNewPassword(), foundUser.getPassword());
-        User user = User.builder()
-                .username(request.getUsername())
+        String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), user.getRealName());
+        String newPassword = StringUtils.defaultIfEmpty(request.getNewPassword(), user.getPassword());
+
+        User changedUser = user.toBuilder()
                 .realName(newRealName)
-                .password(newPassWord)
-                .updatedAt(LocalDateTimeUtils.setLocalDateTime())
+                .password(newPassword)
+                .updatedAt(LocalDateTime.now())
                 .build();
 
-        if (validate(foundUser, request.getExistingPassword())) {
-            try {
-                userRepository.update(user);
-                return UpdateResponse.success();
-            } catch (Exception e) {
-                return UpdateResponse.failWith("password update failed");
-            }
-        }
-
-        return UpdateResponse.failWith("password not correct");
+        userRepository.update(changedUser);
+        return ChangeUserProfileResponse.success();
     }
 
-    private boolean validate(User user, String password) {
-        return Objects.nonNull(user) && SecurityUtils.matches(password, user.getPassword());
-    }
-
-    public User find(String username) throws UsernameNotFoundException {
-        return Optional.ofNullable(username)
-                .map(userRepository::findByUsername)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+    private boolean hasNotMatchedPassword(User user, String password) {
+        return Optional.ofNullable(user)
+                .map(User::getPassword)
+                .filter(userPw -> passwordEncoder.matches(password, userPw))
+                .isEmpty();
     }
 
     @Transactional
-    public DeleteResponse delete(String sessionId, DeleteRequest request) {
-        User foundUser = userRepository.findByUsername(request.getUsername());
-
-        if (Objects.isNull(foundUser) || !sessionRepository.exists(sessionId)) {
-            return DeleteResponse.failWith("can't find user or not login state");
+    public WithdrawUserResponse withdrawUser(User user, WithdrawUserRequest request) {
+        if (hasNotMatchedPassword(user, request.getPassword())) {
+            return WithdrawUserResponse.failWith("password not correct");
         }
 
-        if (validate(foundUser, request.getPassword())) {
-            try {
-                userRepository.delete(request.getUsername());
-                return DeleteResponse.success();
-            } catch (Exception e) {
-                return DeleteResponse.failWith(ResponseMessage.SERVER_ERROR);
-            }
-        }
-
-        return DeleteResponse.failWith("password not correct");
+        userRepository.delete(user.getUsername());
+        return WithdrawUserResponse.success();
     }
 
 }

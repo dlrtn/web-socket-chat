@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class UpdateResponse {
+public class WithdrawUserResponse {
 
     private final boolean success;
 
@@ -15,19 +15,19 @@ public class UpdateResponse {
 
     private final String description;
 
-    public static UpdateResponse success() {
+    public static WithdrawUserResponse success() {
         return successWith(ResponseMessage.SUCCESS);
     }
 
-    public static UpdateResponse successWith(ResponseMessage message) {
+    public static WithdrawUserResponse successWith(ResponseMessage message) {
         return of(true, message, message.getDescription());
     }
 
-    public static UpdateResponse failWith(ResponseMessage message) {
+    public static WithdrawUserResponse failWith(ResponseMessage message) {
         return of(false, message, message.getDescription());
     }
 
-    public static UpdateResponse failWith(String description) {
+    public static WithdrawUserResponse failWith(String description) {
         return of(false, ResponseMessage.SERVER_ERROR, description);
     }
 

@@ -1,12 +1,7 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
-import com.dlrtn.websocket.chat.business.user.model.domain.User;
-import com.dlrtn.websocket.chat.business.user.model.domain.UserAuthRole;
-import com.dlrtn.websocket.chat.business.user.model.payload.*;
-import com.dlrtn.websocket.chat.common.model.ResponseMessage;
 import com.dlrtn.websocket.chat.util.CookieUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,14 +64,6 @@ public class UserServiceTests {
         CommonResponse commonResponse = userService.signUp(requestBody);
 
         Assertions.assertEquals(ResponseMessage.EXISTED_USER_ID, commonResponse.getMessage());*/
-    }
-
-    @DisplayName("유저 찾기 기능 부분 테스트")
-    @Test
-    void find_user_test() {
-        String username = "11";
-
-        User foundUser = userService.find(username);
     }
 
     @DisplayName("유저 로그인 기능 부분 테스트")

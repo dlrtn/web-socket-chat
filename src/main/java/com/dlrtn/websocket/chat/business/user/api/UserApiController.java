@@ -1,7 +1,10 @@
 package com.dlrtn.websocket.chat.business.user.api;
 
+import com.dlrtn.websocket.chat.business.user.aop.SessionId;
+import com.dlrtn.websocket.chat.business.user.aop.SessionUser;
 import com.dlrtn.websocket.chat.business.user.application.UserService;
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -34,11 +36,10 @@ public class UserApiController {
     @Operation(summary = "회원 로그인")
     @PostMapping(LOGIN)
     public SignInResponse signIn(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            @Valid @RequestBody SignInRequest requestBody
+            @SessionId String sessionId,
+            @Valid @RequestBody SignInRequest requestBody,
+            HttpServletResponse response
     ) {
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         SignInResponse signInResponse = userService.signIn(sessionId, requestBody);
 
         if (signInResponse.isSuccess()) {
@@ -51,22 +52,20 @@ public class UserApiController {
 
     @Operation(summary = "회원 정보수정")
     @PatchMapping(MODIFYING)
-    public UpdateResponse update(
-            HttpServletRequest request,
-            @Valid @RequestBody UpdateRequest requestBody
+    public ChangeUserProfileResponse changeUserProfile(
+            @SessionUser User user,
+            @Valid @RequestBody ChangeUserProfileRequest requestBody
     ) {
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
-        return userService.update(sessionId, requestBody);
+        return userService.changeUserProfile(user, requestBody);
     }
 
     @Operation(summary = "회원 정보 삭제")
     @DeleteMapping(WITHDRAWAL)
-    public DeleteResponse deleteUser(
-            HttpServletRequest request,
-            @Valid @RequestBody DeleteRequest requestBody
+    public WithdrawUserResponse deleteUser(
+            @SessionUser User user,
+            @Valid @RequestBody WithdrawUserRequest requestBody
     ) {
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
-        return userService.delete(sessionId, requestBody);
+        return userService.withdrawUser(user, requestBody);
     }
 
 }

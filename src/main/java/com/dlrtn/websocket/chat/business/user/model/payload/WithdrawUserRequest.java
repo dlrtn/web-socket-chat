@@ -5,10 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class DeleteRequest {
-
-    @NotBlank
-    private String username;
+public class WithdrawUserRequest {
 
     @NotBlank
     private String password;
