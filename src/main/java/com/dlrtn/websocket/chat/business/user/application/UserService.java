@@ -6,14 +6,14 @@ import com.dlrtn.websocket.chat.business.user.repository.InMemorySessionReposito
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
 import com.dlrtn.websocket.chat.common.model.ResponseMessage;
 import com.dlrtn.websocket.chat.util.LocalDateTimeUtils;
+import com.dlrtn.websocket.chat.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,8 +26,6 @@ public class UserService {
 
     private final InMemorySessionRepository sessionRepository;
 
-    private final PasswordEncoder passwordEncoder;
-
     @Transactional
     public SignUpResponse signUp(SignUpRequest request) {
         User foundUser = userRepository.findByUsername(request.getUsername());
@@ -36,11 +34,9 @@ public class UserService {
             return SignUpResponse.failWith(ResponseMessage.EXISTED_USER_ID);
         }
 
-        LocalDateTime now = LocalDateTimeUtils.setLocalDateTime();
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
         User user = User.builder()
                 .username(request.getUsername())
-                .password(encodedPassword)
+                .password(SecurityUtils.encode(request.getPassword()))
                 .realName(request.getRealName())
                 .authRole(request.getAuthRole())
                 .createdAt(now)
@@ -102,7 +98,7 @@ public class UserService {
     }
 
     private boolean validate(User user, String password) {
-        return Objects.nonNull(user) && passwordEncoder.matches(password, user.getPassword());
+        return Objects.nonNull(user) && SecurityUtils.matches(password, user.getPassword());
     }
 
     public User find(String username) throws UsernameNotFoundException {

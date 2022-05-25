@@ -1,6 +1,5 @@
-package com.dlrtn.websocket.chat.business.user.model.payload;
+package com.dlrtn.websocket.chat.common.model;
 
-import com.dlrtn.websocket.chat.common.model.ResponseMessage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
