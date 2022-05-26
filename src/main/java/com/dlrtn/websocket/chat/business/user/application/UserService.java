@@ -46,7 +46,7 @@ public class UserService {
                 .build();
 
         try {
-            userRepository.save(user); //TODO 구현 덜 끝남
+            userRepository.save(user);
             return SignUpResponse.success();
         } catch (Exception e) {
             return SignUpResponse.failWith(ResponseMessage.SERVER_ERROR);
@@ -81,7 +81,7 @@ public class UserService {
 
         User changedUser = user.toBuilder()
                 .realName(newRealName)
-                .password(newPassword)
+                .password(passwordEncoder.encode(newPassword))
                 .updatedAt(LocalDateTime.now())
                 .build();
 
