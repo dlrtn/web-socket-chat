@@ -1,10 +1,14 @@
 package com.dlrtn.websocket.chat.business.user.model.payload;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@AllArgsConstructor
+@Getter
+@Builder
 public class ChangeUserProfileRequest {
 
     private String newRealName; // 이름 변경 안할 경우
