@@ -1,86 +1,55 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
-import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
+import com.dlrtn.websocket.chat.business.user.model.UserServiceTestsConstants;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
-import com.dlrtn.websocket.chat.business.user.model.domain.UserAuthRole;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
-import com.dlrtn.websocket.chat.business.user.repository.InMemorySessionRepository;
+import com.dlrtn.websocket.chat.common.exception.CommonException;
 import com.dlrtn.websocket.chat.common.model.ResponseMessage;
-import com.dlrtn.websocket.chat.util.CookieUtils;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpMethod;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
-import static com.dlrtn.websocket.chat.common.model.PagePathConstants.LOGIN;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 @SpringBootTest
+@Transactional
 public class UserServiceTests {
-
-    String sessionId;
-
-    @Autowired
-    private InMemorySessionRepository sessionRepository;
 
     @Autowired
     private UserService userService;
 
-    public void createHttpServlet() {
-        MockHttpServletRequest request;
-        MockHttpServletResponse response;
+    @BeforeEach
+    void initialize_session_user(TestInfo info) {
+        boolean needUserRecord = Optional.ofNullable(info)
+                .map(TestInfo::getDisplayName)
+                .filter(Predicate.not("유저 회원가입 기능 테스트"::equals))
+                .isPresent();
 
-        request = new MockHttpServletRequest(HttpMethod.POST.name(), LOGIN);
-        response = new MockHttpServletResponse();
-
-        CookieUtils.setCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, String.valueOf(UUID.randomUUID()));
-        request.setCookies(response.getCookies());
-        String sessionId = CookieUtils.getCookie(request, UserSessionConstants.SESSION_ID_COOKIE_NAME);
+        if (needUserRecord) {
+            userService.signUp(UserServiceTestsConstants.TEST_SIGN_UP_REQUEST);
+        }
     }
 
-//    @DisplayName("유저 회원가입 기능 테스트")
-//    @Test
-//    void join_user_test() {
-//        SignUpRequest requestBody = new SignUpRequest();
-//
-//        requestBody.setUsername("123");
-//        requestBody.setPassword("123");
-//        requestBody.setRealName("wndlrtn");
-//        requestBody.setAuthRole(UserAuthRole.USER);
-//
-//        SignUpResponse signUpResponse = userService.signUp(requestBody);
-//
-//        Assertions.assertEquals(ResponseMessage.SUCCESS, signUpResponse.getMessage());
-//    }
+    @DisplayName("유저 회원가입 기능 테스트")
+    @Test
+    void join_user_test() {
+        SignUpRequest requestBody = UserServiceTestsConstants.TEST_SIGN_UP_REQUEST;
 
-//    @DisplayName("유저 회원가입 기능 부분 테스트")
-//    @Test
-//    void join_user_test_existed_user() {
-//        SignUpRequest requestBody = new SignUpRequest();
-//
-//        requestBody.setUsername("123");
-//        requestBody.setPassword("123");
-//        requestBody.setRealName("wndlrtn");
-//        requestBody.setAuthRole(UserAuthRole.USER);
-//
-//        SignUpResponse signUpResponse = userService.signUp(requestBody);
-//
-//        Assertions.assertEquals(ResponseMessage.EXISTED_USER_ID, signUpResponse.getMessage());
-//    }
+        SignUpResponse firstSignUpResponse = userService.signUp(requestBody);
+        SignUpResponse secondSignUpResponse = userService.signUp(requestBody);
+
+        Assertions.assertEquals(ResponseMessage.SUCCESS, firstSignUpResponse.getMessage());
+        Assertions.assertEquals(ResponseMessage.EXISTED_USER_ID, secondSignUpResponse.getMessage());
+    }
 
     @DisplayName("유저 로그인 기능 부분 테스트")
     @Test
     void login_user_test() {
-        SignInRequest requestBody = new SignInRequest();
+        SignInRequest requestBody = UserServiceTestsConstants.TEST_SIGN_IN_REQUEST;
 
-        requestBody.setUsername("123");
-        requestBody.setPassword("123");
-
-        SignInResponse signInResponse = userService.signIn(sessionId, requestBody);
+        SignInResponse signInResponse = userService.signIn(null, requestBody);
 
         Assertions.assertTrue(signInResponse.isSuccess());
     }
@@ -88,54 +57,34 @@ public class UserServiceTests {
     @DisplayName("유저 회원정보 변경 기능 부분 테스트")
     @Test
     void update_user_test() {
-        createHttpServlet();
+        String sessionId = getSessionId();
+        ChangeUserProfileRequest request = UserServiceTestsConstants.TEST_CHANGE_USER_PROFILE_REQUEST;
 
-        SignInRequest signInRequest = new SignInRequest();
-
-        signInRequest.setUsername("123");
-        signInRequest.setPassword("123");
-
-        SignInResponse signInResponse = userService.signIn(sessionId, signInRequest);
-
-        ChangeUserProfileRequest request = new ChangeUserProfileRequest();
-
-        request.setExistingPassword("123");
-        request.setNewRealName("1234");
-        request.setNewPassword("1243");
-
-        User user = sessionRepository.get(signInResponse.getSessionId());
-
-        ChangeUserProfileResponse response = userService.changeUserProfile(user, request);
-
-        User foundUser = sessionRepository.get(sessionId);
+        ChangeUserProfileResponse response = userService.changeUserProfile(sessionId, request);
+        User sessionUser = userService.getSessionUser(sessionId);
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(response.isSuccess()),
-                () -> Assertions.assertEquals(request.getNewPassword(), foundUser.getPassword()),
-                () -> Assertions.assertEquals(request.getNewRealName(), foundUser.getRealName()));
+                () -> Assertions.assertFalse(userService.hasNotMatchedPassword(sessionUser, request.getNewPassword())),
+                () -> Assertions.assertEquals(request.getNewRealName(), sessionUser.getRealName()));
     }
 
     @DisplayName("유저 회원탈퇴 기능 부분 테스트")
     @Test
-    void withdrawal_user_test() {
-        createHttpServlet();
+    void withdraw_user_test() {
+        String sessionId = getSessionId();
+        WithdrawUserRequest request = UserServiceTestsConstants.TEST_WITHDRAW_USER_REQUEST;
 
-        SignInRequest signInRequest = new SignInRequest();
-
-        signInRequest.setUsername("123");
-        signInRequest.setPassword("123");
-
-        SignInResponse signInResponse = userService.signIn(sessionId, signInRequest);
-
-        WithdrawUserRequest request = new WithdrawUserRequest();
-
-        request.setPassword("11");
-
-        User foundUser = sessionRepository.get(signInResponse.getSessionId());
-
-        WithdrawUserResponse response = userService.withdrawUser(foundUser, request);
+        WithdrawUserResponse response = userService.withdrawUser(sessionId, request);
 
         Assertions.assertTrue(response.isSuccess());
+    }
+
+    private String getSessionId() {
+        return Optional.of(UserServiceTestsConstants.TEST_SIGN_IN_REQUEST)
+                .map(request -> userService.signIn(null, request))
+                .map(SignInResponse::getSessionId)
+                .orElseThrow(() -> new CommonException("Failed to get sign in session id"));
     }
 
 }
