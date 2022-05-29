@@ -2,6 +2,7 @@ package com.dlrtn.websocket.chat.business.chat.api;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
 import com.dlrtn.websocket.chat.business.chat.application.ChatService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,14 @@ public class ChatPageController {
     @Autowired
     private final ChatService chatService;
 
-    @GetMapping
+    @GetMapping("/main")
     public List<ChatRoom> findAllRoom() {
         return chatService.findAllRoom();
+    }
+
+    @GetMapping("/refresh")
+    public String refreshRoomList() {
+        return "/main";
     }
 
 }
