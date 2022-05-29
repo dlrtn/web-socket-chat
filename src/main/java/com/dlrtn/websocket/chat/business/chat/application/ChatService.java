@@ -1,12 +1,15 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
+import com.dlrtn.websocket.chat.business.chat.model.payload.ExitRoomRequest;
+import com.dlrtn.websocket.chat.business.chat.model.payload.FindRoomRequest;
+import com.dlrtn.websocket.chat.business.chat.model.payload.MakeRoomRequest;
+import com.dlrtn.websocket.chat.business.chat.model.payload.UpdateRoomInfoRequest;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Slf4j
@@ -16,36 +19,31 @@ public class ChatService {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    private Map<String, ChatRoom> chatRooms;
-
-    @PostConstruct
-    private void init() {
-        chatRooms = new LinkedHashMap<>();
-    }
-
-    public List<ChatRoom> findAllRoom() {
-        return new ArrayList<>(chatRooms.values());
-    }
-
-    public ChatRoom findRoomById(String roomId) {
-        return chatRooms.get(roomId);
-    }
-
-    public ChatRoom createRoom(String name) {
+    public boolean createRoom(MakeRoomRequest request) {
         String randomId = UUID.randomUUID().toString();
 
         ChatRoom chatRoom = ChatRoom.builder()
                 .roomId(randomId)
-                .name(name)
+                .name(request.getName())
                 .build();
 
-        chatRooms.put(randomId, chatRoom);
-
-        return chatRoom;
+        return chatRoomRepository.makeRoom(chatRoom);
     }
 
-    public boolean delete(String roomId) {
-        return chatRoomRepository.delete(roomId);
+    public List<ChatRoom> findAllRoom() {
+        return chatRoomRepository.findAll();
+    }
+
+    public ChatRoom findRoomById(FindRoomRequest request) {
+        return chatRoomRepository.findByRoomId(request.getRoomId());
+    }
+
+    public boolean update(UpdateRoomInfoRequest request) {
+        return chatRoomRepository.updateRoomInfo(request.getRoomId(), request.getName());
+    }
+
+    public boolean delete(ExitRoomRequest request) {
+        return chatRoomRepository.delete(request.getRoomId());
     }
 
 
