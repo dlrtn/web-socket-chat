@@ -6,20 +6,22 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
 @ToString
 public class SignUpRequest {
 
     @NotBlank
-    private String username;
+    private final String username;
 
     @NotBlank
-    private String password;
+    private final String password;
 
     @NotBlank
-    private String realName;
+    private final String realName;
 
     @NotNull
-    private UserAuthRole authRole;
+    private final UserAuthRole authRole;
 
 }

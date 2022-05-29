@@ -1,11 +1,12 @@
 package com.dlrtn.websocket.chat.business.user.model.payload;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
 @ToString
 public class SignInRequest {
 
