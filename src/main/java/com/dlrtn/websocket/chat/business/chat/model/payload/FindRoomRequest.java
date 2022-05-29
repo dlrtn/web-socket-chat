@@ -6,12 +6,12 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
+@Getter
 @Builder
 @AllArgsConstructor
-@Getter
-public class MakeRoomRequest {
+public class FindRoomRequest {
 
     @NotBlank
-    private final String name;
+    private final String roomId;
 
 }

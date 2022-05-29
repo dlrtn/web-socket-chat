@@ -1,13 +1,17 @@
 package com.dlrtn.websocket.chat.business.chat.model.payload;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Builder
+@AllArgsConstructor
+@Getter
 public class ExitRoomRequest {
 
     @NotBlank
-    private String roomId;
+    private final String roomId;
 
 }
