@@ -6,9 +6,9 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
-@Builder
 @AllArgsConstructor
+@Builder
+@Getter
 public class FindRoomRequest {
 
     @NotBlank

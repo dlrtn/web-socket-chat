@@ -6,14 +6,11 @@ import com.dlrtn.websocket.chat.business.chat.application.ChatService;
 import com.dlrtn.websocket.chat.business.chat.model.payload.FindRoomRequest;
 import com.dlrtn.websocket.chat.business.chat.model.payload.MakeRoomRequest;
 import com.dlrtn.websocket.chat.business.chat.model.payload.UpdateRoomInfoRequest;
-import com.dlrtn.websocket.chat.common.model.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import java.util.List;
 
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.CHAT;
 

@@ -6,8 +6,8 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
-@Builder
 @AllArgsConstructor
+@Builder
 @Getter
 public class ExitRoomRequest {
 
