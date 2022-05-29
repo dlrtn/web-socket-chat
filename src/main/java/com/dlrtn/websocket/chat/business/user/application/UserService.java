@@ -21,9 +21,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final InMemorySessionRepository sessionRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -70,26 +68,36 @@ public class UserService {
         return SignInResponse.successWith(newSessionId);
     }
 
+    public User getSessionUser(String sessionId) {
+        return Optional.ofNullable(sessionId)
+                .filter(sessionRepository::exists)
+                .map(sessionRepository::get)
+                .orElse(null);
+    }
+
     @Transactional
-    public ChangeUserProfileResponse changeUserProfile(User user, ChangeUserProfileRequest request) {
-        if (hasNotMatchedPassword(user, request.getExistingPassword())) {
+    public ChangeUserProfileResponse changeUserProfile(String sessionId, ChangeUserProfileRequest request) {
+        User sessionUser = getSessionUser(sessionId);
+
+        if (hasNotMatchedPassword(sessionUser, request.getExistingPassword())) {
             return ChangeUserProfileResponse.failWith("password not correct");
         }
 
-        String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), user.getRealName());
-        String newPassword = StringUtils.defaultIfEmpty(request.getNewPassword(), user.getPassword());
+        String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), sessionUser.getRealName());
+        String newPassword = StringUtils.defaultIfEmpty(request.getNewPassword(), sessionUser.getPassword());
 
-        User changedUser = user.toBuilder()
+        User changedUser = sessionUser.toBuilder()
                 .realName(newRealName)
                 .password(passwordEncoder.encode(newPassword))
                 .updatedAt(LocalDateTime.now())
                 .build();
 
         userRepository.update(changedUser);
+        sessionRepository.put(sessionId, changedUser);
         return ChangeUserProfileResponse.success();
     }
 
-    private boolean hasNotMatchedPassword(User user, String password) {
+    public boolean hasNotMatchedPassword(User user, String password) {
         return Optional.ofNullable(user)
                 .map(User::getPassword)
                 .filter(userPw -> passwordEncoder.matches(password, userPw))
@@ -97,12 +105,14 @@ public class UserService {
     }
 
     @Transactional
-    public WithdrawUserResponse withdrawUser(User user, WithdrawUserRequest request) {
-        if (hasNotMatchedPassword(user, request.getPassword())) {
+    public WithdrawUserResponse withdrawUser(String sessionId, WithdrawUserRequest request) {
+        User sessionUser = getSessionUser(sessionId);
+
+        if (hasNotMatchedPassword(sessionUser, request.getPassword())) {
             return WithdrawUserResponse.failWith("password not correct");
         }
 
-        userRepository.delete(user.getUsername());
+        userRepository.delete(sessionUser.getUsername());
         return WithdrawUserResponse.success();
     }
 

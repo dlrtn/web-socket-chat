@@ -1,7 +1,6 @@
 package com.dlrtn.websocket.chat.business.user.api;
 
 import com.dlrtn.websocket.chat.business.user.aop.SessionId;
-import com.dlrtn.websocket.chat.business.user.aop.SessionUser;
 import com.dlrtn.websocket.chat.business.user.application.UserService;
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
@@ -44,28 +43,27 @@ public class UserApiController {
 
         if (signInResponse.isSuccess()) {
             CookieUtils.setCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, signInResponse.getSessionId());
-            return SignInResponse.successWith(sessionId);
-        } else {
-            return SignInResponse.failWith("error");
         }
+
+        return signInResponse;
     }
 
     @Operation(summary = "회원 정보수정")
     @PatchMapping(MODIFYING)
     public ChangeUserProfileResponse changeUserProfile(
-            @SessionUser User user,
+            @SessionId String sessionId,
             @Valid @RequestBody ChangeUserProfileRequest requestBody
     ) {
-        return userService.changeUserProfile(user, requestBody);
+        return userService.changeUserProfile(sessionId, requestBody);
     }
 
     @Operation(summary = "회원 정보 삭제")
     @DeleteMapping(WITHDRAWAL)
-    public WithdrawUserResponse deleteUser(
-            @SessionUser User user,
+    public WithdrawUserResponse withdrawUser(
+            @SessionId String sessionId,
             @Valid @RequestBody WithdrawUserRequest requestBody
     ) {
-        return userService.withdrawUser(user, requestBody);
+        return userService.withdrawUser(sessionId, requestBody);
     }
 
 }
