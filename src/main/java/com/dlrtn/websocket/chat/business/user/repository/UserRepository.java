@@ -16,8 +16,19 @@ public class UserRepository {
     private final DSLContext dslContext;
 
     public void save(User user) {
-        dslContext.insertInto(TB_USER, TB_USER.USERNAME, TB_USER.PASSWORD, TB_USER.AUTH_ROLE, TB_USER.REAL_NAME, TB_USER.CREATED_AT, TB_USER.UPDATED_AT)
-                .values(user.getUsername(), user.getPassword(), user.getAuthRole().name(), user.getRealName(), convertLocalDateTimeToString(user.getCreatedAt()), convertLocalDateTimeToString(user.getUpdatedAt()))
+        dslContext.insertInto(TB_USER,
+                        TB_USER.USERNAME,
+                        TB_USER.PASSWORD,
+                        TB_USER.AUTH_ROLE,
+                        TB_USER.REAL_NAME,
+                        TB_USER.CREATED_AT,
+                        TB_USER.UPDATED_AT)
+                .values(user.getUsername(),
+                        user.getPassword(),
+                        user.getAuthRole().name(),
+                        user.getRealName(),
+                        convertLocalDateTimeToString(user.getCreatedAt()),
+                        convertLocalDateTimeToString(user.getUpdatedAt()))
                 .execute();
     }
 

@@ -1,11 +1,7 @@
 package com.dlrtn.websocket.chat.business.chat.model.domain;
 
-import lombok.Data;
 import lombok.Builder;
-import org.springframework.web.socket.WebSocketSession;
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.Data;
 
 @Data
 @Builder

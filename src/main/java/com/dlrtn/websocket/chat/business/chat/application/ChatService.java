@@ -1,16 +1,21 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
-import com.dlrtn.websocket.chat.business.chat.model.payload.*;
+import com.dlrtn.websocket.chat.business.chat.model.payload.ChangeChatRoomRespnose;
+import com.dlrtn.websocket.chat.business.chat.model.payload.CreateChatRoomRequest;
+import com.dlrtn.websocket.chat.business.chat.model.payload.CreateChatRoomResponse;
+import com.dlrtn.websocket.chat.business.chat.model.payload.ExitChatRoomResponse;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomRepository;
-import com.dlrtn.websocket.chat.common.model.CommonResponse;
+import com.dlrtn.websocket.chat.common.exception.CommonException;
 import com.dlrtn.websocket.chat.common.model.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,11 +24,11 @@ public class ChatService {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    public SaveRoomResponse saveRoom(SaveRoomRequest request) {
-        ChatRoom foundChatRoom = chatRoomRepository.selectByRoomName(request.getName());
+    public CreateChatRoomResponse createChatRoom(CreateChatRoomRequest request) {
+        ChatRoom foundChatRoom = chatRoomRepository.selectById(request.getName());
 
         if (Objects.nonNull(foundChatRoom)) {
-            return SaveRoomResponse.failWith(ResponseMessage.EXISTED_ROOM_NAME);
+            return CreateChatRoomResponse.failWith(ResponseMessage.EXISTED_ROOM_NAME);
         }
 
         String randomId = UUID.randomUUID().toString();
@@ -36,50 +41,37 @@ public class ChatService {
                 .roomPassword(roomPassword)
                 .build();
 
-        try {
-            chatRoomRepository.insertRoom(chatRoom);
-            return SaveRoomResponse.success();
-        } catch (Exception e) {
-            return SaveRoomResponse.failWith(ResponseMessage.SERVER_ERROR);
-        }
+        chatRoomRepository.insertRoom(chatRoom);
+        return CreateChatRoomResponse.success();
 
     }
 
-    public List<ChatRoom> getAllRoom() {
-        List<ChatRoom> chatRoomList = chatRoomRepository.selectAllRoom();
-
-        if (Objects.isNull(chatRoomList)) {
-            return null;
-        }
-
-        return chatRoomList;
+    public ChatRoom getChatRoom(String roomId) {
+        return Optional.ofNullable(roomId)
+                .map(chatRoomRepository::selectById)
+                .orElseThrow(() -> new CommonException("Can't find room"));
     }
 
-    public ChatRoom getRoomByName(FindRoomRequest request) {
-        return Optional.ofNullable(request.getName())
-                .map(chatRoomRepository::selectByRoomName)
-                .orElseThrow(null);
-    }
-
-    public ChangeRoomInfoRespnose changeRoomInfo(ChangeRoomInfoRequest request) {
-        ChatRoom foundChatRoom = chatRoomRepository.selectByRoomName(request.getName());
+    public ChangeChatRoomRespnose changeChatRoom(String roomId, String roomName) {
+        ChatRoom foundChatRoom = chatRoomRepository.selectById(roomId);
 
         if (Objects.isNull(foundChatRoom)) {
-            return ChangeRoomInfoRespnose.failWith("Can't find room by name");
+            return ChangeChatRoomRespnose.failWith("Can't find room by name");
         }
 
-        chatRoomRepository.updateRoom(request.getRoomId(), request.getName());
-        return ChangeRoomInfoRespnose.success();
+        chatRoomRepository.updateRoom(roomId, roomName);
+        return ChangeChatRoomRespnose.success();
     }
 
-    public ExitRoomResponse delete(ExitRoomRequest request) {
-        ChatRoom foundChatRoom = chatRoomRepository.selectByRoomName(request.getName());
+    public ExitChatRoomResponse exitChatRoom(String roomId) {
+        ChatRoom foundChatRoom = chatRoomRepository.selectById(roomId);
 
         if (Objects.isNull(foundChatRoom)) {
-            return ExitRoomResponse.failWith("Can't find room by name");
+            return ExitChatRoomResponse.failWith("Can't find room by name");
         }
-        chatRoomRepository.deleteRoom(request.getRoomId());
-        return ExitRoomResponse.success();
+
+        chatRoomRepository.deleteRoom(roomId);
+        return ExitChatRoomResponse.success();
     }
 
 

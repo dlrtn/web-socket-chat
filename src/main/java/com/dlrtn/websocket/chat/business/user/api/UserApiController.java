@@ -3,7 +3,6 @@ package com.dlrtn.websocket.chat.business.user.api;
 import com.dlrtn.websocket.chat.business.user.aop.SessionId;
 import com.dlrtn.websocket.chat.business.user.application.UserService;
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
-import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import static com.dlrtn.websocket.chat.common.model.PagePathConstants.*;
+import static com.dlrtn.websocket.chat.common.model.PagePathConstants.API;
+import static com.dlrtn.websocket.chat.common.model.PagePathConstants.USER;
 
 @Slf4j
 @RestController
@@ -25,16 +25,16 @@ public class UserApiController {
     private final UserService userService;
 
     @Operation(summary = "회원가입")
-    @PostMapping(SIGNUP)
-    public SignUpResponse signUp(
+    @PostMapping("/sign-up")
+    public SignUpResponse signUpUser(
             @Valid @RequestBody SignUpRequest signUpRequest
     ) {
         return userService.signUp(signUpRequest);
     }
 
     @Operation(summary = "회원 로그인")
-    @PostMapping(LOGIN)
-    public SignInResponse signIn(
+    @PostMapping("/sign-in")
+    public SignInResponse signInUser(
             @SessionId String sessionId,
             @Valid @RequestBody SignInRequest requestBody,
             HttpServletResponse response
@@ -49,8 +49,8 @@ public class UserApiController {
     }
 
     @Operation(summary = "회원 정보수정")
-    @PatchMapping(MODIFYING)
-    public ChangeUserProfileResponse changeUserProfile(
+    @PatchMapping("/{userId}/modifying")
+    public ChangeUserProfileResponse changeUser(
             @SessionId String sessionId,
             @Valid @RequestBody ChangeUserProfileRequest requestBody
     ) {
@@ -58,7 +58,7 @@ public class UserApiController {
     }
 
     @Operation(summary = "회원 정보 삭제")
-    @DeleteMapping(WITHDRAWAL)
+    @DeleteMapping("/{userId}/withdrawal")
     public WithdrawUserResponse withdrawUser(
             @SessionId String sessionId,
             @Valid @RequestBody WithdrawUserRequest requestBody

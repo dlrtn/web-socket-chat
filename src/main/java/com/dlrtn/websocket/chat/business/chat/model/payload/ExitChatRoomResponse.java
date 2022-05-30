@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class ExitRoomResponse {
+public class ExitChatRoomResponse {
 
     private final boolean success;
 
@@ -15,19 +15,19 @@ public class ExitRoomResponse {
 
     private final String description;
 
-    public static ExitRoomResponse success() {
+    public static ExitChatRoomResponse success() {
         return successWith(ResponseMessage.SUCCESS);
     }
 
-    public static ExitRoomResponse successWith(ResponseMessage message) {
+    public static ExitChatRoomResponse successWith(ResponseMessage message) {
         return of(true, message, message.getDescription());
     }
 
-    public static ExitRoomResponse failWith(ResponseMessage message) {
+    public static ExitChatRoomResponse failWith(ResponseMessage message) {
         return of(false, message, message.getDescription());
     }
 
-    public static ExitRoomResponse failWith(String description) {
+    public static ExitChatRoomResponse failWith(String description) {
         return of(false, ResponseMessage.SERVER_ERROR, description);
     }
 

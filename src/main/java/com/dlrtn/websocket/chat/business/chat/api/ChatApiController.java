@@ -1,44 +1,41 @@
 package com.dlrtn.websocket.chat.business.chat.api;
 
-import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
-import com.dlrtn.websocket.chat.business.chat.model.payload.*;
 import com.dlrtn.websocket.chat.business.chat.application.ChatService;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
+import com.dlrtn.websocket.chat.business.chat.model.payload.ChangeChatRoomRespnose;
+import com.dlrtn.websocket.chat.business.chat.model.payload.CreateChatRoomRequest;
+import com.dlrtn.websocket.chat.business.chat.model.payload.CreateChatRoomResponse;
+import com.dlrtn.websocket.chat.business.chat.model.payload.ExitChatRoomResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.dlrtn.websocket.chat.common.model.PagePathConstants.CHAT;
-
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(CHAT)
+@RequestMapping("/api")
 public class ChatApiController {
 
-    @Autowired
     private final ChatService chatService;
 
-    //TODO RequestParam, RequestBody 차이점 확인하고 적용
-
-    @PostMapping("/main")
-    public SaveRoomResponse createRoom(@Valid @RequestBody SaveRoomRequest saveRoomRequest) {
-        return chatService.saveRoom(saveRoomRequest);
+    @PostMapping("/users/{userId}/chats")
+    public CreateChatRoomResponse createChatRoom(@Valid @RequestBody CreateChatRoomRequest createChatRoomRequest) {
+        return chatService.createChatRoom(createChatRoomRequest);
     }
 
-    @PostMapping("/exitRoom")
-    public ExitRoomResponse exitRoom(@Valid @RequestBody ExitRoomRequest exitRoomRequest) {
-        return chatService.delete(exitRoomRequest);
+    @GetMapping("/users/{userId}/chats/{chatsId}")
+    public ChatRoom findChatRoom(@PathVariable String chatsId) {
+        return chatService.getChatRoom(chatsId);
     }
 
-    @PostMapping("/updateRoom")
-    public ChangeRoomInfoRespnose updateRoom(@Valid @RequestBody ChangeRoomInfoRequest changeRoomInfoRequest) {
-        return chatService.changeRoomInfo(changeRoomInfoRequest);
+    @DeleteMapping("/users/{userId}/chats/{chatsId}")
+    public ExitChatRoomResponse exitChatRoom(@PathVariable String chatsId) {
+        return chatService.exitChatRoom(chatsId);
     }
 
-    @PostMapping("/findRoom")
-    public ChatRoom findRoom(@Valid @RequestBody FindRoomRequest findRoomRequest) {
-        return chatService.getRoomByName(findRoomRequest); //TODO 반환값 바꿔야할거같은데 고민해보기
+    @PutMapping("/users/{userId}/chats/{chatsId}")
+    public ChangeChatRoomRespnose changeChatRoom(@PathVariable String chatsId, String roomName) {
+        return chatService.changeChatRoom(chatsId, roomName);
     }
 
 }
