@@ -15,39 +15,37 @@ public class ChatRoomRepository {
 
     private final DSLContext dslContext;
 
-    public boolean makeRoom(ChatRoom chatRoom) {
-        return dslContext.insertInto(TB_CHATROOM, TB_CHATROOM.ROOMID, TB_CHATROOM.NAME)
+    public void insertRoom(ChatRoom chatRoom) {
+        dslContext.insertInto(TB_CHATROOM, TB_CHATROOM.ROOMID, TB_CHATROOM.NAME)
                 .values(chatRoom.getRoomId(), chatRoom.getName())
-                .execute() == 1;
+                .execute();
     }
 
-    public ChatRoom findByRoomId(String roomId) {
+    public ChatRoom selectByRoomName(String name) {
         return dslContext.select()
                 .from(TB_CHATROOM)
-                .where(TB_CHATROOM.ROOMID.eq(roomId))
+                .where(TB_CHATROOM.ROOMID.eq(name))
                 .fetchOneInto(ChatRoom.class);
     }
 
-    public List<ChatRoom> findAll() {
+    public List<ChatRoom> selectAllRoom() {
         return dslContext.select()
                 .from(TB_CHATROOM)
                 .fetchInto(ChatRoom.class);
     }
 
-    public boolean updateRoomInfo(String roomId, String name) {
-        return dslContext.update(TB_CHATROOM)
+    public void updateRoom(String roomId, String name) {
+        dslContext.update(TB_CHATROOM)
                 .set(TB_CHATROOM.NAME, name)
                 .where(TB_CHATROOM.ROOMID.eq(roomId))
-                .execute() == 1; //TODO 과연 좋은 방법인가..
+                .execute();
 
     }
 
-    public boolean delete(String roomId) {
-        return dslContext.delete(TB_CHATROOM)
+    public void deleteRoom(String roomId) {
+        dslContext.delete(TB_CHATROOM)
                 .where(TB_CHATROOM.ROOMID.equal(roomId))
-                .execute() == 1;
+                .execute();
     }
-
-
 
 }

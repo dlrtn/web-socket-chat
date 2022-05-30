@@ -14,4 +14,7 @@ public class ExitRoomRequest {
     @NotBlank
     private final String roomId;
 
+    @NotBlank
+    private final String name;
+
 }

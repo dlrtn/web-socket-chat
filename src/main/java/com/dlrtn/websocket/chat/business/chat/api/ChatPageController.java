@@ -27,7 +27,7 @@ public class ChatPageController {
 
     @GetMapping("/refresh")
     public String refreshRoomList() {
-        return "/main";
+        return "redirect:/main";
     }
 
 }

@@ -59,7 +59,7 @@ public class UserService {
         User foundUser = userRepository.findByUsername(request.getUsername());
 
         if (hasNotMatchedPassword(foundUser, request.getPassword())) {
-            return SignInResponse.failWith("user id or password mismatch");
+            return SignInResponse.failWith("User id or password mismatch");
         }
 
         String newSessionId = UUID.randomUUID().toString();
@@ -95,7 +95,7 @@ public class UserService {
         userRepository.update(changedUser);
         sessionRepository.put(sessionId, changedUser);
         return ChangeUserProfileResponse.success();
-    }
+}
 
     public boolean hasNotMatchedPassword(User user, String password) {
         return Optional.ofNullable(user)

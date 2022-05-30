@@ -2,7 +2,6 @@ package com.dlrtn.websocket.chat.business.user.repository;
 
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.jooq.Converter;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 

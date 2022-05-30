@@ -11,10 +11,12 @@ import java.util.Set;
 @Builder
 public class ChatRoom {
 
-    private String roomId;
+    private final String roomId;
 
-    private String name;
+    private final String name;
 
-    private final Set<WebSocketSession> sessions = new HashSet<>();
+    private final ChatRoomType chatRoomType;
+
+    private final String roomPassword;
 
 }

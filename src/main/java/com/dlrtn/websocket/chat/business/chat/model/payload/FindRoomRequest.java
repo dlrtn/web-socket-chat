@@ -12,6 +12,6 @@ import javax.validation.constraints.NotBlank;
 public class FindRoomRequest {
 
     @NotBlank
-    private final String roomId;
+    private final String name;
 
 }
