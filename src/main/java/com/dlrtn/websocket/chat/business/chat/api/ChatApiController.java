@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.api;
 
-import com.dlrtn.websocket.chat.business.chat.application.ChatService;
+import com.dlrtn.websocket.chat.business.chat.application.ChatRoomService;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
 import com.dlrtn.websocket.chat.business.chat.model.payload.ChangeChatRoomRespnose;
 import com.dlrtn.websocket.chat.business.chat.model.payload.CreateChatRoomRequest;
@@ -16,26 +16,26 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class ChatApiController {
 
-    private final ChatService chatService;
+    private final ChatRoomService CHatRoomService;
 
     @PostMapping("/users/{userId}/chats")
     public CreateChatRoomResponse createChatRoom(@Valid @RequestBody CreateChatRoomRequest createChatRoomRequest) {
-        return chatService.createChatRoom(createChatRoomRequest);
+        return CHatRoomService.createChatRoom(createChatRoomRequest);
     }
 
     @GetMapping("/users/{userId}/chats/{chatsId}")
     public ChatRoom findChatRoom(@PathVariable String chatsId) {
-        return chatService.getChatRoom(chatsId);
+        return CHatRoomService.getChatRoom(chatsId);
     }
 
     @DeleteMapping("/users/{userId}/chats/{chatsId}")
     public ExitChatRoomResponse exitChatRoom(@PathVariable String chatsId) {
-        return chatService.exitChatRoom(chatsId);
+        return CHatRoomService.exitChatRoom(chatsId);
     }
 
     @PutMapping("/users/{userId}/chats/{chatsId}")
     public ChangeChatRoomRespnose changeChatRoom(@PathVariable String chatsId, String roomName) {
-        return chatService.changeChatRoom(chatsId, roomName);
+        return CHatRoomService.changeChatRoom(chatsId, roomName);
     }
 
 }

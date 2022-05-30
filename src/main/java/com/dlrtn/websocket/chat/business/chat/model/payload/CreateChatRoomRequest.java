@@ -19,6 +19,6 @@ public class CreateChatRoomRequest {
     private final ChatRoomType chatRoomType;
 
     @NotBlank
-    private final String roomPassword;
+    private final String chatRoomPassword;
 
 }

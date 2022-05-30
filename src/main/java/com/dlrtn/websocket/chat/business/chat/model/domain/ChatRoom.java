@@ -1,18 +1,20 @@
 package com.dlrtn.websocket.chat.business.chat.model.domain;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@Getter
 @Builder
+@ToString
 public class ChatRoom {
 
-    private final String roomId;
+    private final String chatId;
 
     private final String name;
 
     private final ChatRoomType chatRoomType;
 
-    private final String roomPassword;
+    private final String password;
 
 }

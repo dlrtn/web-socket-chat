@@ -20,7 +20,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ChatService {
+public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
 
@@ -32,16 +32,16 @@ public class ChatService {
         }
 
         String randomId = UUID.randomUUID().toString();
-        String roomPassword = StringUtils.defaultIfEmpty(request.getRoomPassword(), "0000");
+        String roomPassword = StringUtils.defaultIfEmpty(request.getChatRoomPassword(), "0000");
 
         ChatRoom chatRoom = ChatRoom.builder()
-                .roomId(randomId)
+                .chatId(randomId)
                 .name(request.getName())
                 .chatRoomType(request.getChatRoomType())
-                .roomPassword(roomPassword)
+                .password(roomPassword)
                 .build();
 
-        chatRoomRepository.insertRoom(chatRoom);
+        chatRoomRepository.insertChatRoom(chatRoom);
         return CreateChatRoomResponse.success();
 
     }
@@ -59,7 +59,7 @@ public class ChatService {
             return ChangeChatRoomRespnose.failWith("Can't find room by name");
         }
 
-        chatRoomRepository.updateRoom(roomId, roomName);
+        chatRoomRepository.updateChatRoom(roomId, roomName);
         return ChangeChatRoomRespnose.success();
     }
 
@@ -70,7 +70,7 @@ public class ChatService {
             return ExitChatRoomResponse.failWith("Can't find room by name");
         }
 
-        chatRoomRepository.deleteRoom(roomId);
+        chatRoomRepository.deleteChatRoom(roomId);
         return ExitChatRoomResponse.success();
     }
 
