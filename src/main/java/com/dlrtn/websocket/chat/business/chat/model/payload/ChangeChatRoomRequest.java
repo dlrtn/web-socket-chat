@@ -12,9 +12,9 @@ import javax.validation.constraints.NotBlank;
 public class ChangeChatRoomRequest {
 
     @NotBlank
-    private final String roomId;
+    private final String chatId;
 
     @NotBlank
-    private final String name;
+    private final String chatName;
 
 }

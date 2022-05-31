@@ -19,9 +19,9 @@ public class ChatRoomRepository {
     public void insertChatRoom(ChatRoom chatRoom) {
         dslContext.insertInto(TB_CHATROOM,
                         TB_CHATROOM.CHATID,
-                        TB_CHATROOM.NAME,
-                        TB_CHATROOM.CHATROOM_TYPE,
-                        TB_CHATROOM.ROOM_PASSWORD)
+                        TB_CHATROOM.CHATNAME,
+                        TB_CHATROOM.CHAT_TYPE,
+                        TB_CHATROOM.CHAT_PASSWORD)
                 .values(chatRoom.getChatId(),
                         chatRoom.getChatName(),
                         chatRoom.getChatType().name(),
@@ -32,8 +32,8 @@ public class ChatRoomRepository {
     public List<ChatRoom> selectByUserId(String userId) {
         return dslContext.select(
                         TB_CHATROOM.CHATID,
-                        TB_CHATROOM.CHATROOM_TYPE,
-                        TB_CHATROOM.NAME
+                        TB_CHATROOM.CHATNAME,
+                        TB_CHATROOM.CHAT_TYPE
                 )
                 .from(TB_CHATROOM)
                 .join(TB_CHATROOM_MEMBER)
@@ -51,7 +51,7 @@ public class ChatRoomRepository {
 
     public void updateChatRoom(String chatId, String name) {
         dslContext.update(TB_CHATROOM)
-                .set(TB_CHATROOM.NAME, name)
+                .set(TB_CHATROOM.CHATNAME, name)
                 .where(TB_CHATROOM.CHATID.eq(chatId))
                 .execute();
     }

@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class ChatRoomMember {
+public class ChatMember {
 
     private final long id;
 
@@ -15,9 +15,9 @@ public class ChatRoomMember {
 
     private final String userId;
 
-    private final ChatRoomMemberRole role;
+    private final ChatMemberRole role;
 
-    private final ChatRoomMemberStatus status;
+    private final ChatMemberStatus status;
 
     private final Long joinedAt;
 

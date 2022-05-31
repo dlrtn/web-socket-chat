@@ -14,7 +14,7 @@ import java.util.List;
 public class CreateChatRoomRequest {
 
     @NotBlank
-    private final String name;
+    private final String chatRoomName;
 
     @NotBlank
     private final ChatRoomType chatRoomType;

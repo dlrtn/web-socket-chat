@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.business.chat.repository;
 
-import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoomMember;
-import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoomMemberRole;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -16,25 +16,32 @@ public class ChatRoomMemberRepository {
 
     private final DSLContext dslContext;
 
-    public List<ChatRoomMember> selectChatRoomMember(String chatId) {
+    public List<ChatMember> selectChatRoomMembers(String chatId) {
         return dslContext.select()
                 .from(TB_CHATROOM_MEMBER)
                 .where(TB_CHATROOM_MEMBER.CHATID.eq(chatId))
-                .fetchInto(ChatRoomMember.class);
+                .fetchInto(ChatMember.class);
     }
 
-    public void updateChatRoomMemberRole(String userId, ChatRoomMemberRole role) {
+    public void updateChatRoomMemberRole(String userId, ChatMemberRole role) {
         dslContext.update(TB_CHATROOM_MEMBER)
                 .set(TB_CHATROOM_MEMBER.ROLE, role.name())
                 .where(TB_CHATROOM_MEMBER.USERID.eq(userId))
                 .execute();
     }
 
-    public ChatRoomMember selectChatRoomMemberById(String userId, String chatId) {
+    public ChatMember selectChatRoomMemberById(String userId, String chatId) {
         return dslContext.select()
                 .from(TB_CHATROOM_MEMBER)
                 .where(TB_CHATROOM_MEMBER.USERID.eq(userId).and(TB_CHATROOM_MEMBER.CHATID.eq(chatId)))
-                .fetchOneInto(ChatRoomMember.class);
+                .fetchOneInto(ChatMember.class);
+    }
+
+    public boolean existsChatRoomMember(String userId, String chatId) {
+        return dslContext.select()
+                .from(TB_CHATROOM_MEMBER)
+                .where(TB_CHATROOM_MEMBER.CHATID.eq(chatId).and(TB_CHATROOM_MEMBER.USERID.eq(userId)))
+                .execute() == 1;
     }
 
 }

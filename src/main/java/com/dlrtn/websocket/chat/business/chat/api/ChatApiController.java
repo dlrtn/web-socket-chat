@@ -2,10 +2,7 @@ package com.dlrtn.websocket.chat.business.chat.api;
 
 import com.dlrtn.websocket.chat.business.chat.application.ChatRoomService;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
-import com.dlrtn.websocket.chat.business.chat.model.payload.ChangeChatRoomResponse;
-import com.dlrtn.websocket.chat.business.chat.model.payload.CreateChatRoomRequest;
-import com.dlrtn.websocket.chat.business.chat.model.payload.CreateChatRoomResponse;
-import com.dlrtn.websocket.chat.business.chat.model.payload.ExitChatRoomResponse;
+import com.dlrtn.websocket.chat.business.chat.model.payload.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,31 +13,31 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class ChatApiController {
 
-    private final ChatRoomService ChatRoomService;
+    private final ChatRoomService chatRoomService;
 
     @PostMapping("/users/{userId}/chats")
     public CreateChatRoomResponse createChatRoom(@PathVariable String userId,
                                                  @Valid @RequestBody CreateChatRoomRequest createChatRoomRequest) {
-        return ChatRoomService.createChatRoom(userId, createChatRoomRequest);
+        return chatRoomService.createChatRoom(userId, createChatRoomRequest);
     }
 
-    @GetMapping("/users/{userId}/chats/{chatsId}")
+    @GetMapping("/users/{userId}/chats/{chatId}")
     public ChatRoom findChatRoom(@PathVariable String userId,
-                                 @PathVariable String chatsId) {
-        return ChatRoomService.getChatRoom(userId, chatsId);
+                                 @PathVariable String chatId) {
+        return chatRoomService.getChatRoom(userId, chatId);
     }
 
-    @DeleteMapping("/users/{userId}/chats/{chatsId}")
+    @DeleteMapping("/users/{userId}/chats/{chatId}")
     public ExitChatRoomResponse exitChatRoom(@PathVariable String userId,
-                                             @PathVariable String chatsId) {
-        return ChatRoomService.exitChatRoom(userId, chatsId);
+                                             @PathVariable String chatId) {
+        return chatRoomService.exitChatRoom(userId, chatId);
     }
 
-    @PutMapping("/users/{userId}/chats/{chatsId}")
+    @PutMapping("/users/{userId}/chats/{chatId}")
     public ChangeChatRoomResponse changeChatRoom(@PathVariable String userId,
-                                                 @PathVariable String chatsId,
-                                                 String roomName) {
-        return ChatRoomService.changeChatRoom(userId, chatsId, roomName);
+                                                 @PathVariable String chatId,
+                                                 @Valid @RequestBody ChangeChatRoomRequest changeChatRoomRequest) {
+        return chatRoomService.changeChatRoom(userId, chatId, changeChatRoomRequest);
     }
 
 }
