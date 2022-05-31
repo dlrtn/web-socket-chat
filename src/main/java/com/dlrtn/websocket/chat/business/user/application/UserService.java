@@ -95,7 +95,7 @@ public class UserService {
         userRepository.update(changedUser);
         sessionRepository.put(sessionId, changedUser);
         return ChangeUserProfileResponse.success();
-}
+    }
 
     public boolean hasNotMatchedPassword(User user, String password) {
         return Optional.ofNullable(user)

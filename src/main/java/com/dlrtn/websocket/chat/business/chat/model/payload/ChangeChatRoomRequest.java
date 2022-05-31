@@ -12,9 +12,6 @@ import javax.validation.constraints.NotBlank;
 public class ChangeChatRoomRequest {
 
     @NotBlank
-    private final String chatId;
-
-    @NotBlank
     private final String chatName;
 
 }

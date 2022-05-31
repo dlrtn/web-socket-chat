@@ -1,8 +1,8 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
-import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
 import com.dlrtn.websocket.chat.business.chat.model.payload.*;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomMemberRepository;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomRepository;
@@ -47,14 +47,16 @@ public class ChatRoomService {
     public List<ChatRoom> getChatRooms(String userId, String chatId) {
         return Optional.ofNullable(userId)
                 .map(chatRoomRepository::selectByUserId)
-                .orElseThrow(() -> new CommonException(String.format("Error with userId : %s, chatId : %s", userId, chatId)));
+                .orElseThrow(() -> new CommonException(String.format("Error with userId : %s", userId)));
     }
 
-    public ChatRoom getChatRoom(String userId, String chatId) {
-        return Optional.ofNullable(chatId)
-                .map(chatRoomRepository::selectByChatId)
-                .orElseThrow(() -> new CommonException(String.format("Error with userId : %s, chatId : %s", userId, chatId)));
-    }
+//    public ChatRoom getChatRoom(String userId, String chatId) {
+//        if (!chatRoomMemberRepository.existsChatRoomMember(userId, chatId)) {
+//            return null;
+//        }
+//
+//        return chatRoomRepository.selectByChatId(userId, chatId);
+//    }
 
     public ChangeChatRoomResponse changeChatRoom(String userId, String chatId, ChangeChatRoomRequest changeChatRoomRequest) {
         ChatMember foundChatMember = chatRoomMemberRepository.selectChatRoomMemberById(userId, chatId);
@@ -68,7 +70,7 @@ public class ChatRoomService {
     }
 
     public ExitChatRoomResponse exitChatRoom(String userId, String chatId) {
-        ChatRoom foundChatRoom = chatRoomRepository.selectByChatId(chatId);
+        ChatRoom foundChatRoom = chatRoomRepository.selectByChatId(userId, chatId);
 
         if (!StringUtils.equals(foundChatRoom.getChatHostUser(), userId)) {
             return ExitChatRoomResponse.failWith(String.format("Error with userId : %s, chatId : %s", userId, chatId));

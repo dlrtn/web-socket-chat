@@ -42,10 +42,10 @@ public class ChatRoomRepository {
                 .fetchInto(ChatRoom.class);
     }
 
-    public ChatRoom selectByChatId(String chatId) {
+    public ChatRoom selectByChatId(String userId, String chatId) {
         return dslContext.select()
                 .from(TB_CHATROOM)
-                .where(TB_CHATROOM.CHATID.eq(chatId))
+                .where(TB_CHATROOM.CHATID.eq(chatId).and(TB_CHATROOM_MEMBER.USERID.eq(userId)))
                 .fetchOneInto(ChatRoom.class);
     }
 
