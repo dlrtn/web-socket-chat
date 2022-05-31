@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Builder
 @Getter
-public class FindRoomRequest {
+public class FindChatRoomRequest {
 
     @NotBlank
     private final String name;

@@ -18,11 +18,11 @@ public class ChatRoomMemberService {
 
     private final ChatRoomMemberRepository chatRoomMemberRepository;
 
-    public List<ChatRoomMember> getAllChatRoomMember(String chatId) {
+    public List<ChatRoomMember> getAllChatMembers(String chatId) {
         return chatRoomMemberRepository.selectChatRoomMember(chatId);
     }
 
-    public CommonResponse changeChatRoomMemberRole(String chatId, String userId, ChatRoomMemberRole role) {
+    public CommonResponse changeChatMemberRole(String chatId, String userId, ChatRoomMemberRole role) {
         if (Objects.isNull(chatRoomMemberRepository.selectChatRoomMemberById(chatId, userId))) {
             return CommonResponse.failWith("Can't find user in chatRoomMemberList");
         }

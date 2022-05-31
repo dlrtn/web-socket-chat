@@ -30,7 +30,7 @@ public class ChatRoomMemberRepository {
                 .execute();
     }
 
-    public ChatRoomMember selectChatRoomMemberById(String chatId, String userId) {
+    public ChatRoomMember selectChatRoomMemberById(String userId, String chatId) {
         return dslContext.select()
                 .from(TB_CHATROOM_MEMBER)
                 .where(TB_CHATROOM_MEMBER.USERID.eq(userId).and(TB_CHATROOM_MEMBER.CHATID.eq(chatId)))

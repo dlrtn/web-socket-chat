@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/chats")
+@RequestMapping("/users")
 public class ChatPageController {
 
-    @GetMapping("/refresh")
+    @GetMapping("/{userId}/chats/refresh")
     public String refreshRoomList() {
-        return "redirect:/";
+        return "redirect:/api/users/{userId}/chats";
     }
 
 }

@@ -9,18 +9,18 @@ import lombok.ToString;
 @ToString
 public class ChatRoomMember {
 
-    private Long id;
+    private final long id;
 
-    private Long chatId;
+    private final String chatId;
 
-    private Long userId;
+    private final String userId;
 
-    private ChatRoomMemberRole role;
+    private final ChatRoomMemberRole role;
 
-    private ChatRoomMemberStatus status;
+    private final ChatRoomMemberStatus status;
 
-    private Long joinedAt;
+    private final Long joinedAt;
 
-    private Long lastConnectedAt;
+    private final Long lastConnectedAt;
 
 }

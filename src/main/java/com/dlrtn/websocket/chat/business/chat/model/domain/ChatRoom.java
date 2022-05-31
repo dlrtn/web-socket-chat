@@ -11,10 +11,12 @@ public class ChatRoom {
 
     private final String chatId;
 
-    private final String name;
+    private final String chatName;
 
-    private final ChatRoomType chatRoomType;
+    private final String chatHostUser;
 
-    private final String password;
+    private final ChatRoomType chatType;
+
+    private final String chatPassword;
 
 }

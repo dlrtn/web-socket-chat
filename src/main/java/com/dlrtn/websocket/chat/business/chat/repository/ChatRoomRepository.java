@@ -1,7 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.repository;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
-import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoomMember;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -24,13 +23,26 @@ public class ChatRoomRepository {
                         TB_CHATROOM.CHATROOM_TYPE,
                         TB_CHATROOM.ROOM_PASSWORD)
                 .values(chatRoom.getChatId(),
-                        chatRoom.getName(),
-                        chatRoom.getChatRoomType().name(),
-                        chatRoom.getPassword())
+                        chatRoom.getChatName(),
+                        chatRoom.getChatType().name(),
+                        chatRoom.getChatPassword())
                 .execute();
     }
 
-    public ChatRoom selectById(String chatId) {
+    public List<ChatRoom> selectByUserId(String userId) {
+        return dslContext.select(
+                        TB_CHATROOM.CHATID,
+                        TB_CHATROOM.CHATROOM_TYPE,
+                        TB_CHATROOM.NAME
+                )
+                .from(TB_CHATROOM)
+                .join(TB_CHATROOM_MEMBER)
+                .on(TB_CHATROOM.CHATID.eq(TB_CHATROOM_MEMBER.CHATID))
+                .where(TB_CHATROOM_MEMBER.USERID.eq(userId))
+                .fetchInto(ChatRoom.class);
+    }
+
+    public ChatRoom selectByChatId(String chatId) {
         return dslContext.select()
                 .from(TB_CHATROOM)
                 .where(TB_CHATROOM.CHATID.eq(chatId))
@@ -44,9 +56,10 @@ public class ChatRoomRepository {
                 .execute();
     }
 
-    public void deleteChatRoom(String chatId) {
-        dslContext.delete(TB_CHATROOM)
-                .where(TB_CHATROOM.CHATID.equal(chatId))
+    public void deleteChatRoom(String userId, String chatId) {
+        dslContext.delete(TB_CHATROOM_MEMBER)
+                .where(TB_CHATROOM_MEMBER.CHATID.eq(chatId)
+                        .and(TB_CHATROOM_MEMBER.USERID.eq(userId)))
                 .execute();
     }
 

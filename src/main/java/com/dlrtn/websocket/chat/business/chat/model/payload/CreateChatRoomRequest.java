@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @AllArgsConstructor
 @Builder
@@ -20,5 +21,7 @@ public class CreateChatRoomRequest {
 
     @NotBlank
     private final String chatRoomPassword;
+
+    private final List<String> chatMembers;
 
 }

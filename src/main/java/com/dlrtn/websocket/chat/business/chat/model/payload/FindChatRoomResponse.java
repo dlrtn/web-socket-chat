@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class ChangeChatRoomRespnose {
+public class FindChatRoomResponse {
 
     private final boolean success;
 
@@ -15,19 +15,19 @@ public class ChangeChatRoomRespnose {
 
     private final String description;
 
-    public static ChangeChatRoomRespnose success() {
+    public static FindChatRoomResponse success() {
         return successWith(ResponseMessage.SUCCESS);
     }
 
-    public static ChangeChatRoomRespnose successWith(ResponseMessage message) {
+    public static FindChatRoomResponse successWith(ResponseMessage message) {
         return of(true, message, message.getDescription());
     }
 
-    public static ChangeChatRoomRespnose failWith(ResponseMessage message) {
+    public static FindChatRoomResponse failWith(ResponseMessage message) {
         return of(false, message, message.getDescription());
     }
 
-    public static ChangeChatRoomRespnose failWith(String description) {
+    public static FindChatRoomResponse failWith(String description) {
         return of(false, ResponseMessage.SERVER_ERROR, description);
     }
 
