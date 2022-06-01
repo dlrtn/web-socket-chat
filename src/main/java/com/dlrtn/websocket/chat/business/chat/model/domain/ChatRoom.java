@@ -1,20 +1,22 @@
 package com.dlrtn.websocket.chat.business.chat.model.domain;
 
-import lombok.Data;
 import lombok.Builder;
-import org.springframework.web.socket.WebSocketSession;
+import lombok.Getter;
+import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
-
-@Data
+@Getter
 @Builder
+@ToString
 public class ChatRoom {
 
-    private String roomId;
+    private final String chatId;
 
-    private String name;
+    private final String chatName;
 
-    private final Set<WebSocketSession> sessions = new HashSet<>();
+    private final String chatHostUser;
+
+    private final ChatRoomType chatType;
+
+    private final String chatPassword;
 
 }

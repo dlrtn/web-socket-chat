@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.*;
 
 @Controller
-@RequestMapping(USER)
+@RequestMapping(API + USER)
 @RequiredArgsConstructor
 public class UserPageController {
 
@@ -27,7 +27,7 @@ public class UserPageController {
 
     @Operation(summary = "회원 정보 수정 페이지")
     @GetMapping(MODIFYING)
-    public String getUpdateUserInfoPage() {
+    public String getChangeUserInfoPage() {
         return MODIFYING;
     }
 

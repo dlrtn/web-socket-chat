@@ -11,7 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.dlrtn.websocket.chat.common.model.PagePathConstants.*;
+import static com.dlrtn.websocket.chat.common.model.PagePathConstants.LOGIN;
+import static com.dlrtn.websocket.chat.common.model.PagePathConstants.SIGNUP;
 
 @Configuration
 @EnableWebSecurity

@@ -9,20 +9,14 @@ import java.time.LocalDateTime;
 @Getter
 @Builder(toBuilder = true)
 @ToString
-public class User {
+public class Friend {
 
     private final long id;
 
-    private final String username;
+    private final String userId;
 
-    private final String password;
-
-    private final String realName;
-
-    private final UserAuthRole authRole;
+    private final String friendId;
 
     private final LocalDateTime createdAt;
-
-    private final LocalDateTime updatedAt;
 
 }
