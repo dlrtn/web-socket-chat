@@ -3,7 +3,6 @@ spring:
     active:
       - datasource
       - logging
-      - mybatis
       - swagger
 
 server:
