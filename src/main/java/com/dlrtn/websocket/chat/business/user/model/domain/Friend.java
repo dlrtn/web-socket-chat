@@ -17,6 +17,10 @@ public class Friend {
 
     private final String friendId;
 
+    private final boolean isBlocked;
+
+    private final boolean isFavorite;
+
     private final LocalDateTime createdAt;
 
 }

@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
+import com.dlrtn.websocket.chat.business.user.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
 import com.dlrtn.websocket.chat.business.user.repository.FriendRepository;
@@ -15,8 +16,26 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class FriendService {
 
-    FriendRepository friendRepository;
-    InMemorySessionRepository sessionRepository;
+    private final FriendRepository friendRepository;
+    private final InMemorySessionRepository sessionRepository;
+
+    public List<User> getFriends(String sessionId) {
+        User sessionUser = sessionRepository.get(sessionId);
+
+        return friendRepository.selectAllFriends(sessionUser);
+    }
+
+    public User getFriend(String sessionId, String friendId) {
+        User sessionUser = sessionRepository.get(sessionId);
+
+        return friendRepository.selectFriend(sessionUser, friendId);
+    }
+
+    public Friend getFriendRelation(String sessionId, String friendId) {
+        User sessionUser = sessionRepository.get(sessionId);
+
+        return friendRepository.selectFriendRelation(sessionUser, friendId);
+    }
 
     public CommonResponse addFriend(String sessionId, String friendId) {
         User sessionUser = sessionRepository.get(sessionId);
@@ -36,12 +55,6 @@ public class FriendService {
 
         friendRepository.deleteUserFromFriendList(sessionUser, friendId);
         return CommonResponse.success();
-    }
-
-    public List<User> getFriends(String sessionId) {
-        User sessionUser = sessionRepository.get(sessionId);
-
-        return friendRepository.selectAllFriends(sessionUser);
     }
 
     public CommonResponse changeFriendState(String sessionId, String friendId, ChangeFriendStateRequest request) {

@@ -5,6 +5,7 @@ import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
 import com.dlrtn.websocket.chat.common.model.ResponseMessage;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+@RequiredArgsConstructor
 @SpringBootTest
 @Transactional
 public class UserServiceTests {
 
-    @Autowired
     private UserService userService;
 
     @BeforeEach

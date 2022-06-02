@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.user.repository;
 
+import com.dlrtn.websocket.chat.business.user.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +66,20 @@ public class FriendRepository {
                 .on(TB_FRIEND.USER_ID.eq(TB_USER.USERNAME))
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_USER.USERNAME.eq(user.getUsername())))
                 .fetchOneInto(User.class);
+    }
+
+    public Friend selectFriendRelation(User user, String friendId) {
+        return dslContext.select(
+                        TB_FRIEND.ID,
+                        TB_FRIEND.USER_ID,
+                        TB_FRIEND.FRIEND_ID,
+                        TB_FRIEND.ISBLOCKED,
+                        TB_FRIEND.ISFAVORITE,
+                        TB_FRIEND.CREATED_AT
+                )
+                .from(TB_FRIEND)
+                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_USER.USERNAME.eq(user.getUsername())))
+                .fetchOneInto(Friend.class);
     }
 
     public void updateFriendState(User user, String friendId, ChangeFriendStateRequest request) {
