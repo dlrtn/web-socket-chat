@@ -1,6 +1,7 @@
 package com.dlrtn.websocket.chat.business.user.repository;
 
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
+import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -66,17 +67,10 @@ public class FriendRepository {
                 .fetchOneInto(User.class);
     }
 
-    public void updateFriendFavorite(User user, String friendId) {
+    public void updateFriendState(User user, String friendId, ChangeFriendStateRequest request) {
         dslContext.update(TB_FRIEND)
-                .set(TB_FRIEND.ISFAVORITE, 1) //TODO tinyint to boolean
-                .where(TB_FRIEND.FRIEND_ID.eq(friendId)
-                        .and(TB_FRIEND.USER_ID.eq(user.getUsername())))
-                .execute();
-    }
-
-    public void updateFriendBlocked(User user, String friendId) {
-        dslContext.update(TB_FRIEND)
-                .set(TB_FRIEND.ISBLOCKED, 1)
+                .set(TB_FRIEND.ISFAVORITE.cast(Boolean.class), request.isFavorite()) //TODO tinyint to boolean
+                .set(TB_FRIEND.ISBLOCKED.cast(Boolean.class), request.isBlocked())
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId)
                         .and(TB_FRIEND.USER_ID.eq(user.getUsername())))
                 .execute();
