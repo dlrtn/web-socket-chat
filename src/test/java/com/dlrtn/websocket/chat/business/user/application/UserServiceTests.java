@@ -14,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-@RequiredArgsConstructor
 @SpringBootTest
 @Transactional
 public class UserServiceTests {
 
+    @Autowired
     private UserService userService;
 
     @BeforeEach

@@ -43,13 +43,17 @@ public class FriendService {
             return CommonResponse.failWith("Not Exists in friend list");
         }
 
+        if (Objects.nonNull(friendRepository.selectFriend(sessionUser,friendId))) {
+            return CommonResponse.failWith("Exists friendship");
+        }
+
         friendRepository.insertIntoFriendList(sessionUser, friendId);
         return CommonResponse.success();
     }
 
     public CommonResponse deleteFriend(String sessionId, String friendId) {
         User sessionUser = sessionRepository.get(sessionId);
-        if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
+        if (Objects.isNull(friendRepository.selectFriend(sessionUser, friendId))) {
             return CommonResponse.failWith("Not Exists in friend list");
         }
 

@@ -56,15 +56,15 @@ public class FriendRepository {
                         TB_USER.USER_NO,
                         TB_USER.USERNAME,
                         TB_USER.PASSWORD,
-                        TB_USER.AUTH_ROLE,
                         TB_USER.REAL_NAME,
+                        TB_USER.AUTH_ROLE,
                         TB_USER.CREATED_AT,
                         TB_USER.UPDATED_AT
                 )
                 .from(TB_USER)
                 .join(TB_FRIEND)
-                .on(TB_FRIEND.USER_ID.eq(TB_USER.USERNAME))
-                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_USER.USERNAME.eq(user.getUsername())))
+                .on(TB_FRIEND.FRIEND_ID.eq(TB_USER.USERNAME))
+                .where(TB_USER.USERNAME.eq(friendId))
                 .fetchOneInto(User.class);
     }
 
