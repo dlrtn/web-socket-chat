@@ -84,7 +84,7 @@ public class FriendRepository {
 
     public void updateFriendState(User user, String friendId, ChangeFriendStateRequest request) {
         dslContext.update(TB_FRIEND)
-                .set(TB_FRIEND.ISFAVORITE.cast(Boolean.class), request.isFavorite()) //TODO tinyint to boolean
+                .set(TB_FRIEND.ISFAVORITE.cast(Boolean.class), request.isFavorite())
                 .set(TB_FRIEND.ISBLOCKED.cast(Boolean.class), request.isBlocked())
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId)
                         .and(TB_FRIEND.USER_ID.eq(user.getUsername())))

@@ -40,10 +40,6 @@ public class FriendService {
     public CommonResponse addFriend(String sessionId, String friendId) {
         User sessionUser = sessionRepository.get(sessionId);
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
-            return CommonResponse.failWith("Not Exists in friend list");
-        }
-
-        if (Objects.nonNull(friendRepository.selectFriend(sessionUser,friendId))) {
             return CommonResponse.failWith("Exists friendship");
         }
 
