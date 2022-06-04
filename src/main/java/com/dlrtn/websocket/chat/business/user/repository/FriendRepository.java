@@ -1,6 +1,8 @@
 package com.dlrtn.websocket.chat.business.user.repository;
 
+import com.dlrtn.websocket.chat.business.user.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
+import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -54,29 +56,36 @@ public class FriendRepository {
                         TB_USER.USER_NO,
                         TB_USER.USERNAME,
                         TB_USER.PASSWORD,
-                        TB_USER.AUTH_ROLE,
                         TB_USER.REAL_NAME,
+                        TB_USER.AUTH_ROLE,
                         TB_USER.CREATED_AT,
                         TB_USER.UPDATED_AT
                 )
                 .from(TB_USER)
                 .join(TB_FRIEND)
-                .on(TB_FRIEND.USER_ID.eq(TB_USER.USERNAME))
-                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_USER.USERNAME.eq(user.getUsername())))
+                .on(TB_FRIEND.FRIEND_ID.eq(TB_USER.USERNAME))
+                .where(TB_USER.USERNAME.eq(friendId))
                 .fetchOneInto(User.class);
     }
 
-    public void updateFriendFavorite(User user, String friendId) {
-        dslContext.update(TB_FRIEND)
-                .set(TB_FRIEND.ISFAVORITE, 1) //TODO tinyint to boolean
-                .where(TB_FRIEND.FRIEND_ID.eq(friendId)
-                        .and(TB_FRIEND.USER_ID.eq(user.getUsername())))
-                .execute();
+    public Friend selectFriendRelation(User user, String friendId) {
+        return dslContext.select(
+                        TB_FRIEND.ID,
+                        TB_FRIEND.USER_ID,
+                        TB_FRIEND.FRIEND_ID,
+                        TB_FRIEND.ISBLOCKED,
+                        TB_FRIEND.ISFAVORITE,
+                        TB_FRIEND.CREATED_AT
+                )
+                .from(TB_FRIEND)
+                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_USER.USERNAME.eq(user.getUsername())))
+                .fetchOneInto(Friend.class);
     }
 
-    public void updateFriendBlocked(User user, String friendId) {
+    public void updateFriendState(User user, String friendId, ChangeFriendStateRequest request) {
         dslContext.update(TB_FRIEND)
-                .set(TB_FRIEND.ISBLOCKED, 1)
+                .set(TB_FRIEND.ISFAVORITE.cast(Boolean.class), request.isFavorite())
+                .set(TB_FRIEND.ISBLOCKED.cast(Boolean.class), request.isBlocked())
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId)
                         .and(TB_FRIEND.USER_ID.eq(user.getUsername())))
                 .execute();
