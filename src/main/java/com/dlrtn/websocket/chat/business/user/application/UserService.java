@@ -24,6 +24,20 @@ public class UserService {
     private final InMemorySessionRepository sessionRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public boolean hasNotMatchedPassword(User user, String password) {
+        return Optional.ofNullable(user)
+                .map(User::getPassword)
+                .filter(userPw -> passwordEncoder.matches(password, userPw))
+                .isEmpty();
+    }
+
+    public User getSessionUser(String sessionId) {
+        return Optional.ofNullable(sessionId)
+                .filter(sessionRepository::exists)
+                .map(sessionRepository::get)
+                .orElse(null);
+    }
+
     @Transactional
     public SignUpResponse signUp(SignUpRequest request) {
         User foundUser = userRepository.findByUsername(request.getUsername());
@@ -68,13 +82,6 @@ public class UserService {
         return SignInResponse.successWith(newSessionId);
     }
 
-    public User getSessionUser(String sessionId) {
-        return Optional.ofNullable(sessionId)
-                .filter(sessionRepository::exists)
-                .map(sessionRepository::get)
-                .orElse(null);
-    }
-
     @Transactional
     public ChangeUserProfileResponse changeUserProfile(String sessionId, ChangeUserProfileRequest request) {
         User sessionUser = getSessionUser(sessionId);
@@ -95,13 +102,6 @@ public class UserService {
         userRepository.update(changedUser);
         sessionRepository.put(sessionId, changedUser);
         return ChangeUserProfileResponse.success();
-    }
-
-    public boolean hasNotMatchedPassword(User user, String password) {
-        return Optional.ofNullable(user)
-                .map(User::getPassword)
-                .filter(userPw -> passwordEncoder.matches(password, userPw))
-                .isEmpty();
     }
 
     @Transactional
