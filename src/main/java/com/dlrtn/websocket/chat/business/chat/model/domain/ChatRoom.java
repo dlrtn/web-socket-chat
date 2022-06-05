@@ -17,6 +17,4 @@ public class ChatRoom {
 
     private final ChatRoomType chatType;
 
-    private final String chatPassword;
-
 }
