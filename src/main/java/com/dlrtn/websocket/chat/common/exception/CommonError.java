@@ -2,8 +2,11 @@ package com.dlrtn.websocket.chat.common.exception;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.http.HttpStatus;
 
+@RequiredArgsConstructor
 @Getter
 @Builder
 @ToString

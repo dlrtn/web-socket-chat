@@ -39,6 +39,7 @@ public class HttpExceptionHandler {
             TypeMismatchException.class,
             IllegalArgumentException.class
     })
+
     public ResponseEntity<CommonError> handleBadRequest(Exception cause) {
         CommonException exception = new CommonException(cause.getMessage(), cause, HttpStatus.BAD_REQUEST);
         return handleCommonException(exception);
