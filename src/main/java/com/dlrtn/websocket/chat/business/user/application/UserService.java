@@ -2,7 +2,6 @@ package com.dlrtn.websocket.chat.business.user.application;
 
 import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridException;
 import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
-import com.dlrtn.websocket.chat.business.user.exception.UserNotFoundException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.repository.RedisSessionRepository;
@@ -39,8 +38,7 @@ public class UserService {
         return sessionRepository
                 .findById(sessionId)
                 .get() //TODO NoSuchElementException 어떻게 처리할지
-                .getSessionUser()
-                ;
+                .getSessionUser();
     }
 
     @Transactional
@@ -95,7 +93,6 @@ public class UserService {
         return SignOutResponse.successWith();
     }
 
-
     @Transactional
     public ChangeUserProfileResponse changeUserProfile(String sessionId, ChangeUserProfileRequest request) {
         User sessionUser = getSessionUser(sessionId);
@@ -118,7 +115,6 @@ public class UserService {
                         .sessionId(sessionId)
                         .sessionUser(changedUser)
                         .build());
-        ;
         return ChangeUserProfileResponse.success();
     }
 

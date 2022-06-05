@@ -29,11 +29,12 @@ public class FriendService {
                 .findById(sessionId)
                 .get()
                 .getSessionUser();
+
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
             throw new FriendNotExistsException();
         }
-
         friendRepository.insertIntoFriendList(sessionUser, friendId);
+
         return AddFriendResponse.success();
     }
 
@@ -43,11 +44,12 @@ public class FriendService {
                 .findById(sessionId)
                 .get()
                 .getSessionUser();
+
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
             throw new FriendNotExistsException();
         }
-
         friendRepository.deleteUserFromFriendList(sessionUser, friendId);
+
         return DeleteFriendResponse.success();
     }
 
@@ -56,6 +58,7 @@ public class FriendService {
                 .findById(sessionId)
                 .get()
                 .getSessionUser();
+
         User foundFriend = friendRepository.selectFriend(sessionUser, friendId);
         if (Objects.isNull(foundFriend)) {
             throw new FriendNotExistsException();
@@ -64,12 +67,12 @@ public class FriendService {
         return foundFriend;
     }
 
-
     public List<User> getFriends(String sessionId) {
         User sessionUser = sessionRepository
                 .findById(sessionId)
                 .get()
                 .getSessionUser();
+
         List<User> foundFriends = friendRepository.selectAllFriends(sessionUser);
         if (Objects.isNull(foundFriends)) {
             throw new FriendNotExistsException();
@@ -83,6 +86,7 @@ public class FriendService {
                 .findById(sessionId)
                 .get()
                 .getSessionUser();
+
         Friend foundFriendShip = friendRepository.selectFriendRelation(sessionUser, friendId);
         if (Objects.isNull(foundFriendShip)) {
             throw new FriendNotExistsException();
@@ -97,11 +101,12 @@ public class FriendService {
                 .findById(sessionId)
                 .get()
                 .getSessionUser();
+
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
             throw new FriendNotExistsException();
         }
-
         friendRepository.updateFriendState(sessionUser, friendId, request);
+
         return ChangeFriendStateResponse.success();
     }
 
