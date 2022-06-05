@@ -70,12 +70,12 @@ public class FriendService {
                 .findById(sessionId)
                 .get()
                 .getSessionUser();
-        List<User> foundFriend = friendRepository.selectAllFriends(sessionUser);
-        if (Objects.isNull(foundFriend)) {
+        List<User> foundFriends = friendRepository.selectAllFriends(sessionUser);
+        if (Objects.isNull(foundFriends)) {
             throw new FriendNotExistsException();
         }
 
-        return foundFriend;
+        return foundFriends;
     }
 
     public Friend getFriendShip(String sessionId, String friendId) {
