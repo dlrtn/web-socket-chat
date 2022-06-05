@@ -2,7 +2,10 @@ package com.dlrtn.websocket.chat.business.user.api;
 
 import com.dlrtn.websocket.chat.business.user.aop.SessionId;
 import com.dlrtn.websocket.chat.business.user.application.FriendService;
+import com.dlrtn.websocket.chat.business.user.model.payload.AddFriendResponse;
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
+import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateResponse;
+import com.dlrtn.websocket.chat.business.user.model.payload.DeleteFriendResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,28 +31,28 @@ public class UserFriendController {
     }
 
     @PutMapping("/{userId}/friend")
-    public void getFriend(
+    public AddFriendResponse addFriend(
             @SessionId String sessionId,
             String friendId
     ) {
-        friendService.addFriend(sessionId, friendId);
+        return friendService.addFriend(sessionId, friendId);
     }
 
     @PatchMapping("/{userId}/friends/{friendId}")
-    public void changeFriendState(
+    public ChangeFriendStateResponse changeFriendState(
             @SessionId String sessionId,
             @PathVariable String friendId,
             @Valid@RequestBody ChangeFriendStateRequest request
     ) {
-        friendService.changeFriendState(sessionId, friendId, request);
+        return friendService.changeFriendState(sessionId, friendId, request);
     }
 
     @DeleteMapping("/{userId}/friends/{friendId}")
-    public void deleteFriend(
+    public DeleteFriendResponse deleteFriend(
             @SessionId String sessionId,
             @PathVariable String friendId
     ) {
-        friendService.deleteFriend(sessionId, friendId);
+        return friendService.deleteFriend(sessionId, friendId);
     }
 
 }
