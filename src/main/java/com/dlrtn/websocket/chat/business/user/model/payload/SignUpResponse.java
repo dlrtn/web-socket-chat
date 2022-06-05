@@ -23,12 +23,4 @@ public class SignUpResponse {
         return of(true, message, message.getDescription());
     }
 
-    public static SignUpResponse failWith(ResponseMessage message) {
-        return of(false, message, message.getDescription());
-    }
-
-    public static SignUpResponse failWith(String description) {
-        return of(false, ResponseMessage.SERVER_ERROR, description);
-    }
-
 }

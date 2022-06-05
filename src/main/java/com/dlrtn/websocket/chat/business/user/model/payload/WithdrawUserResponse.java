@@ -23,12 +23,4 @@ public class WithdrawUserResponse {
         return of(true, message, message.getDescription());
     }
 
-    public static WithdrawUserResponse failWith(ResponseMessage message) {
-        return of(false, message, message.getDescription());
-    }
-
-    public static WithdrawUserResponse failWith(String description) {
-        return of(false, ResponseMessage.SERVER_ERROR, description);
-    }
-
 }

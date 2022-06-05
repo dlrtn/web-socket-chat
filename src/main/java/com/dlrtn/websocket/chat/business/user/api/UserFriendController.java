@@ -2,16 +2,11 @@ package com.dlrtn.websocket.chat.business.user.api;
 
 import com.dlrtn.websocket.chat.business.user.aop.SessionId;
 import com.dlrtn.websocket.chat.business.user.application.FriendService;
-import com.dlrtn.websocket.chat.business.user.application.UserService;
-import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
-import com.dlrtn.websocket.chat.business.user.model.payload.*;
-import com.dlrtn.websocket.chat.util.CookieUtils;
-import io.swagger.v3.oas.annotations.Operation;
+import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.API;
@@ -41,23 +36,16 @@ public class UserFriendController {
     }
 
     @PatchMapping("/{userId}/friends/{friendId}")
-    public void changeFriendBlocked(
+    public void changeFriendState(
             @SessionId String sessionId,
-            @PathVariable String friendId
+            @PathVariable String friendId,
+            @Valid@RequestBody ChangeFriendStateRequest request
     ) {
-        friendService.addBlockUserList(sessionId, friendId);
-    }
-
-    @PatchMapping("/{userId}/friends/{friendId}")
-    public void changeFriendFavorite(
-            @SessionId String sessionId,
-            @PathVariable String friendId
-    ) {
-        friendService.addFavoriteFriendList(sessionId, friendId);
+        friendService.changeFriendState(sessionId, friendId, request);
     }
 
     @DeleteMapping("/{userId}/friends/{friendId}")
-    public void withdrawUser(
+    public void deleteFriend(
             @SessionId String sessionId,
             @PathVariable String friendId
     ) {
