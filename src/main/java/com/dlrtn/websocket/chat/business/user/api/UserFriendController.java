@@ -2,12 +2,15 @@ package com.dlrtn.websocket.chat.business.user.api;
 
 import com.dlrtn.websocket.chat.business.user.aop.SessionId;
 import com.dlrtn.websocket.chat.business.user.application.FriendService;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
+import com.dlrtn.websocket.chat.common.model.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.API;
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.USER;
@@ -21,35 +24,36 @@ public class UserFriendController {
     private final FriendService friendService;
 
     @GetMapping("/{userId}/friend")
-    public void getFriendList(
+    public List<User> getFriendList(
             @SessionId String sessionId
     ) {
-        friendService.getFriends(sessionId);
+        return friendService.getFriends(sessionId);
     }
 
     @PutMapping("/{userId}/friend")
-    public void getFriend(
+    public CommonResponse addFriend(
             @SessionId String sessionId,
             String friendId
     ) {
-        friendService.addFriend(sessionId, friendId);
+        return friendService.addFriend(sessionId, friendId);
     }
 
     @PatchMapping("/{userId}/friends/{friendId}")
-    public void changeFriendState(
+
+    public CommonResponse changeFriendState(
             @SessionId String sessionId,
             @PathVariable String friendId,
-            @Valid@RequestBody ChangeFriendStateRequest request
+            @Valid @RequestBody ChangeFriendStateRequest request
     ) {
-        friendService.changeFriendState(sessionId, friendId, request);
+        return friendService.changeFriendState(sessionId, friendId, request);
     }
 
     @DeleteMapping("/{userId}/friends/{friendId}")
-    public void deleteFriend(
+    public CommonResponse deleteFriend(
             @SessionId String sessionId,
             @PathVariable String friendId
     ) {
-        friendService.deleteFriend(sessionId, friendId);
+        return friendService.deleteFriend(sessionId, friendId);
     }
 
 }
