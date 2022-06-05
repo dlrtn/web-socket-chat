@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class ChangeUserProfileResponse {
+public class DeleteFriendResponse {
 
     private final boolean success;
 
@@ -15,11 +15,11 @@ public class ChangeUserProfileResponse {
 
     private final String description;
 
-    public static ChangeUserProfileResponse success() {
+    public static DeleteFriendResponse success() {
         return successWith(ResponseMessage.SUCCESS);
     }
 
-    public static ChangeUserProfileResponse successWith(ResponseMessage message) {
+    public static DeleteFriendResponse successWith(ResponseMessage message) {
         return of(true, message, message.getDescription());
     }
 

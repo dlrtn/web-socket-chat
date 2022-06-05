@@ -1,10 +1,12 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
+import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridException;
+import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.repository.InMemorySessionRepository;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
-import com.dlrtn.websocket.chat.common.model.ResponseMessage;
+import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,7 +45,7 @@ public class UserService {
         User foundUser = userRepository.findByUsername(request.getUsername());
 
         if (Objects.nonNull(foundUser)) {
-            return SignUpResponse.failWith(ResponseMessage.EXISTED_USER_ID);
+            throw new AlreadyExistsUseridException();
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -61,7 +63,7 @@ public class UserService {
             userRepository.save(user);
             return SignUpResponse.success();
         } catch (Exception e) {
-            return SignUpResponse.failWith(ResponseMessage.SERVER_ERROR);
+            throw new CommonException(e);
         }
     }
 
@@ -73,7 +75,7 @@ public class UserService {
         User foundUser = userRepository.findByUsername(request.getUsername());
 
         if (hasNotMatchedPassword(foundUser, request.getPassword())) {
-            return SignInResponse.failWith("User id or password mismatch");
+            throw new UserInfoNotMatchedException();
         }
 
         String newSessionId = UUID.randomUUID().toString();
@@ -87,7 +89,7 @@ public class UserService {
         User sessionUser = getSessionUser(sessionId);
 
         if (hasNotMatchedPassword(sessionUser, request.getExistingPassword())) {
-            return ChangeUserProfileResponse.failWith("password not correct");
+            return ChangeUserProfileResponse.success();
         }
 
         String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), sessionUser.getRealName());
@@ -109,7 +111,7 @@ public class UserService {
         User sessionUser = getSessionUser(sessionId);
 
         if (hasNotMatchedPassword(sessionUser, request.getPassword())) {
-            return WithdrawUserResponse.failWith("password not correct");
+            throw new UserInfoNotMatchedException();
         }
 
         userRepository.delete(sessionUser.getUsername());

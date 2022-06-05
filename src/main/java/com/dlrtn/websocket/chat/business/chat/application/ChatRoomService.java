@@ -6,6 +6,8 @@ import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
 import com.dlrtn.websocket.chat.business.chat.model.payload.*;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomMemberRepository;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomRepository;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
+import com.dlrtn.websocket.chat.business.user.repository.FriendRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +32,12 @@ public class ChatRoomService {
         memberIds.add(0, userId);
 
         String randomId = UUID.randomUUID().toString();
-        String roomPassword = StringUtils.defaultIfEmpty(request.getChatRoomPassword(), "");
 
         ChatRoom chatRoom = ChatRoom.builder()
                 .chatId(randomId)
                 .chatName(request.getChatRoomName())
                 .chatHostUser(userId)
-                .chatType(request.getChatRoomType()) //front에서 넘겨준다고 생각
-                .chatPassword(roomPassword)
+                .chatType(request.getChatRoomType())
                 .build();
 
         chatRoomRepository.insertChatRoom(chatRoom);

@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.user.model.payload;
 
+import com.dlrtn.websocket.chat.common.model.ResponseMessage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,14 +13,8 @@ public class SignInResponse {
 
     private final String sessionId;
 
-    private final String failReason;
-
     public static SignInResponse successWith(String sessionId) {
-        return of(true, sessionId, null);
-    }
-
-    public static SignInResponse failWith(String failReason) {
-        return of(false, null, failReason);
+        return of(true, sessionId);
     }
 
 }
