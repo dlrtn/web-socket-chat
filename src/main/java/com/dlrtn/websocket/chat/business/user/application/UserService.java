@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
-import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistEmailException;
+import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridException;
 import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
@@ -45,7 +45,7 @@ public class UserService {
         User foundUser = userRepository.findByUsername(request.getUsername());
 
         if (Objects.nonNull(foundUser)) {
-            throw new AlreadyExistEmailException();
+            throw new AlreadyExistsUseridException();
         }
 
         LocalDateTime now = LocalDateTime.now();

@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.API;
@@ -45,7 +44,7 @@ public class UserFriendController {
     public ChangeFriendStateResponse changeFriendState(
             @SessionId String sessionId,
             @PathVariable String friendId,
-            @Valid@RequestBody ChangeFriendStateRequest request
+            @Valid @RequestBody ChangeFriendStateRequest request
     ) {
         return friendService.changeFriendState(sessionId, friendId, request);
     }

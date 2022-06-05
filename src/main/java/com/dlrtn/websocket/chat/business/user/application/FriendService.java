@@ -79,7 +79,7 @@ public class FriendService {
     public boolean isExistInBlockList(String sessionId, String friendId) {
         User sessionUser = sessionRepository.get(sessionId);
 
-        return friendRepository.existFriendInBlockedList(sessionUser, friendId);
+        return friendRepository.existsFriendInBlockedList(sessionUser, friendId);
     }
 
 }
