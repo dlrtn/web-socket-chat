@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
-
 import com.dlrtn.websocket.chat.business.user.exception.FriendNotExistsException;
+import com.dlrtn.websocket.chat.business.user.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.AddFriendResponse;
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
@@ -45,7 +45,7 @@ public class FriendService {
         return DeleteFriendResponse.success();
     }
 
-    public Friend getFriendRelation(String sessionId, String friendId) {
+    public List<User> getFriends(String sessionId) {
         User sessionUser = sessionRepository.get(sessionId);
         List<User> foundFriends = friendRepository.selectAllFriends(sessionUser);
         if (Objects.isNull(foundFriends)) {
@@ -53,6 +53,16 @@ public class FriendService {
         }
 
         return foundFriends;
+    }
+
+    public Friend getFriendShip(String sessionId, String friendId) {
+        User sessionUser = sessionRepository.get(sessionId);
+        Friend foundFriendShip = friendRepository.selectFriendRelation(sessionUser, friendId);
+        if (Objects.isNull(foundFriendShip)) {
+            throw new FriendNotExistsException();
+        }
+
+        return foundFriendShip;
     }
 
     @Transactional
@@ -68,7 +78,6 @@ public class FriendService {
 
     public boolean isExistInBlockList(String sessionId, String friendId) {
         User sessionUser = sessionRepository.get(sessionId);
-
 
         return friendRepository.existFriendInBlockedList(sessionUser, friendId);
     }

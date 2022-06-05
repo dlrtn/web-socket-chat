@@ -2,6 +2,7 @@ package com.dlrtn.websocket.chat.business.user.api;
 
 import com.dlrtn.websocket.chat.business.user.aop.SessionId;
 import com.dlrtn.websocket.chat.business.user.application.FriendService;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.AddFriendResponse;
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateResponse;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.API;
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.USER;
@@ -24,10 +27,10 @@ public class UserFriendController {
     private final FriendService friendService;
 
     @GetMapping("/{userId}/friend")
-    public void getFriendList(
+    public List<User> getFriendList(
             @SessionId String sessionId
     ) {
-        friendService.getFriends(sessionId);
+        return friendService.getFriends(sessionId);
     }
 
     @PutMapping("/{userId}/friend")
