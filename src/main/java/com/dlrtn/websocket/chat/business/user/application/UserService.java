@@ -2,6 +2,7 @@ package com.dlrtn.websocket.chat.business.user.application;
 
 import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridException;
 import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
+import com.dlrtn.websocket.chat.business.user.exception.UserNotFoundException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.repository.RedisSessionRepository;
@@ -35,18 +36,16 @@ public class UserService {
     }
 
     public User getSessionUser(String sessionId) {
-        return Optional.ofNullable(sessionId)
-                .filter(sessionRepository::existsById)
-                .map(sessionRepository::findById)
-                .orElseGet(null)
-                .orElseGet(null)
-                .getSessionUser();
+        return sessionRepository
+                .findById(sessionId)
+                .get() //TODO NoSuchElementException 어떻게 처리할지
+                .getSessionUser()
+                ;
     }
 
     @Transactional
     public SignUpResponse signUp(SignUpRequest request) {
         User foundUser = userRepository.findByUsername(request.getUsername());
-
         if (Objects.nonNull(foundUser)) {
             throw new AlreadyExistsUseridException();
         }
@@ -76,7 +75,6 @@ public class UserService {
         }
 
         User foundUser = userRepository.findByUsername(request.getUsername());
-
         if (hasNotMatchedPassword(foundUser, request.getPassword())) {
             throw new UserInfoNotMatchedException();
         }
@@ -93,6 +91,7 @@ public class UserService {
 
     public SignOutResponse signOut(String sessionId) {
         sessionRepository.deleteById(sessionId);
+
         return SignOutResponse.successWith();
     }
 
@@ -100,7 +99,6 @@ public class UserService {
     @Transactional
     public ChangeUserProfileResponse changeUserProfile(String sessionId, ChangeUserProfileRequest request) {
         User sessionUser = getSessionUser(sessionId);
-
         if (hasNotMatchedPassword(sessionUser, request.getExistingPassword())) {
             return ChangeUserProfileResponse.success();
         }
@@ -127,7 +125,6 @@ public class UserService {
     @Transactional
     public WithdrawUserResponse withdrawUser(String sessionId, WithdrawUserRequest request) {
         User sessionUser = getSessionUser(sessionId);
-
         if (hasNotMatchedPassword(sessionUser, request.getPassword())) {
             throw new UserInfoNotMatchedException();
         }

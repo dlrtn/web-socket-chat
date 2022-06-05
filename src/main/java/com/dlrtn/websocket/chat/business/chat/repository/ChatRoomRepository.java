@@ -1,7 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.repository;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
-import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -21,12 +20,10 @@ public class ChatRoomRepository {
         dslContext.insertInto(TB_CHATROOM,
                         TB_CHATROOM.CHATID,
                         TB_CHATROOM.CHATNAME,
-                        TB_CHATROOM.CHAT_TYPE,
-                        TB_CHATROOM.CHAT_PASSWORD)
+                        TB_CHATROOM.CHAT_TYPE)
                 .values(chatRoom.getChatId(),
                         chatRoom.getChatName(),
-                        chatRoom.getChatType().name(),
-                        chatRoom.getChatPassword())
+                        chatRoom.getChatType().name())
                 .execute();
     }
 

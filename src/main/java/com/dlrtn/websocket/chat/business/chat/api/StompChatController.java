@@ -17,7 +17,9 @@ public class StompChatController {
     public void enter(ChatMessage message,
                       @DestinationVariable String userId,
                       @DestinationVariable String chatId) {
-        message.setMessage(message.getSender() + "님이 채팅방에 참여하였습니다.");
+        message.builder()
+                .message(message.getSender() + "님이 채팅방에 참여하였습니다.")
+                .build();
         template.convertAndSend("/sub" + message.getChatId(), message);
     }
 

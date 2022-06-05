@@ -8,7 +8,7 @@ import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateReq
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateResponse;
 import com.dlrtn.websocket.chat.business.user.model.payload.DeleteFriendResponse;
 import com.dlrtn.websocket.chat.business.user.repository.FriendRepository;
-import com.dlrtn.websocket.chat.business.user.repository.InMemorySessionRepository;
+import com.dlrtn.websocket.chat.business.user.repository.RedisSessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +21,14 @@ import java.util.Objects;
 public class FriendService {
 
     private final FriendRepository friendRepository;
-    private final InMemorySessionRepository sessionRepository;
+    private final RedisSessionRepository sessionRepository;
 
     @Transactional
     public AddFriendResponse addFriend(String sessionId, String friendId) {
-        User sessionUser = sessionRepository.get(sessionId);
+        User sessionUser = sessionRepository
+                .findById(sessionId)
+                .get()
+                .getSessionUser();
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
             throw new FriendNotExistsException();
         }
@@ -36,7 +39,10 @@ public class FriendService {
 
     @Transactional
     public DeleteFriendResponse deleteFriend(String sessionId, String friendId) {
-        User sessionUser = sessionRepository.get(sessionId);
+        User sessionUser = sessionRepository
+                .findById(sessionId)
+                .get()
+                .getSessionUser();
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
             throw new FriendNotExistsException();
         }
@@ -45,18 +51,38 @@ public class FriendService {
         return DeleteFriendResponse.success();
     }
 
-    public List<User> getFriends(String sessionId) {
-        User sessionUser = sessionRepository.get(sessionId);
-        List<User> foundFriends = friendRepository.selectAllFriends(sessionUser);
-        if (Objects.isNull(foundFriends)) {
+    public User getFriend(String sessionId, String friendId) {
+        User sessionUser = sessionRepository
+                .findById(sessionId)
+                .get()
+                .getSessionUser();
+        User foundFriend = friendRepository.selectFriend(sessionUser, friendId);
+        if (Objects.isNull(foundFriend)) {
             throw new FriendNotExistsException();
         }
 
-        return foundFriends;
+        return foundFriend;
+    }
+
+
+    public List<User> getFriends(String sessionId) {
+        User sessionUser = sessionRepository
+                .findById(sessionId)
+                .get()
+                .getSessionUser();
+        List<User> foundFriend = friendRepository.selectAllFriends(sessionUser);
+        if (Objects.isNull(foundFriend)) {
+            throw new FriendNotExistsException();
+        }
+
+        return foundFriend;
     }
 
     public Friend getFriendShip(String sessionId, String friendId) {
-        User sessionUser = sessionRepository.get(sessionId);
+        User sessionUser = sessionRepository
+                .findById(sessionId)
+                .get()
+                .getSessionUser();
         Friend foundFriendShip = friendRepository.selectFriendRelation(sessionUser, friendId);
         if (Objects.isNull(foundFriendShip)) {
             throw new FriendNotExistsException();
@@ -67,7 +93,10 @@ public class FriendService {
 
     @Transactional
     public ChangeFriendStateResponse changeFriendState(String sessionId, String friendId, ChangeFriendStateRequest request) {
-        User sessionUser = sessionRepository.get(sessionId);
+        User sessionUser = sessionRepository
+                .findById(sessionId)
+                .get()
+                .getSessionUser();
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
             throw new FriendNotExistsException();
         }
@@ -77,7 +106,10 @@ public class FriendService {
     }
 
     public boolean isExistInBlockList(String sessionId, String friendId) {
-        User sessionUser = sessionRepository.get(sessionId);
+        User sessionUser = sessionRepository
+                .findById(sessionId)
+                .get()
+                .getSessionUser();
 
         return friendRepository.existsFriendInBlockedList(sessionUser, friendId);
     }
