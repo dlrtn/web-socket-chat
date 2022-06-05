@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 
-@RedisHash("sessionRepo")
+@RedisHash("SessionRepository")
 @Getter
 @Builder
 @ToString
