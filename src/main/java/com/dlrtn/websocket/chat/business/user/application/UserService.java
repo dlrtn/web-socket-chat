@@ -4,9 +4,10 @@ import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridExcep
 import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
-import com.dlrtn.websocket.chat.business.user.repository.InMemorySessionRepository;
+import com.dlrtn.websocket.chat.business.user.repository.RedisSessionRepository;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
+import com.dlrtn.websocket.chat.config.redisdb.RedisEntity;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +24,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final InMemorySessionRepository sessionRepository;
+    private final RedisSessionRepository sessionRepository;
     private final PasswordEncoder passwordEncoder;
 
     public boolean hasNotMatchedPassword(User user, String password) {
@@ -35,9 +36,11 @@ public class UserService {
 
     public User getSessionUser(String sessionId) {
         return Optional.ofNullable(sessionId)
-                .filter(sessionRepository::exists)
-                .map(sessionRepository::get)
-                .orElse(null);
+                .filter(sessionRepository::existsById)
+                .map(sessionRepository::findById)
+                .orElseGet(null)
+                .orElseGet(null)
+                .getSessionUser();
     }
 
     @Transactional
@@ -68,7 +71,7 @@ public class UserService {
     }
 
     public SignInResponse signIn(String sessionId, SignInRequest request) {
-        if (sessionRepository.exists(sessionId)) {
+        if (sessionRepository.existsById(sessionId)) {
             return SignInResponse.successWith(sessionId);
         }
 
@@ -79,10 +82,20 @@ public class UserService {
         }
 
         String newSessionId = UUID.randomUUID().toString();
-        sessionRepository.put(newSessionId, foundUser);
 
+        sessionRepository.save(
+                RedisEntity.builder()
+                        .sessionId(newSessionId)
+                        .sessionUser(foundUser)
+                        .build());
         return SignInResponse.successWith(newSessionId);
     }
+
+    public SignOutResponse signOut(String sessionId) {
+        sessionRepository.deleteById(sessionId);
+        return SignOutResponse.successWith();
+    }
+
 
     @Transactional
     public ChangeUserProfileResponse changeUserProfile(String sessionId, ChangeUserProfileRequest request) {
@@ -102,7 +115,12 @@ public class UserService {
                 .build();
 
         userRepository.update(changedUser);
-        sessionRepository.put(sessionId, changedUser);
+        sessionRepository.save(
+                RedisEntity.builder()
+                        .sessionId(sessionId)
+                        .sessionUser(changedUser)
+                        .build());
+        ;
         return ChangeUserProfileResponse.success();
     }
 

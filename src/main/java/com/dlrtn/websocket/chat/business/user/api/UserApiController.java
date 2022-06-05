@@ -48,6 +48,14 @@ public class UserApiController {
         return signInResponse;
     }
 
+    @Operation(summary = "회원 로그아웃")
+    @PostMapping("/{userId}/sign-out")
+    public SignOutResponse signOutUser(
+            @SessionId String sessionId
+    ) {
+        return userService.signOut(sessionId);
+    }
+
     @Operation(summary = "회원 정보수정")
     @PatchMapping("/{userId}/modifying")
     public ChangeUserProfileResponse changeUser(
