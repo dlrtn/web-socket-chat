@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
+
 import com.dlrtn.websocket.chat.business.user.exception.FriendNotExistsException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.AddFriendResponse;
@@ -44,7 +45,7 @@ public class FriendService {
         return DeleteFriendResponse.success();
     }
 
-    public List<User> getFriends(String sessionId) {
+    public Friend getFriendRelation(String sessionId, String friendId) {
         User sessionUser = sessionRepository.get(sessionId);
         List<User> foundFriends = friendRepository.selectAllFriends(sessionUser);
         if (Objects.isNull(foundFriends)) {
@@ -67,6 +68,7 @@ public class FriendService {
 
     public boolean isExistInBlockList(String sessionId, String friendId) {
         User sessionUser = sessionRepository.get(sessionId);
+
 
         return friendRepository.existFriendInBlockedList(sessionUser, friendId);
     }
