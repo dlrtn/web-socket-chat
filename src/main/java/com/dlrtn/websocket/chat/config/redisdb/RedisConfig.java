@@ -2,6 +2,7 @@ package com.dlrtn.websocket.chat.config.redisdb;
 
 import com.dlrtn.websocket.chat.config.properties.RedisProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -16,6 +17,12 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 public class RedisConfig {
 
     private final RedisProperties redisProperties;
+
+    @Bean
+    @ConfigurationProperties(prefix = "spring.redis")
+    public RedisProperties redisProperties() {
+        return new RedisProperties();
+    }
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
