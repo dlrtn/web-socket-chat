@@ -4,7 +4,7 @@ import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridExcep
 import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
-import com.dlrtn.websocket.chat.business.user.repository.RedisSessionRepository;
+import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
 import com.dlrtn.websocket.chat.config.redisdb.RedisEntity;
@@ -24,7 +24,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RedisSessionRepository sessionRepository;
+    private final UserSessionRepository sessionRepository;
     private final PasswordEncoder passwordEncoder;
 
     public boolean hasNotMatchedPassword(User user, String password) {
@@ -37,7 +37,7 @@ public class UserService {
     public User getSessionUser(String sessionId) {
         return sessionRepository
                 .findById(sessionId)
-                .get() //TODO NoSuchElementException 어떻게 처리할지
+                .orElseThrow(() -> new CommonException("Can't find user session"))
                 .getSessionUser();
     }
 

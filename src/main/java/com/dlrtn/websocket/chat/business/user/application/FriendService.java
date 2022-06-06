@@ -8,7 +8,8 @@ import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateReq
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateResponse;
 import com.dlrtn.websocket.chat.business.user.model.payload.DeleteFriendResponse;
 import com.dlrtn.websocket.chat.business.user.repository.FriendRepository;
-import com.dlrtn.websocket.chat.business.user.repository.RedisSessionRepository;
+import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
+import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +22,13 @@ import java.util.Objects;
 public class FriendService {
 
     private final FriendRepository friendRepository;
-    private final RedisSessionRepository sessionRepository;
+    private final UserSessionRepository sessionRepository;
 
     @Transactional
     public AddFriendResponse addFriend(String sessionId, String friendId) {
         User sessionUser = sessionRepository
                 .findById(sessionId)
-                .get()
+                .orElseThrow(() -> new CommonException("Can't find user session"))
                 .getSessionUser();
 
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
@@ -42,7 +43,7 @@ public class FriendService {
     public DeleteFriendResponse deleteFriend(String sessionId, String friendId) {
         User sessionUser = sessionRepository
                 .findById(sessionId)
-                .get()
+                .orElseThrow(() -> new CommonException("Can't find user session"))
                 .getSessionUser();
 
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
@@ -56,7 +57,7 @@ public class FriendService {
     public User getFriend(String sessionId, String friendId) {
         User sessionUser = sessionRepository
                 .findById(sessionId)
-                .get()
+                .orElseThrow(() -> new CommonException("Can't find user session"))
                 .getSessionUser();
 
         User foundFriend = friendRepository.selectFriend(sessionUser, friendId);
@@ -70,7 +71,7 @@ public class FriendService {
     public List<User> getFriends(String sessionId) {
         User sessionUser = sessionRepository
                 .findById(sessionId)
-                .get()
+                .orElseThrow(() -> new CommonException("Can't find user session"))
                 .getSessionUser();
 
         List<User> foundFriends = friendRepository.selectAllFriends(sessionUser);
@@ -84,7 +85,7 @@ public class FriendService {
     public Friend getFriendShip(String sessionId, String friendId) {
         User sessionUser = sessionRepository
                 .findById(sessionId)
-                .get()
+                .orElseThrow(() -> new CommonException("Can't find user session"))
                 .getSessionUser();
 
         Friend foundFriendShip = friendRepository.selectFriendRelation(sessionUser, friendId);
@@ -99,7 +100,7 @@ public class FriendService {
     public ChangeFriendStateResponse changeFriendState(String sessionId, String friendId, ChangeFriendStateRequest request) {
         User sessionUser = sessionRepository
                 .findById(sessionId)
-                .get()
+                .orElseThrow(() -> new CommonException("Can't find user session"))
                 .getSessionUser();
 
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
@@ -113,7 +114,7 @@ public class FriendService {
     public boolean isExistInBlockList(String sessionId, String friendId) {
         User sessionUser = sessionRepository
                 .findById(sessionId)
-                .get()
+                .orElseThrow(() -> new CommonException("Can't find user session"))
                 .getSessionUser();
 
         return friendRepository.existsFriendInBlockedList(sessionUser, friendId);
