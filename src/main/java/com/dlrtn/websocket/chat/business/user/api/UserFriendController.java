@@ -1,6 +1,7 @@
 package com.dlrtn.websocket.chat.business.user.api;
 
 import com.dlrtn.websocket.chat.business.user.aop.SessionId;
+import com.dlrtn.websocket.chat.business.user.aop.SessionUser;
 import com.dlrtn.websocket.chat.business.user.application.FriendService;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.AddFriendResponse;
@@ -27,34 +28,34 @@ public class UserFriendController {
 
     @GetMapping("/{userId}/friend")
     public List<User> getFriendList(
-            @SessionId String sessionId
+            @SessionUser User sessionUser
     ) {
-        return friendService.getFriends(sessionId);
+        return friendService.getFriends(sessionUser);
     }
 
     @PutMapping("/{userId}/friend")
     public AddFriendResponse addFriend(
-            @SessionId String sessionId,
+            @SessionUser User sessionUser,
             String friendId
     ) {
-        return friendService.addFriend(sessionId, friendId);
+        return friendService.addFriend(sessionUser, friendId);
     }
 
     @PatchMapping("/{userId}/friends/{friendId}")
     public ChangeFriendStateResponse changeFriendState(
-            @SessionId String sessionId,
+            @SessionUser User sessionUser,
             @PathVariable String friendId,
             @Valid @RequestBody ChangeFriendStateRequest request
     ) {
-        return friendService.changeFriendState(sessionId, friendId, request);
+        return friendService.changeFriendState(sessionUser, friendId, request);
     }
 
     @DeleteMapping("/{userId}/friends/{friendId}")
     public DeleteFriendResponse deleteFriend(
-            @SessionId String sessionId,
+            @SessionUser User sessionUser,
             @PathVariable String friendId
     ) {
-        return friendService.deleteFriend(sessionId, friendId);
+        return friendService.deleteFriend(sessionUser, friendId);
     }
 
 }

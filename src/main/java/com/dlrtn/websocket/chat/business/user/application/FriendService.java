@@ -8,8 +8,6 @@ import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateReq
 import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateResponse;
 import com.dlrtn.websocket.chat.business.user.model.payload.DeleteFriendResponse;
 import com.dlrtn.websocket.chat.business.user.repository.FriendRepository;
-import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
-import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,17 +20,11 @@ import java.util.Objects;
 public class FriendService {
 
     private final FriendRepository friendRepository;
-    private final UserSessionRepository sessionRepository;
 
     @Transactional
-    public AddFriendResponse addFriend(String sessionId, String friendId) {
-        User sessionUser = sessionRepository
-                .findById(sessionId)
-                .orElseThrow(() -> new CommonException("Can't find user session"))
-                .getSessionUser();
-
+    public AddFriendResponse addFriend(User sessionUser, String friendId) {
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
-            throw new FriendNotExistsException();
+            throw new FriendNotExistsException(sessionUser.getUsername());
         }
         friendRepository.insertIntoFriendList(sessionUser, friendId);
 
@@ -40,83 +32,53 @@ public class FriendService {
     }
 
     @Transactional
-    public DeleteFriendResponse deleteFriend(String sessionId, String friendId) {
-        User sessionUser = sessionRepository
-                .findById(sessionId)
-                .orElseThrow(() -> new CommonException("Can't find user session"))
-                .getSessionUser();
-
+    public DeleteFriendResponse deleteFriend(User sessionUser, String friendId) {
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
-            throw new FriendNotExistsException();
+            throw new FriendNotExistsException(sessionUser.getUsername());
         }
         friendRepository.deleteUserFromFriendList(sessionUser, friendId);
 
         return DeleteFriendResponse.success();
     }
 
-    public User getFriend(String sessionId, String friendId) {
-        User sessionUser = sessionRepository
-                .findById(sessionId)
-                .orElseThrow(() -> new CommonException("Can't find user session"))
-                .getSessionUser();
-
+    public User getFriend(User sessionUser, String friendId) {
         User foundFriend = friendRepository.selectFriend(sessionUser, friendId);
         if (Objects.isNull(foundFriend)) {
-            throw new FriendNotExistsException();
+            throw new FriendNotExistsException(sessionUser.getUsername());
         }
 
         return foundFriend;
     }
 
-    public List<User> getFriends(String sessionId) {
-        User sessionUser = sessionRepository
-                .findById(sessionId)
-                .orElseThrow(() -> new CommonException("Can't find user session"))
-                .getSessionUser();
-
+    public List<User> getFriends(User sessionUser) {
         List<User> foundFriends = friendRepository.selectAllFriends(sessionUser);
         if (Objects.isNull(foundFriends)) {
-            throw new FriendNotExistsException();
+            throw new FriendNotExistsException(sessionUser.getUsername());
         }
 
         return foundFriends;
     }
 
-    public Friend getFriendShip(String sessionId, String friendId) {
-        User sessionUser = sessionRepository
-                .findById(sessionId)
-                .orElseThrow(() -> new CommonException("Can't find user session"))
-                .getSessionUser();
-
+    public Friend getFriendShip(User sessionUser, String friendId) {
         Friend foundFriendShip = friendRepository.selectFriendRelation(sessionUser, friendId);
         if (Objects.isNull(foundFriendShip)) {
-            throw new FriendNotExistsException();
+            throw new FriendNotExistsException(sessionUser.getUsername());
         }
 
         return foundFriendShip;
     }
 
     @Transactional
-    public ChangeFriendStateResponse changeFriendState(String sessionId, String friendId, ChangeFriendStateRequest request) {
-        User sessionUser = sessionRepository
-                .findById(sessionId)
-                .orElseThrow(() -> new CommonException("Can't find user session"))
-                .getSessionUser();
-
+    public ChangeFriendStateResponse changeFriendState(User sessionUser, String friendId, ChangeFriendStateRequest request) {
         if (Objects.nonNull(friendRepository.selectFriend(sessionUser, friendId))) {
-            throw new FriendNotExistsException();
+            throw new FriendNotExistsException(sessionUser.getUsername());
         }
         friendRepository.updateFriendState(sessionUser, friendId, request);
 
         return ChangeFriendStateResponse.success();
     }
 
-    public boolean isExistInBlockList(String sessionId, String friendId) {
-        User sessionUser = sessionRepository
-                .findById(sessionId)
-                .orElseThrow(() -> new CommonException("Can't find user session"))
-                .getSessionUser();
-
+    public boolean isExistInBlockList(User sessionUser, String friendId) {
         return friendRepository.existsFriendInBlockedList(sessionUser, friendId);
     }
 

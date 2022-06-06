@@ -10,7 +10,7 @@ public class SignOutResponse {
 
     private final boolean success;
 
-    public static SignOutResponse successWith() {
+    public static SignOutResponse success() {
         return of(true);
     }
 

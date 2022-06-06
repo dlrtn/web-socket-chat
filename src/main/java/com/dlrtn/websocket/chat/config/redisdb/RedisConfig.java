@@ -1,7 +1,6 @@
 package com.dlrtn.websocket.chat.config.redisdb;
 
 import com.dlrtn.websocket.chat.config.properties.RedisProperties;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,26 +12,24 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 
 @Configuration
 @EnableRedisRepositories
-@RequiredArgsConstructor
 public class RedisConfig {
 
-    private final RedisProperties redisProperties;
 
-    @Bean
     @ConfigurationProperties(prefix = "spring.redis")
+    @Bean
     public RedisProperties redisProperties() {
         return new RedisProperties();
     }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    public RedisConnectionFactory redisConnectionFactory(RedisProperties redisProperties) {
         return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
     }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate() {
+    public RedisTemplate<String, String> redisTemplate(RedisProperties redisProperties) {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setConnectionFactory(redisConnectionFactory(redisProperties));
         redisTemplate.setKeySerializer(new GenericJackson2JsonRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;

@@ -44,7 +44,6 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-websocket"
 
-
     // general development support library dependencies
     implementation "org.apache.commons:commons-lang3:$commons_lang_version"
     implementation "org.apache.commons:commons-collections4:$commons_collection_version"
@@ -54,7 +53,6 @@ dependencies {
 
     implementation "org.mariadb.jdbc:mariadb-java-client:$mariadb_connector_version"
     jooqGenerator "org.mariadb.jdbc:mariadb-java-client:$mariadb_connector_version"
-
 
     compileOnly "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"

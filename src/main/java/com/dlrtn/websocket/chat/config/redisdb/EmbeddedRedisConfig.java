@@ -1,27 +1,32 @@
 package com.dlrtn.websocket.chat.config.redisdb;
 
+import com.dlrtn.websocket.chat.common.exception.CommonException;
+import com.dlrtn.websocket.chat.config.properties.RedisProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import redis.embedded.RedisServer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.io.IOException;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class EmbeddedRedisConfig {
 
-    @Value("${spring.redis.port}")
-    private int redisPort;
+    private final RedisProperties redisProperties;
 
     private RedisServer redisServer;
 
     @PostConstruct
-    public void redisServer() throws IOException {
-        redisServer = new RedisServer(redisPort);
-        redisServer.start();
+    public void redisServer() {
+        try {
+            redisServer = new RedisServer(redisProperties.getPort());
+            redisServer.start();
+        } catch (Exception e) {
+            throw new CommonException(String.format("Failed to Start Embedded Redis Server, error code : %s", e.getMessage()));
+        }
     }
 
     @PreDestroy

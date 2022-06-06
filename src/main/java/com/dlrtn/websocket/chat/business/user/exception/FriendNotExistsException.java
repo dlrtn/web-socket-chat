@@ -6,8 +6,10 @@ public class FriendNotExistsException extends CommonException {
 
     private static final String message = "Friend not exists";
 
-    public FriendNotExistsException() {
-        super(message);
+    private String userId;
+
+    public FriendNotExistsException(String userId) {
+        super(String.format("%s, userId : %s", message, userId));
     }
 
 }

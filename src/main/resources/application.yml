@@ -4,6 +4,7 @@ spring:
       - datasource
       - logging
       - swagger
+      - redis
 
 server:
   port: 8010

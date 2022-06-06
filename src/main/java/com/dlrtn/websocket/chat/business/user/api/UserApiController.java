@@ -1,8 +1,10 @@
 package com.dlrtn.websocket.chat.business.user.api;
 
 import com.dlrtn.websocket.chat.business.user.aop.SessionId;
+import com.dlrtn.websocket.chat.business.user.aop.SessionUser;
 import com.dlrtn.websocket.chat.business.user.application.UserService;
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.util.CookieUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,18 +62,19 @@ public class UserApiController {
     @PatchMapping("/{userId}/modifying")
     public ChangeUserProfileResponse changeUser(
             @SessionId String sessionId,
+            @SessionUser User sessionUser,
             @Valid @RequestBody ChangeUserProfileRequest requestBody
     ) {
-        return userService.changeUserProfile(sessionId, requestBody);
+        return userService.changeUserProfile(sessionId, sessionUser, requestBody);
     }
 
     @Operation(summary = "회원 정보 삭제")
     @DeleteMapping("/{userId}/withdrawal")
     public WithdrawUserResponse withdrawUser(
-            @SessionId String sessionId,
+            @SessionUser User sessionUser,
             @Valid @RequestBody WithdrawUserRequest requestBody
     ) {
-        return userService.withdrawUser(sessionId, requestBody);
+        return userService.withdrawUser(sessionUser, requestBody);
     }
 
 }

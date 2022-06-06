@@ -4,10 +4,10 @@ import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridExcep
 import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
-import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
+import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
-import com.dlrtn.websocket.chat.config.redisdb.RedisEntity;
+import com.dlrtn.websocket.chat.config.redisdb.SessionEntity;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,13 +34,6 @@ public class UserService {
                 .isEmpty();
     }
 
-    public User getSessionUser(String sessionId) {
-        return sessionRepository
-                .findById(sessionId)
-                .orElseThrow(() -> new CommonException("Can't find user session"))
-                .getSessionUser();
-    }
-
     @Transactional
     public SignUpResponse signUp(SignUpRequest request) {
         User foundUser = userRepository.findByUsername(request.getUsername());
@@ -49,7 +42,6 @@ public class UserService {
         }
 
         LocalDateTime now = LocalDateTime.now();
-
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -80,7 +72,7 @@ public class UserService {
         String newSessionId = UUID.randomUUID().toString();
 
         sessionRepository.save(
-                RedisEntity.builder()
+                SessionEntity.builder()
                         .sessionId(newSessionId)
                         .sessionUser(foundUser)
                         .build());
@@ -90,12 +82,11 @@ public class UserService {
     public SignOutResponse signOut(String sessionId) {
         sessionRepository.deleteById(sessionId);
 
-        return SignOutResponse.successWith();
+        return SignOutResponse.success();
     }
 
     @Transactional
-    public ChangeUserProfileResponse changeUserProfile(String sessionId, ChangeUserProfileRequest request) {
-        User sessionUser = getSessionUser(sessionId);
+    public ChangeUserProfileResponse changeUserProfile(String sessionId, User sessionUser, ChangeUserProfileRequest request) {
         if (hasNotMatchedPassword(sessionUser, request.getExistingPassword())) {
             return ChangeUserProfileResponse.success();
         }
@@ -111,7 +102,7 @@ public class UserService {
 
         userRepository.update(changedUser);
         sessionRepository.save(
-                RedisEntity.builder()
+                SessionEntity.builder()
                         .sessionId(sessionId)
                         .sessionUser(changedUser)
                         .build());
@@ -119,8 +110,7 @@ public class UserService {
     }
 
     @Transactional
-    public WithdrawUserResponse withdrawUser(String sessionId, WithdrawUserRequest request) {
-        User sessionUser = getSessionUser(sessionId);
+    public WithdrawUserResponse withdrawUser(User sessionUser, WithdrawUserRequest request) {
         if (hasNotMatchedPassword(sessionUser, request.getPassword())) {
             throw new UserInfoNotMatchedException();
         }
