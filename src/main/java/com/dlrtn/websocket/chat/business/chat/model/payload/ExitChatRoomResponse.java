@@ -23,13 +23,4 @@ public class ExitChatRoomResponse {
         return of(true, message, message.getDescription());
     }
 
-    public static ExitChatRoomResponse failWith(ResponseMessage message) {
-        return of(false, message, message.getDescription());
-    }
-
-    public static ExitChatRoomResponse failWith(String description) {
-        return of(false, ResponseMessage.SERVER_ERROR, description);
-    }
-
 }
-

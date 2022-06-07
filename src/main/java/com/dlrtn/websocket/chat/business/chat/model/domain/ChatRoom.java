@@ -15,6 +15,6 @@ public class ChatRoom {
 
     private final String chatHostUser;
 
-    private final ChatRoomType chatType;
+    private final ChatType chatType;
 
 }

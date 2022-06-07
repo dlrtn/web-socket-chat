@@ -43,6 +43,7 @@ public class FriendService {
 
     public User getFriend(User sessionUser, String friendId) {
         User foundFriend = friendRepository.selectFriend(sessionUser, friendId);
+
         if (Objects.isNull(foundFriend)) {
             throw new FriendNotExistsException(sessionUser.getUsername());
         }
@@ -52,6 +53,7 @@ public class FriendService {
 
     public List<User> getFriends(User sessionUser) {
         List<User> foundFriends = friendRepository.selectAllFriends(sessionUser);
+
         if (Objects.isNull(foundFriends)) {
             throw new FriendNotExistsException(sessionUser.getUsername());
         }
@@ -61,6 +63,7 @@ public class FriendService {
 
     public Friend getFriendShip(User sessionUser, String friendId) {
         Friend foundFriendShip = friendRepository.selectFriendRelation(sessionUser, friendId);
+
         if (Objects.isNull(foundFriendShip)) {
             throw new FriendNotExistsException(sessionUser.getUsername());
         }

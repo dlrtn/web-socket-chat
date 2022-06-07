@@ -54,8 +54,7 @@ public class SessionUserResolver implements HandlerMethodArgumentResolver {
 
     private User getSessionUser(NativeWebRequest webRequest) {
         return Optional.of(webRequest.getSessionId())
-                .map(userSessionRepository::findById)
-                .orElseThrow(() -> new CommonException(String.format("Failed to found user, sessionId : %s", webRequest.getSessionId())))
+                .flatMap(userSessionRepository::findById)
                 .orElseThrow(() -> new CommonException(String.format("Failed to found user, sessionId : %s", webRequest.getSessionId())))
                 .getSessionUser();
     }

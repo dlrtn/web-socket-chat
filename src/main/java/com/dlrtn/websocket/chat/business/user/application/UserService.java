@@ -70,12 +70,12 @@ public class UserService {
         }
 
         String newSessionId = UUID.randomUUID().toString();
-
         sessionRepository.save(
                 SessionEntity.builder()
                         .sessionId(newSessionId)
                         .sessionUser(foundUser)
                         .build());
+
         return SignInResponse.successWith(newSessionId);
     }
 
@@ -99,13 +99,14 @@ public class UserService {
                 .password(passwordEncoder.encode(newPassword))
                 .updatedAt(LocalDateTime.now())
                 .build();
-
         userRepository.update(changedUser);
+
         sessionRepository.save(
                 SessionEntity.builder()
                         .sessionId(sessionId)
                         .sessionUser(changedUser)
                         .build());
+
         return ChangeUserProfileResponse.success();
     }
 
@@ -114,8 +115,8 @@ public class UserService {
         if (hasNotMatchedPassword(sessionUser, request.getPassword())) {
             throw new UserInfoNotMatchedException();
         }
-
         userRepository.delete(sessionUser.getUsername());
+
         return WithdrawUserResponse.success();
     }
 

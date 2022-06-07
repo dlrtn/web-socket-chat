@@ -14,7 +14,6 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 @EnableRedisRepositories
 public class RedisConfig {
 
-
     @ConfigurationProperties(prefix = "spring.redis")
     @Bean
     public RedisProperties redisProperties() {

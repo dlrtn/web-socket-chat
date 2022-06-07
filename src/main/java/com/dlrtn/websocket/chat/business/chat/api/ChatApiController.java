@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RequiredArgsConstructor
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class ChatApiController {
 
@@ -22,8 +23,8 @@ public class ChatApiController {
     }
 
     @GetMapping("/users/{userId}/chats/{chatId}")
-    public ChatRoom findChatRoom(@PathVariable String userId,
-                                 @PathVariable String chatId) {
+    public ChatRoom getChatRoom(@PathVariable String userId,
+                                @PathVariable String chatId) {
         return chatRoomService.getChatRoom(userId, chatId);
     }
 

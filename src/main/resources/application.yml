@@ -3,8 +3,8 @@ spring:
     active:
       - datasource
       - logging
-      - swagger
       - redis
+      - swagger
 
 server:
   port: 8010

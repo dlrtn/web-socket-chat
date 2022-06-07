@@ -1,18 +1,14 @@
 package com.dlrtn.websocket.chat.business.user.model.payload;
 
 import com.dlrtn.websocket.chat.business.user.model.domain.UserAuthRole;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@ToString
+@Getter
 public class SignUpRequest {
 
     @NotBlank

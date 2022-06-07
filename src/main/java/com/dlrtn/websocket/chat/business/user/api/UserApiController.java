@@ -15,12 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import static com.dlrtn.websocket.chat.common.model.PagePathConstants.API;
-import static com.dlrtn.websocket.chat.common.model.PagePathConstants.USER;
-
 @Slf4j
 @RestController
-@RequestMapping(API + USER)
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserApiController {
 
@@ -53,9 +50,16 @@ public class UserApiController {
     @Operation(summary = "회원 로그아웃")
     @PostMapping("/{userId}/sign-out")
     public SignOutResponse signOutUser(
-            @SessionId String sessionId
+            @SessionId String sessionId,
+            HttpServletResponse response
     ) {
-        return userService.signOut(sessionId);
+        SignOutResponse signOutResponse = userService.signOut(sessionId);
+
+        if (signOutResponse.isSuccess()) {
+            CookieUtils.setCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, null, 0);
+        }
+
+        return signOutResponse;
     }
 
     @Operation(summary = "회원 정보수정")
@@ -68,7 +72,7 @@ public class UserApiController {
         return userService.changeUserProfile(sessionId, sessionUser, requestBody);
     }
 
-    @Operation(summary = "회원 정보 삭제")
+    @Operation(summary = "회원 정보삭제")
     @DeleteMapping("/{userId}/withdrawal")
     public WithdrawUserResponse withdrawUser(
             @SessionUser User sessionUser,

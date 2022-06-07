@@ -19,8 +19,6 @@ public class ChatMember {
 
     private final ChatMemberStatus status;
 
-    private final Long joinedAt;
-
     private final Long lastConnectedAt;
 
 }

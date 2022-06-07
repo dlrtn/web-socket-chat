@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
+import com.dlrtn.websocket.chat.business.chat.exception.UnAuthorizedException;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
@@ -18,8 +19,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -30,12 +31,11 @@ public class ChatRoomService {
         memberIds.add(0, userId);
 
         String randomId = UUID.randomUUID().toString();
-
         ChatRoom chatRoom = ChatRoom.builder()
                 .chatId(randomId)
                 .chatName(request.getChatRoomName())
                 .chatHostUser(userId)
-                .chatType(request.getChatRoomType())
+                .chatType(request.getChatType())
                 .build();
 
         chatRoomRepository.insertChatRoom(chatRoom);
@@ -50,12 +50,6 @@ public class ChatRoomService {
 
     public ChatRoom getChatRoom(String userId, String chatId) {
         return chatRoomRepository.selectByChatId(userId, chatId); //TODO 로직 수정
-
-//        if (!chatRoomMemberRepository.existsChatRoomMember(userId, chatId)) {
-//            return null;
-//        }
-//
-//        return chatRoomRepository.selectByChatId(userId, chatId);
     }
 
     public ChangeChatRoomResponse changeChatRoom(String userId, String chatId, ChangeChatRoomRequest changeChatRoomRequest) {
@@ -66,14 +60,13 @@ public class ChatRoomService {
             return ChangeChatRoomResponse.success();
         }
 
-        return ChangeChatRoomResponse.failWith(String.format("Error with userId : %s, chatId : %s", userId, chatId));
+        throw new UnAuthorizedException(userId, chatId);
     }
 
     public ExitChatRoomResponse exitChatRoom(String userId, String chatId) {
         ChatRoom foundChatRoom = chatRoomRepository.selectByChatId(userId, chatId);
-
         if (!StringUtils.equals(foundChatRoom.getChatHostUser(), userId)) {
-            return ExitChatRoomResponse.failWith(String.format("Error with userId : %s, chatId : %s", userId, chatId));
+            throw new UnAuthorizedException(userId, chatId);
         }
 
         chatRoomRepository.deleteChatRoom(userId, chatId);

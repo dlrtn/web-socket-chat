@@ -4,12 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.springframework.http.HttpStatus;
 
-@RequiredArgsConstructor
+
 @Getter
 @Builder
 @ToString
+@RequiredArgsConstructor
 public class CommonError {
 
     private final int code;

@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.model.payload;
 
-import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoomType;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class CreateChatRoomRequest {
     private final String chatRoomName;
 
     @NotBlank
-    private final ChatRoomType chatRoomType;
+    private final ChatType chatType;
 
     @NotBlank
     private final String chatRoomPassword;

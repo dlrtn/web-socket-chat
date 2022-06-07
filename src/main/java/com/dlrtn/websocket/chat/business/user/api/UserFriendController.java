@@ -1,6 +1,5 @@
 package com.dlrtn.websocket.chat.business.user.api;
 
-import com.dlrtn.websocket.chat.business.user.aop.SessionId;
 import com.dlrtn.websocket.chat.business.user.aop.SessionUser;
 import com.dlrtn.websocket.chat.business.user.application.FriendService;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
@@ -15,12 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.dlrtn.websocket.chat.common.model.PagePathConstants.API;
-import static com.dlrtn.websocket.chat.common.model.PagePathConstants.USER;
-
 @Slf4j
 @RestController
-@RequestMapping(API + USER)
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserFriendController {
 

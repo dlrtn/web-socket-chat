@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ChatRoomMemberService {
 
     private final ChatRoomMemberRepository chatRoomMemberRepository;
