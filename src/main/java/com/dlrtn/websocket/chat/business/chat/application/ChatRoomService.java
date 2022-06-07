@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
-import com.dlrtn.websocket.chat.business.chat.exception.UnAuthorizedException;
+import com.dlrtn.websocket.chat.business.chat.exception.UnAuthorizedToChangeChatException;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
@@ -10,11 +10,11 @@ import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,18 +55,18 @@ public class ChatRoomService {
     public ChangeChatRoomResponse changeChatRoom(String userId, String chatId, ChangeChatRoomRequest changeChatRoomRequest) {
         ChatMember foundChatMember = chatRoomMemberRepository.selectChatRoomMemberById(userId, chatId);
 
-        if (Objects.equals(foundChatMember.getRole(), ChatMemberRole.HOST) || Objects.equals(foundChatMember.getRole(), ChatMemberRole.ADMIN)) {
-            chatRoomRepository.updateChatRoom(chatId, changeChatRoomRequest.getChatName());
-            return ChangeChatRoomResponse.success();
+        if (ObjectUtils.notEqual(foundChatMember.getRole(), ChatMemberRole.HOST) && ObjectUtils.notEqual(foundChatMember.getRole(), ChatMemberRole.ADMIN)) {
+            throw new UnAuthorizedToChangeChatException(userId, chatId);
         }
+        chatRoomRepository.updateChatRoom(chatId, changeChatRoomRequest.getChatName());
 
-        throw new UnAuthorizedException(userId, chatId);
+        return ChangeChatRoomResponse.success();
     }
 
     public ExitChatRoomResponse exitChatRoom(String userId, String chatId) {
         ChatRoom foundChatRoom = chatRoomRepository.selectByChatId(userId, chatId);
         if (!StringUtils.equals(foundChatRoom.getChatHostUser(), userId)) {
-            throw new UnAuthorizedException(userId, chatId);
+            throw new UnAuthorizedToChangeChatException(userId, chatId);
         }
 
         chatRoomRepository.deleteChatRoom(userId, chatId);
