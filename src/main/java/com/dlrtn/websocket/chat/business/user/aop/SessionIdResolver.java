@@ -47,7 +47,7 @@ public class SessionIdResolver implements HandlerMethodArgumentResolver {
     private SessionId getSessionIdAnnotation(MethodParameter parameter) {
         return Arrays.stream(parameter.getParameterAnnotations())
                 .filter(TARGET_ANNOTATION_CLASS::isInstance)
-                .map(TARGET_ANNOTATION_CLASS::cast)
+                .map(SessionId.class::cast)
                 .findFirst()
                 .orElseThrow(() -> new CommonException("Failed to found target annotation (Will not happen)"));
     }

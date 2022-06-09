@@ -49,7 +49,7 @@ public class SessionUserResolver implements HandlerMethodArgumentResolver {
     private SessionUser getSessionUserAnnotation(MethodParameter parameter) {
         return Arrays.stream(parameter.getParameterAnnotations())
                 .filter(TARGET_ANNOTATION_CLASS::isInstance)
-                .map(TARGET_ANNOTATION_CLASS::cast)
+                .map(SessionUser.class::cast)
                 .findFirst()
                 .orElseThrow(() -> new CommonException("Failed to found target annotation (Will not happen)"));
     }
