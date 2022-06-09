@@ -12,6 +12,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -19,11 +20,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SessionIdResolver implements HandlerMethodArgumentResolver {
 
-    private static final Class<?> TARGET_ANNOTATION_CLASS = SessionId.class;
+    private static final Class<? extends Annotation> TARGET_ANNOTATION_CLASS = SessionId.class;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(TARGET_ANNOTATION_CLASS.getClass(annotation))
+        return parameter.hasParameterAnnotation(TARGET_ANNOTATION_CLASS)
                 && parameter.getParameterType() == String.class;
     }
 
