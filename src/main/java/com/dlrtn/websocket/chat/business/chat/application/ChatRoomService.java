@@ -42,7 +42,7 @@ public class ChatRoomService {
         return CreateChatRoomResponse.success();
     }
 
-    public List<ChatRoom> getChatRooms(String userId, String chatId) {
+    public List<ChatRoom> getChatRooms(String userId) {
         return Optional.ofNullable(userId)
                 .map(chatRoomRepository::selectByUserId)
                 .orElseThrow(() -> new CommonException(String.format("Error with userId : %s", userId)));
