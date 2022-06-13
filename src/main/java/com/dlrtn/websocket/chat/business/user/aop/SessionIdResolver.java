@@ -12,7 +12,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SessionIdResolver implements HandlerMethodArgumentResolver {
 
-    private static final Class<? extends Annotation> TARGET_ANNOTATION_CLASS = SessionId.class;
+    private static final Class<SessionId> TARGET_ANNOTATION_CLASS = SessionId.class;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -47,7 +46,7 @@ public class SessionIdResolver implements HandlerMethodArgumentResolver {
     private SessionId getSessionIdAnnotation(MethodParameter parameter) {
         return Arrays.stream(parameter.getParameterAnnotations())
                 .filter(TARGET_ANNOTATION_CLASS::isInstance)
-                .map(SessionId.class::cast)
+                .map(TARGET_ANNOTATION_CLASS::cast)
                 .findFirst()
                 .orElseThrow(() -> new CommonException("Failed to found target annotation (Will not happen)"));
     }

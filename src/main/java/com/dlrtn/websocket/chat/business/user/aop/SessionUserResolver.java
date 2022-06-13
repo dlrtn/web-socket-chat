@@ -4,7 +4,6 @@ import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.AnnotationUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -21,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SessionUserResolver implements HandlerMethodArgumentResolver {
 
-    private static final Class<? extends Annotation> TARGET_ANNOTATION_CLASS = SessionUser.class;
+    private static final Class<SessionUser> TARGET_ANNOTATION_CLASS = SessionUser.class;
     private final UserSessionRepository userSessionRepository;
 
     @Override
