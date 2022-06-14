@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -29,10 +28,9 @@ public class ChatRoomService {
         List<String> memberIds = request.getChatMembers();
         memberIds.add(0, userId);
 
-        String randomId = UUID.randomUUID().toString();
         ChatRoom chatRoom = ChatRoom.builder()
-                .chatId(randomId)
-                .chatName(request.getChatRoomName())
+                .chatId(request.getChatId())
+                .chatName(request.getChatName())
                 .chatHostUser(userId)
                 .chatType(request.getChatType())
                 .build();

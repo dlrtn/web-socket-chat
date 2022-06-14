@@ -14,13 +14,13 @@ import java.util.List;
 public class CreateChatRoomRequest {
 
     @NotBlank
-    private final String chatRoomName;
+    private final String chatId;
+
+    @NotBlank
+    private final String chatName;
 
     @NotBlank
     private final ChatType chatType;
-
-    @NotBlank
-    private final String chatRoomPassword;
 
     private final List<String> chatMembers;
 
