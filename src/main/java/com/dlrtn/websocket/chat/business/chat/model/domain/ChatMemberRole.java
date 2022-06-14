@@ -3,6 +3,8 @@ package com.dlrtn.websocket.chat.business.chat.model.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 @AllArgsConstructor
 public enum ChatMemberRole {
@@ -13,5 +15,9 @@ public enum ChatMemberRole {
     ;
 
     private final String description;
+
+    public static boolean isUserRoleAuthorized(ChatMemberRole userRole) {
+        return Objects.equals(userRole, ADMIN) || Objects.equals(userRole, HOST);
+    }
 
 }

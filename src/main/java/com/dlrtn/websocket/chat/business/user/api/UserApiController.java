@@ -41,7 +41,7 @@ public class UserApiController {
         SignInResponse signInResponse = userService.signIn(sessionId, requestBody);
 
         if (signInResponse.isSuccess()) {
-            CookieUtils.setCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, signInResponse.getSessionId());
+            CookieUtils.createCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, signInResponse.getSessionId(), Integer.MAX_VALUE);
         }
 
         return signInResponse;
@@ -56,7 +56,7 @@ public class UserApiController {
         SignOutResponse signOutResponse = userService.signOut(sessionId);
 
         if (signOutResponse.isSuccess()) {
-            CookieUtils.setCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME, null, 0);
+            CookieUtils.deleteCookie(response, UserSessionConstants.SESSION_ID_COOKIE_NAME);
         }
 
         return signOutResponse;

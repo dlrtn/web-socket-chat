@@ -15,13 +15,16 @@ public class CookieUtils {
                 .orElse(null);
     }
 
-    public static void setCookie(HttpServletResponse response, String name, String value) {
-        setCookie(response, name, value, Integer.MAX_VALUE);
-    }
-
-    public static void setCookie(HttpServletResponse response, String name, String value, int maxAge) {
+    public static void createCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    public static void deleteCookie(HttpServletResponse response, String name) {
+        Cookie cookie = new Cookie(name, null);
+        cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
     }

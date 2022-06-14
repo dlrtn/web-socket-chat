@@ -1,6 +1,5 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
-import com.dlrtn.websocket.chat.business.chat.exception.UnAuthorizedException;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
@@ -11,10 +10,10 @@ import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,31 +41,31 @@ public class ChatRoomService {
         return CreateChatRoomResponse.success();
     }
 
-    public List<ChatRoom> getChatRooms(String userId, String chatId) {
+    public List<ChatRoom> getChatRooms(String userId) {
         return Optional.ofNullable(userId)
                 .map(chatRoomRepository::selectByUserId)
                 .orElseThrow(() -> new CommonException(String.format("Error with userId : %s", userId)));
     }
 
     public ChatRoom getChatRoom(String userId, String chatId) {
-        return chatRoomRepository.selectByChatId(userId, chatId); //TODO 로직 수정
+        return chatRoomRepository.selectByChatId(userId, chatId); //예외처리 고려해서 exist로 분기문 한번 걸친 뒤에 하는게 좋을까요
     }
 
     public ChangeChatRoomResponse changeChatRoom(String userId, String chatId, ChangeChatRoomRequest changeChatRoomRequest) {
         ChatMember foundChatMember = chatRoomMemberRepository.selectChatRoomMemberById(userId, chatId);
 
-        if (Objects.equals(foundChatMember.getRole(), ChatMemberRole.HOST) || Objects.equals(foundChatMember.getRole(), ChatMemberRole.ADMIN)) {
-            chatRoomRepository.updateChatRoom(chatId, changeChatRoomRequest.getChatName());
-            return ChangeChatRoomResponse.success();
+        if (ChatMemberRole.isUserRoleAuthorized(foundChatMember.getRole())) {
+            throw new CommonException("User role is unauthorized", HttpStatus.UNAUTHORIZED);
         }
+        chatRoomRepository.updateChatRoom(chatId, changeChatRoomRequest.getChatName());
 
-        throw new UnAuthorizedException(userId, chatId);
+        return ChangeChatRoomResponse.success();
     }
 
     public ExitChatRoomResponse exitChatRoom(String userId, String chatId) {
         ChatRoom foundChatRoom = chatRoomRepository.selectByChatId(userId, chatId);
         if (!StringUtils.equals(foundChatRoom.getChatHostUser(), userId)) {
-            throw new UnAuthorizedException(userId, chatId);
+            throw new CommonException("User role is unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         chatRoomRepository.deleteChatRoom(userId, chatId);
