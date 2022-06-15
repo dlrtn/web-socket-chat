@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-public class StompChatController {
+public class WebSocketController {
 
     private final SimpMessagingTemplate template;
 
