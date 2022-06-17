@@ -5,11 +5,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ChatRoomType {
+public enum ChatType {
+
     SELF("개인"),
     PUBLIC("공개"),
-    PRIVATE("비밀"),
     ;
 
     private final String description;
+
 }

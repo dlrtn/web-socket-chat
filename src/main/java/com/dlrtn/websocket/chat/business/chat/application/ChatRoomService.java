@@ -6,22 +6,20 @@ import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
 import com.dlrtn.websocket.chat.business.chat.model.payload.*;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomMemberRepository;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomRepository;
-import com.dlrtn.websocket.chat.business.user.model.domain.User;
-import com.dlrtn.websocket.chat.business.user.repository.FriendRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -32,50 +30,42 @@ public class ChatRoomService {
         memberIds.add(0, userId);
 
         String randomId = UUID.randomUUID().toString();
-
         ChatRoom chatRoom = ChatRoom.builder()
                 .chatId(randomId)
                 .chatName(request.getChatRoomName())
                 .chatHostUser(userId)
-                .chatType(request.getChatRoomType())
+                .chatType(request.getChatType())
                 .build();
 
         chatRoomRepository.insertChatRoom(chatRoom);
         return CreateChatRoomResponse.success();
     }
 
-    public List<ChatRoom> getChatRooms(String userId, String chatId) {
+    public List<ChatRoom> getChatRooms(String userId) {
         return Optional.ofNullable(userId)
                 .map(chatRoomRepository::selectByUserId)
                 .orElseThrow(() -> new CommonException(String.format("Error with userId : %s", userId)));
     }
 
     public ChatRoom getChatRoom(String userId, String chatId) {
-        return chatRoomRepository.selectByChatId(userId, chatId); //TODO 로직 수정
-
-//        if (!chatRoomMemberRepository.existsChatRoomMember(userId, chatId)) {
-//            return null;
-//        }
-//
-//        return chatRoomRepository.selectByChatId(userId, chatId);
+        return chatRoomRepository.selectByChatId(userId, chatId); //예외처리 고려해서 exist로 분기문 한번 걸친 뒤에 하는게 좋을까요
     }
 
     public ChangeChatRoomResponse changeChatRoom(String userId, String chatId, ChangeChatRoomRequest changeChatRoomRequest) {
         ChatMember foundChatMember = chatRoomMemberRepository.selectChatRoomMemberById(userId, chatId);
 
-        if (Objects.equals(foundChatMember.getRole(), ChatMemberRole.HOST) || Objects.equals(foundChatMember.getRole(), ChatMemberRole.ADMIN)) {
-            chatRoomRepository.updateChatRoom(chatId, changeChatRoomRequest.getChatName());
-            return ChangeChatRoomResponse.success();
+        if (ChatMemberRole.isUserRoleAuthorized(foundChatMember.getRole())) {
+            throw new CommonException("User role is unauthorized", HttpStatus.UNAUTHORIZED);
         }
+        chatRoomRepository.updateChatRoom(chatId, changeChatRoomRequest.getChatName());
 
-        return ChangeChatRoomResponse.failWith(String.format("Error with userId : %s, chatId : %s", userId, chatId));
+        return ChangeChatRoomResponse.success();
     }
 
     public ExitChatRoomResponse exitChatRoom(String userId, String chatId) {
         ChatRoom foundChatRoom = chatRoomRepository.selectByChatId(userId, chatId);
-
         if (!StringUtils.equals(foundChatRoom.getChatHostUser(), userId)) {
-            return ExitChatRoomResponse.failWith(String.format("Error with userId : %s, chatId : %s", userId, chatId));
+            throw new CommonException("User role is unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         chatRoomRepository.deleteChatRoom(userId, chatId);

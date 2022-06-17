@@ -3,6 +3,7 @@ spring:
     active:
       - datasource
       - logging
+      - redis
       - swagger
 
 server:

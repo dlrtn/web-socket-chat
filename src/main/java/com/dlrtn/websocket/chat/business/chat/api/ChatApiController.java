@@ -7,13 +7,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
-@RequiredArgsConstructor
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class ChatApiController {
 
     private final ChatRoomService chatRoomService;
+
+    @GetMapping("/users/{userId}/chats")
+    public List<ChatRoom> getChatRooms(@PathVariable String userId) {
+        return chatRoomService.getChatRooms(userId);
+    }
 
     @PostMapping("/users/{userId}/chats")
     public CreateChatRoomResponse createChatRoom(@PathVariable String userId,
@@ -22,8 +29,8 @@ public class ChatApiController {
     }
 
     @GetMapping("/users/{userId}/chats/{chatId}")
-    public ChatRoom findChatRoom(@PathVariable String userId,
-                                 @PathVariable String chatId) {
+    public ChatRoom getChatRoom(@PathVariable String userId,
+                                @PathVariable String chatId) {
         return chatRoomService.getChatRoom(userId, chatId);
     }
 

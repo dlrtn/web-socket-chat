@@ -6,14 +6,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class SignInResponse {
+public class SignOutResponse {
 
     private final boolean success;
 
-    private final String sessionId;
-
-    public static SignInResponse successWith(String sessionId) {
-        return of(true, sessionId);
+    public static SignOutResponse success() {
+        return of(true);
     }
 
 }

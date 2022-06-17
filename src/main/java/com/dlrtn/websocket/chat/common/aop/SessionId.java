@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.aop;
+package com.dlrtn.websocket.chat.common.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

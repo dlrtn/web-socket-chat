@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.model.payload;
+package com.dlrtn.websocket.chat.business.friend.model.payload;
 
 import com.dlrtn.websocket.chat.common.model.ResponseMessage;
 import lombok.AccessLevel;
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class ChangeFriendStateResponse {
+public class DeleteFriendResponse {
 
     private final boolean success;
 
@@ -15,11 +15,11 @@ public class ChangeFriendStateResponse {
 
     private final String description;
 
-    public static ChangeFriendStateResponse success() {
+    public static DeleteFriendResponse success() {
         return successWith(ResponseMessage.SUCCESS);
     }
 
-    public static ChangeFriendStateResponse successWith(ResponseMessage message) {
+    public static DeleteFriendResponse successWith(ResponseMessage message) {
         return of(true, message, message.getDescription());
     }
 

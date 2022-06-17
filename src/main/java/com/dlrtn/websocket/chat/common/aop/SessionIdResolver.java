@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.aop;
+package com.dlrtn.websocket.chat.common.aop;
 
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
@@ -18,11 +18,12 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class SessionIdResolver implements HandlerMethodArgumentResolver {
-    private static final Class<?> TARGET_ANNOTATION_CLASS = SessionId.class;
+
+    private static final Class<SessionId> TARGET_ANNOTATION_CLASS = SessionId.class;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(SessionId.class)
+        return parameter.hasParameterAnnotation(TARGET_ANNOTATION_CLASS)
                 && parameter.getParameterType() == String.class;
     }
 
@@ -44,8 +45,8 @@ public class SessionIdResolver implements HandlerMethodArgumentResolver {
 
     private SessionId getSessionIdAnnotation(MethodParameter parameter) {
         return Arrays.stream(parameter.getParameterAnnotations())
-                .filter(annotation -> TARGET_ANNOTATION_CLASS.equals(annotation.getClass()))
-                .map(annotation -> (SessionId) annotation)
+                .filter(TARGET_ANNOTATION_CLASS::isInstance)
+                .map(TARGET_ANNOTATION_CLASS::cast)
                 .findFirst()
                 .orElseThrow(() -> new CommonException("Failed to found target annotation (Will not happen)"));
     }

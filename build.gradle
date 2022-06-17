@@ -27,11 +27,15 @@ ext {
 
     // mariadb connector
     mariadb_connector_version = "3.0.4"
+
+    // embedded db
+    embedded_redisdb = "0.7.2"
 }
 
 dependencies {
     // spring boot starter dependencies
     implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
     implementation "org.springframework.boot:spring-boot-starter-jdbc"
     implementation "org.springframework.boot:spring-boot-starter-jooq"
     implementation "org.springframework.boot:spring-boot-starter-security"
@@ -44,6 +48,8 @@ dependencies {
     implementation "org.apache.commons:commons-lang3:$commons_lang_version"
     implementation "org.apache.commons:commons-collections4:$commons_collection_version"
     implementation "org.springdoc:springdoc-openapi-ui:$springdoc_openapi_version"
+
+    implementation "it.ozimov:embedded-redis:$embedded_redisdb"
 
     implementation "org.mariadb.jdbc:mariadb-java-client:$mariadb_connector_version"
     jooqGenerator "org.mariadb.jdbc:mariadb-java-client:$mariadb_connector_version"

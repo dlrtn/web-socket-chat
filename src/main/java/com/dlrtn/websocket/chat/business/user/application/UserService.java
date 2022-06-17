@@ -4,9 +4,10 @@ import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridExcep
 import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
-import com.dlrtn.websocket.chat.business.user.repository.InMemorySessionRepository;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
+import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
+import com.dlrtn.websocket.chat.config.redisdb.SessionEntity;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +24,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final InMemorySessionRepository sessionRepository;
+    private final UserSessionRepository sessionRepository;
     private final PasswordEncoder passwordEncoder;
 
     public boolean hasNotMatchedPassword(User user, String password) {
@@ -33,23 +34,14 @@ public class UserService {
                 .isEmpty();
     }
 
-    public User getSessionUser(String sessionId) {
-        return Optional.ofNullable(sessionId)
-                .filter(sessionRepository::exists)
-                .map(sessionRepository::get)
-                .orElse(null);
-    }
-
     @Transactional
     public SignUpResponse signUp(SignUpRequest request) {
         User foundUser = userRepository.findByUsername(request.getUsername());
-
         if (Objects.nonNull(foundUser)) {
             throw new AlreadyExistsUseridException();
         }
 
         LocalDateTime now = LocalDateTime.now();
-
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -68,26 +60,33 @@ public class UserService {
     }
 
     public SignInResponse signIn(String sessionId, SignInRequest request) {
-        if (sessionRepository.exists(sessionId)) {
+        if (sessionRepository.existsById(sessionId)) {
             return SignInResponse.successWith(sessionId);
         }
 
         User foundUser = userRepository.findByUsername(request.getUsername());
-
         if (hasNotMatchedPassword(foundUser, request.getPassword())) {
             throw new UserInfoNotMatchedException();
         }
 
         String newSessionId = UUID.randomUUID().toString();
-        sessionRepository.put(newSessionId, foundUser);
+        sessionRepository.save(
+                SessionEntity.builder()
+                        .sessionId(newSessionId)
+                        .sessionUser(foundUser)
+                        .build());
 
         return SignInResponse.successWith(newSessionId);
     }
 
-    @Transactional
-    public ChangeUserProfileResponse changeUserProfile(String sessionId, ChangeUserProfileRequest request) {
-        User sessionUser = getSessionUser(sessionId);
+    public SignOutResponse signOut(String sessionId) {
+        sessionRepository.deleteById(sessionId);
 
+        return SignOutResponse.success();
+    }
+
+    @Transactional
+    public ChangeUserProfileResponse changeUserProfile(String sessionId, User sessionUser, ChangeUserProfileRequest request) {
         if (hasNotMatchedPassword(sessionUser, request.getExistingPassword())) {
             return ChangeUserProfileResponse.success();
         }
@@ -100,21 +99,24 @@ public class UserService {
                 .password(passwordEncoder.encode(newPassword))
                 .updatedAt(LocalDateTime.now())
                 .build();
-
         userRepository.update(changedUser);
-        sessionRepository.put(sessionId, changedUser);
+
+        sessionRepository.save(
+                SessionEntity.builder()
+                        .sessionId(sessionId)
+                        .sessionUser(changedUser)
+                        .build());
+
         return ChangeUserProfileResponse.success();
     }
 
     @Transactional
-    public WithdrawUserResponse withdrawUser(String sessionId, WithdrawUserRequest request) {
-        User sessionUser = getSessionUser(sessionId);
-
+    public WithdrawUserResponse withdrawUser(User sessionUser, WithdrawUserRequest request) {
         if (hasNotMatchedPassword(sessionUser, request.getPassword())) {
             throw new UserInfoNotMatchedException();
         }
-
         userRepository.delete(sessionUser.getUsername());
+
         return WithdrawUserResponse.success();
     }
 

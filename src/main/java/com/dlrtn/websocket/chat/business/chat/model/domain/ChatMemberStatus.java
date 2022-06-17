@@ -6,10 +6,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ChatMemberStatus {
+
     WAIT("접속하지 않은 상태"),
     ACTIVE("접속중인 상태"),
     EXIT("퇴장한 상태"),
     ;
 
     private final String description;
+
 }

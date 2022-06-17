@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.model.payload;
+package com.dlrtn.websocket.chat.business.friend.model.payload;
 
 import lombok.Builder;
 import lombok.Getter;
