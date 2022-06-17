@@ -1,11 +1,13 @@
-package com.dlrtn.websocket.chat.business.friend.model.payload;
+package com.dlrtn.websocket.chat.business.friend.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
-@Builder
 @Getter
-public class ChangeFriendStateRequest {
+@Builder(toBuilder = true)
+@ToString
+public class FriendInformation {
 
     private final String friendName;
 

@@ -1,8 +1,10 @@
 package com.dlrtn.websocket.chat.business.friend.repository;
 
+import com.dlrtn.websocket.chat.business.friend.model.FriendInformation;
 import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
-import com.dlrtn.websocket.chat.business.user.model.domain.User;
+import com.dlrtn.websocket.chat.business.friend.model.payload.AddFriendRequest;
 import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateRequest;
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -11,6 +13,7 @@ import java.util.List;
 
 import static com.dlrtn.websocket.chat.business.chat.model.domain.generated.study_db.tables.TbFriend.TB_FRIEND;
 import static com.dlrtn.websocket.chat.business.chat.model.domain.generated.study_db.tables.TbUser.TB_USER;
+import static com.dlrtn.websocket.chat.util.LocalDateTimeUtils.convertLocalDateTimeToString;
 
 @RequiredArgsConstructor
 @Repository
@@ -18,12 +21,16 @@ public class FriendRepository {
 
     private final DSLContext dslContext;
 
-    public void insertIntoFriendList(User user, String friendId) {
+    public void insertIntoFriendList(User user, AddFriendRequest request) {
         dslContext.insertInto(TB_FRIEND,
                         TB_FRIEND.USER_ID,
-                        TB_FRIEND.FRIEND_ID)
+                        TB_FRIEND.FRIEND_ID,
+                        TB_FRIEND.FRIEND_NAME,
+                        TB_FRIEND.CREATED_AT)
                 .values(user.getUsername(),
-                        friendId)
+                        request.getFriendId(),
+                        request.getFriendName(),
+                        convertLocalDateTimeToString(request.getCreatedAt()))
                 .execute();
     }
 
@@ -51,21 +58,17 @@ public class FriendRepository {
                 .fetchInto(User.class);
     }
 
-    public User selectFriend(User user, String friendId) {
+    public FriendInformation selectFriend(User user, String friendId) {
         return dslContext.select(
-                        TB_USER.USER_NO,
-                        TB_USER.USERNAME,
-                        TB_USER.PASSWORD,
-                        TB_USER.REAL_NAME,
-                        TB_USER.AUTH_ROLE,
-                        TB_USER.CREATED_AT,
-                        TB_USER.UPDATED_AT
+                        TB_FRIEND.FRIEND_NAME,
+                        TB_FRIEND.ISFAVORITE,
+                        TB_FRIEND.ISBLOCKED
                 )
                 .from(TB_USER)
                 .join(TB_FRIEND)
                 .on(TB_FRIEND.FRIEND_ID.eq(TB_USER.USERNAME))
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_FRIEND.USER_ID.eq(user.getUsername())))
-                .fetchOneInto(User.class);
+                .fetchOneInto(FriendInformation.class);
     }
 
     public Friend selectFriendRelation(User user, String friendId) {

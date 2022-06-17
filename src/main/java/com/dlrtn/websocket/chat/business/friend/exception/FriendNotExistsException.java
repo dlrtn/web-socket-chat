@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.friend.exception;
 
+import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
 
 public class FriendNotExistsException extends CommonException {
@@ -8,8 +9,8 @@ public class FriendNotExistsException extends CommonException {
 
     private String userId;
 
-    public FriendNotExistsException(String userId) {
-        super(String.format("%s, userId : %s", message, userId));
+    public FriendNotExistsException(User user) {
+        super(String.format("%s, userId : %s", message, user.getUsername()));
     }
 
 }
