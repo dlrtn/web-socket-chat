@@ -48,7 +48,7 @@ public class ChatRoomService {
     }
 
     public ChatRoom getChatRoom(String userId, String chatId) {
-        return chatRoomRepository.selectByChatId(userId, chatId); //예외처리 고려해서 exist로 분기문 한번 걸친 뒤에 하는게 좋을까요
+        return chatRoomRepository.selectByChatId(userId, chatId);
     }
 
     public ChangeChatRoomResponse changeChatRoom(String userId, String chatId, ChangeChatRoomRequest changeChatRoomRequest) {

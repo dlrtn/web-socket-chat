@@ -3,12 +3,14 @@ package com.dlrtn.websocket.chat.business.chat.application;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomMemberRepository;
+import com.dlrtn.websocket.chat.common.exception.CommonException;
 import com.dlrtn.websocket.chat.common.model.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -18,7 +20,9 @@ public class ChatRoomMemberService {
     private final ChatRoomMemberRepository chatRoomMemberRepository;
 
     public List<ChatMember> getAllChatMembers(String chatId) {
-        return chatRoomMemberRepository.selectChatRoomMembers(chatId);
+        return Optional.ofNullable(chatId)
+                .map(chatRoomMemberRepository::selectChatRoomMembers)
+                .orElseThrow(() -> new CommonException("Chatroom is empty")); //chatroom이 비어있을 일이 있을까싶지만 혹시 모르니까
     }
 
     public CommonResponse changeChatMemberRole(String userId, String chatId, ChatMemberRole role) {
