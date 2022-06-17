@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.aop;
+package com.dlrtn.websocket.chat.common.aop;
 
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;

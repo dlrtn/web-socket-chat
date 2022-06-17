@@ -1,10 +1,15 @@
-package com.dlrtn.websocket.chat.business.user.application;
+package com.dlrtn.websocket.chat.business.friend.application;
 
-import com.dlrtn.websocket.chat.business.user.model.FriendServiceTestsConstants;
+import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
+import com.dlrtn.websocket.chat.business.friend.model.payload.AddFriendResponse;
+import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateRequest;
+import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateResponse;
+import com.dlrtn.websocket.chat.business.friend.model.payload.DeleteFriendResponse;
+import com.dlrtn.websocket.chat.business.user.application.UserService;
+import com.dlrtn.websocket.chat.business.friend.model.FriendServiceTestsConstants;
 import com.dlrtn.websocket.chat.business.user.model.UserServiceTestsConstants;
-import com.dlrtn.websocket.chat.business.user.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
-import com.dlrtn.websocket.chat.business.user.model.payload.*;
+import com.dlrtn.websocket.chat.business.user.model.payload.SignInResponse;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
 import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
@@ -52,8 +57,7 @@ public class FriendServiceTests {
 
     private User getSessionUser() {
         return Optional.of(getSessionId())
-                .map(userSessionRepository::findById)
-                .orElseThrow(() -> new CommonException("Failed to get session User"))
+                .flatMap(userSessionRepository::findById)
                 .orElseThrow(() -> new CommonException("Failed to get session User"))
                 .getSessionUser();
     }

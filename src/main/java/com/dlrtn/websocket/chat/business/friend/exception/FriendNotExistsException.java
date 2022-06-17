@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.exception;
+package com.dlrtn.websocket.chat.business.friend.exception;
 
 import com.dlrtn.websocket.chat.common.exception.CommonException;
 

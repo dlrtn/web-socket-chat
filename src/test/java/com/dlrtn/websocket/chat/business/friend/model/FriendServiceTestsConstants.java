@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.model;
+package com.dlrtn.websocket.chat.business.friend.model;
 
 import com.dlrtn.websocket.chat.business.user.model.domain.UserAuthRole;
 import com.dlrtn.websocket.chat.business.user.model.payload.SignUpRequest;
