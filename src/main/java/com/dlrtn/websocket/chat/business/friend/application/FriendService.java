@@ -6,6 +6,7 @@ import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.friend.model.payload.*;
 import com.dlrtn.websocket.chat.business.friend.repository.FriendRepository;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
+import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +54,7 @@ public class FriendService {
         return Optional.ofNullable(sessionUser)
                 .map(friendRepository::selectAllFriends)
                 .orElseThrow(() -> {
-                    assert sessionUser != null;
+                    assert sessionUser != null : new CommonException("SessionUser no existed");
                     return new FriendNotExistsException(sessionUser);
                 });
     }
