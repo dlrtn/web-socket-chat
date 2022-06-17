@@ -1,10 +1,7 @@
 package com.dlrtn.websocket.chat.business.friend.api;
 
 import com.dlrtn.websocket.chat.business.friend.application.FriendService;
-import com.dlrtn.websocket.chat.business.friend.model.payload.AddFriendResponse;
-import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateRequest;
-import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateResponse;
-import com.dlrtn.websocket.chat.business.friend.model.payload.DeleteFriendResponse;
+import com.dlrtn.websocket.chat.business.friend.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.common.aop.SessionUser;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +29,8 @@ public class FriendApiController {
     @PutMapping("/{userId}/friend")
     public AddFriendResponse addFriend(
             @SessionUser User sessionUser,
-            String friendId
-    ) {
-        return friendService.addFriend(sessionUser, friendId);
+            @Valid @RequestBody AddFriendRequest request) {
+        return friendService.addFriend(sessionUser, request);
     }
 
     @PatchMapping("/{userId}/friends/{friendId}")
