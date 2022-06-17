@@ -1,8 +1,8 @@
-package com.dlrtn.websocket.chat.business.user.repository;
+package com.dlrtn.websocket.chat.business.friend.repository;
 
-import com.dlrtn.websocket.chat.business.user.model.domain.Friend;
+import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
-import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
+import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateRequest;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;

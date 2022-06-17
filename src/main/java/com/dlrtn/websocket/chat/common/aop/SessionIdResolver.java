@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.user.aop;
+package com.dlrtn.websocket.chat.common.aop;
 
 import com.dlrtn.websocket.chat.business.user.model.UserSessionConstants;
 import com.dlrtn.websocket.chat.common.exception.CommonException;

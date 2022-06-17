@@ -3,7 +3,6 @@ package com.dlrtn.websocket.chat.business.chat.application;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
 import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomMemberRepository;
-import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.common.model.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,14 +28,6 @@ public class ChatRoomMemberService {
         }
 
         return CommonResponse.failWith("Can't find user in chatRoomMemberList");
-    }
-
-    public void inviteChatMembers(String chatId, List<String> invitedMemberIds) {
-
-    }
-
-    public List<User> getChatMembers(String chatId) {
-
     }
 
 }

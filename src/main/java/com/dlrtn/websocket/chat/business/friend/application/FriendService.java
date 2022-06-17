@@ -1,13 +1,13 @@
-package com.dlrtn.websocket.chat.business.user.application;
+package com.dlrtn.websocket.chat.business.friend.application;
 
-import com.dlrtn.websocket.chat.business.user.exception.FriendNotExistsException;
-import com.dlrtn.websocket.chat.business.user.model.domain.Friend;
+import com.dlrtn.websocket.chat.business.friend.exception.FriendNotExistsException;
+import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
+import com.dlrtn.websocket.chat.business.friend.model.payload.AddFriendResponse;
+import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateRequest;
+import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateResponse;
+import com.dlrtn.websocket.chat.business.friend.model.payload.DeleteFriendResponse;
+import com.dlrtn.websocket.chat.business.friend.repository.FriendRepository;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
-import com.dlrtn.websocket.chat.business.user.model.payload.AddFriendResponse;
-import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateRequest;
-import com.dlrtn.websocket.chat.business.user.model.payload.ChangeFriendStateResponse;
-import com.dlrtn.websocket.chat.business.user.model.payload.DeleteFriendResponse;
-import com.dlrtn.websocket.chat.business.user.repository.FriendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
