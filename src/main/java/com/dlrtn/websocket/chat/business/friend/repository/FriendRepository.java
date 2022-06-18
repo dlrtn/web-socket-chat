@@ -41,21 +41,17 @@ public class FriendRepository {
                 .execute();
     }
 
-    public List<User> selectAllFriends(User user) {
+    public List<FriendInformation> selectAllFriends(User user) {
         return dslContext.select(
-                        TB_USER.USER_NO,
-                        TB_USER.USERNAME,
-                        TB_USER.PASSWORD,
-                        TB_USER.AUTH_ROLE,
-                        TB_USER.REAL_NAME,
-                        TB_USER.CREATED_AT,
-                        TB_USER.UPDATED_AT
+                        TB_FRIEND.FRIEND_NAME,
+                        TB_FRIEND.ISFAVORITE,
+                        TB_FRIEND.ISBLOCKED
                 )
                 .from(TB_USER)
                 .join(TB_FRIEND)
                 .on(TB_FRIEND.USER_ID.eq(TB_USER.USERNAME))
                 .where(TB_FRIEND.USER_ID.eq(user.getUsername()))
-                .fetchInto(User.class);
+                .fetchInto(FriendInformation.class);
     }
 
     public FriendInformation selectFriend(User user, String friendId) {

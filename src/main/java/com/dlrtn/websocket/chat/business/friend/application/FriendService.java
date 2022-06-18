@@ -2,11 +2,9 @@ package com.dlrtn.websocket.chat.business.friend.application;
 
 import com.dlrtn.websocket.chat.business.friend.exception.FriendNotExistsException;
 import com.dlrtn.websocket.chat.business.friend.model.FriendInformation;
-import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.friend.model.payload.*;
 import com.dlrtn.websocket.chat.business.friend.repository.FriendRepository;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
-import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,22 +48,22 @@ public class FriendService {
         return foundFriend;
     }
 
-    public List<User> getFriends(User sessionUser) {
+    public List<FriendInformation> getFriends(User sessionUser) {
         return Optional.ofNullable(sessionUser)
                 .map(friendRepository::selectAllFriends)
                 .orElseThrow(() -> {
-                    assert sessionUser != null : new CommonException("SessionUser no existed");
+                    assert sessionUser != null;
                     return new FriendNotExistsException(sessionUser);
                 });
     }
 
-    public Friend getFriendShip(User sessionUser, String friendId) {
-        Friend foundFriendShip = friendRepository.selectFriendRelation(sessionUser, friendId);
-        if (Objects.isNull(foundFriendShip)) {
+    public FriendInformation getFriendShip(User sessionUser, String friendId) {
+        FriendInformation foundFriendInformation = friendRepository.selectFriend(sessionUser, friendId);
+        if (Objects.isNull(foundFriendInformation)) {
             throw new FriendNotExistsException(sessionUser);
         }
 
-        return foundFriendShip;
+        return foundFriendInformation;
     }
 
     @Transactional
