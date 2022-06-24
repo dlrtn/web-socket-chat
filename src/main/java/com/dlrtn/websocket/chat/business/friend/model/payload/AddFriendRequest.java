@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 @ToString
 public class AddFriendRequest {
 
-    private final String friendName;
+    private final String userName;
 
     private final String friendId;
 
-    private LocalDateTime createdAt; //front에서 받도록? 내부에서 정의?
+    private final String friendName;
 
 }

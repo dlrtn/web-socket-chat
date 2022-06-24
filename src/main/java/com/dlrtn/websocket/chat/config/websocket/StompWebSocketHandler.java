@@ -1,22 +1,17 @@
 package com.dlrtn.websocket.chat.config.websocket;
 
-import com.dlrtn.websocket.chat.business.chat.application.WebSocketService;
 import com.dlrtn.websocket.chat.business.user.repository.UserSessionRepository;
 import com.dlrtn.websocket.chat.common.exception.CommonException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 
-
+@RequiredArgsConstructor
 public class StompWebSocketHandler implements ChannelInterceptor {
 
-    @Autowired
     private UserSessionRepository sessionRepository;
-
-    @Autowired
-    private WebSocketService webSocketService;
 
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);

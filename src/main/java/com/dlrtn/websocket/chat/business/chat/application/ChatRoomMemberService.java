@@ -22,7 +22,7 @@ public class ChatRoomMemberService {
     public List<ChatMember> getAllChatMembers(String chatId) {
         return Optional.ofNullable(chatId)
                 .map(chatRoomMemberRepository::selectChatRoomMembers)
-                .orElseThrow(() -> new CommonException("Chatroom is empty")); //chatroom이 비어있을 일이 있을까싶지만 혹시 모르니까
+                .orElseThrow(() -> new CommonException("Chatroom is empty"));
     }
 
     public CommonResponse changeChatMemberRole(String userId, String chatId, ChatMemberRole role) {
