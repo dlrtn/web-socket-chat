@@ -27,7 +27,7 @@ public class StompChatController {
         template.convertAndSend("/sub" + message.getChatId(), message.getSender() + "님이 채팅방에 참여하였습니다.");
     }
 
-    @MessageMapping(value = "/users/{userId}/chats/{chatId}/message")
+    @MessageMapping(value = "/users/{userId}/self/{chatId}/message")
     public void groupMessage(ChatMessage message,
                              @DestinationVariable String userId,
                              @DestinationVariable String chatId) {
