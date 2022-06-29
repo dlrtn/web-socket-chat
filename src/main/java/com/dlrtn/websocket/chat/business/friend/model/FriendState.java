@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Builder(toBuilder = true)
 @ToString
-public class FriendInformation {
+public class FriendState {
 
     private final String friendName;
 

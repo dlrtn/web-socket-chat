@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.business.friend.application;
 
 import com.dlrtn.websocket.chat.business.friend.exception.FriendNotExistsException;
-import com.dlrtn.websocket.chat.business.friend.model.FriendInformation;
+import com.dlrtn.websocket.chat.business.friend.model.FriendState;
 import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.friend.model.payload.*;
 import com.dlrtn.websocket.chat.business.friend.repository.FriendRepository;
@@ -50,8 +50,8 @@ public class FriendService {
         }
     }
 
-    public FriendInformation getFriendProfile(User sessionUser, String friendId) {
-        FriendInformation foundFriend = friendRepository.selectFriend(sessionUser.getUsername(), friendId);
+    public FriendState getFriendProfile(User sessionUser, String friendId) {
+        FriendState foundFriend = friendRepository.selectFriend(sessionUser.getUsername(), friendId);
         if (Objects.isNull(foundFriend)) {
             throw new FriendNotExistsException(sessionUser);
         }
@@ -59,8 +59,8 @@ public class FriendService {
         return foundFriend;
     }
 
-    public List<FriendInformation> getFriends(User sessionUser) {
-        List<FriendInformation> foundFriends = friendRepository.selectAllFriends(sessionUser.getUsername());
+    public List<FriendState> getFriends(User sessionUser) {
+        List<FriendState> foundFriends = friendRepository.selectAllFriends(sessionUser.getUsername());
         if (Objects.isNull(foundFriends)) {
             throw new FriendNotExistsException(sessionUser);
         }
@@ -68,13 +68,13 @@ public class FriendService {
         return foundFriends;
     }
 
-    public FriendInformation getFriendShip(User sessionUser, String friendId) {
-        FriendInformation foundFriendInformation = friendRepository.selectFriend(sessionUser.getUsername(), friendId);
-        if (Objects.isNull(foundFriendInformation)) {
+    public FriendState getFriendShip(User sessionUser, String friendId) {
+        FriendState foundFriendState = friendRepository.selectFriend(sessionUser.getUsername(), friendId);
+        if (Objects.isNull(foundFriendState)) {
             throw new FriendNotExistsException(sessionUser);
         }
 
-        return foundFriendInformation;
+        return foundFriendState;
     }
 
     @Transactional

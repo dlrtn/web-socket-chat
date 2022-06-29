@@ -1,10 +1,8 @@
 package com.dlrtn.websocket.chat.business.friend.repository;
 
-import com.dlrtn.websocket.chat.business.friend.model.FriendInformation;
+import com.dlrtn.websocket.chat.business.friend.model.FriendState;
 import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
-import com.dlrtn.websocket.chat.business.friend.model.payload.AddFriendRequest;
 import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateRequest;
-import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -41,7 +39,7 @@ public class FriendRepository {
                 .execute();
     }
 
-    public List<FriendInformation> selectAllFriends(String userName) {
+    public List<FriendState> selectAllFriends(String userName) {
         return dslContext.select(
                         TB_FRIEND.FRIEND_NAME,
                         TB_FRIEND.ISFAVORITE,
@@ -51,10 +49,10 @@ public class FriendRepository {
                 .join(TB_FRIEND)
                 .on(TB_FRIEND.USER_ID.eq(TB_USER.USERNAME))
                 .where(TB_FRIEND.USER_ID.eq(userName))
-                .fetchInto(FriendInformation.class);
+                .fetchInto(FriendState.class);
     }
 
-    public FriendInformation selectFriend(String userName, String friendId) {
+    public FriendState selectFriend(String userName, String friendId) {
         return dslContext.select(
                         TB_FRIEND.FRIEND_NAME,
                         TB_FRIEND.ISFAVORITE,
@@ -64,7 +62,7 @@ public class FriendRepository {
                 .join(TB_FRIEND)
                 .on(TB_FRIEND.FRIEND_ID.eq(TB_USER.USERNAME))
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_FRIEND.USER_ID.eq(userName)))
-                .fetchOneInto(FriendInformation.class);
+                .fetchOneInto(FriendState.class);
     }
 
     public Friend selectFriendRelation(String userName, String friendId) {

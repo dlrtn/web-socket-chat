@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.business.friend.api;
 
 import com.dlrtn.websocket.chat.business.friend.application.FriendService;
-import com.dlrtn.websocket.chat.business.friend.model.FriendInformation;
+import com.dlrtn.websocket.chat.business.friend.model.FriendState;
 import com.dlrtn.websocket.chat.business.friend.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.common.aop.SessionUser;
@@ -21,7 +21,7 @@ public class FriendApiController {
     private final FriendService friendService;
 
     @GetMapping("/{userId}/friend")
-    public List<FriendInformation> getFriendList(
+    public List<FriendState> getFriendList(
             @SessionUser User sessionUser
     ) {
         return friendService.getFriends(sessionUser);
