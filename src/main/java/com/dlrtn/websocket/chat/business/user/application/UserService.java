@@ -80,7 +80,7 @@ public class UserService {
     }
 
     public SignOutResponse signOut(String sessionId) {
-        sessionRepository.deleteById(sessionId);
+        sessionRepository.deleteById(sessionId); //로그아웃 상태가 아닌 상황에서 들어올 수도 있음? 그렇슴 ㅇㅇ
 
         return SignOutResponse.success();
     }

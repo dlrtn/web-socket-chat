@@ -13,6 +13,8 @@ public class FriendServiceTestsConstants {
 
     private static final UserAuthRole TEST_AUTH_ROLE = UserAuthRole.USER;
 
+    public static final String TEST_FRIEND_NAME_USER_DECIDED = "stupid";
+
     public static final SignUpRequest TEST_FRIEND_SIGN_UP_REQUEST = SignUpRequest.builder()
             .username(TEST_FRIEND_USERNAME)
             .password(TEST_FRIEND_PASSWORD)

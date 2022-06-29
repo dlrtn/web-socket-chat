@@ -17,6 +17,8 @@ public class Friend {
 
     private final String friendId;
 
+    private final String friendName;
+
     private final boolean isBlocked;
 
     private final boolean isFavorite;
