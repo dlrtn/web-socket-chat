@@ -13,7 +13,7 @@ public class StompChatController {
 
     private final SimpMessagingTemplate template;
 
-    @MessageMapping(value = "/users/{userId}/chats/{chatId}/message")
+    @MessageMapping(value = "/users/{userId}/self/{chatId}/message")
     public void selfMessage(ChatMessage message,
                             @DestinationVariable String userId,
                             @DestinationVariable String chatId) {
