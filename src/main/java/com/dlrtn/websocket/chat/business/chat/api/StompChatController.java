@@ -17,21 +17,21 @@ public class StompChatController {
     public void selfMessage(ChatMessage message,
                             @DestinationVariable String userId,
                             @DestinationVariable String chatId) {
-        template.convertAndSend("/sub" + message.getChatId(), message);
+        template.convertAndSend("/sub", message);
     }
 
     @MessageMapping(value = "/users/{userId}/chats/{chatId}/join")
     public void groupJoin(ChatMessage message,
                           @DestinationVariable String userId,
                           @DestinationVariable String chatId) {
-        template.convertAndSend("/sub" + message.getChatId(), message.getSender() + "님이 채팅방에 참여하였습니다.");
+        template.convertAndSend("/sub", message.getSender() + "님이 채팅방에 참여하였습니다.");
     }
 
     @MessageMapping(value = "/users/{userId}/chats/{chatId}/message")
     public void groupMessage(ChatMessage message,
                              @DestinationVariable String userId,
                              @DestinationVariable String chatId) {
-        template.convertAndSend("/sub" + message.getChatId(), message);
+        template.convertAndSend("/sub", message);
     }
 
 }

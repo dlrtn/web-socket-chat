@@ -53,7 +53,6 @@ public class ChatRoomService {
 
     public ChangeChatRoomResponse changeChatRoom(String userId, String chatId, ChangeChatRoomRequest changeChatRoomRequest) {
         ChatMember foundChatMember = chatRoomMemberRepository.selectChatRoomMemberById(userId, chatId);
-
         if (ChatMemberRole.isUserRoleAuthorized(foundChatMember.getRole())) {
             throw new CommonException("User role is unauthorized", HttpStatus.UNAUTHORIZED);
         }

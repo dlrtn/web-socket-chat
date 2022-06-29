@@ -6,6 +6,7 @@ import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.friend.model.payload.*;
 import com.dlrtn.websocket.chat.business.friend.repository.FriendRepository;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
+import com.dlrtn.websocket.chat.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,12 +41,13 @@ public class FriendService {
 
     @Transactional
     public DeleteFriendResponse deleteFriend(User sessionUser, String friendId) {
-        if (Objects.nonNull(friendRepository.selectFriend(sessionUser.getUsername(), friendId))) {
-            throw new FriendNotExistsException(sessionUser);
+        try {
+            friendRepository.deleteUserFromFriendList(sessionUser.getUsername(), friendId);
+            return DeleteFriendResponse.success();
         }
-        friendRepository.deleteUserFromFriendList(sessionUser.getUsername(), friendId);
-
-        return DeleteFriendResponse.success();
+        catch (Exception e) {
+            throw new CommonException(sessionUser.getUsername() ,e); //CommonException message에 오류난 유저 아이디, cause 넘겨 받아 처리
+        }
     }
 
     public FriendInformation getFriendProfile(User sessionUser, String friendId) {
@@ -58,12 +60,12 @@ public class FriendService {
     }
 
     public List<FriendInformation> getFriends(User sessionUser) {
-        List<FriendInformation> foundFriendListObjects = friendRepository.selectAllFriends(sessionUser.getUsername());
-        if (Objects.isNull(foundFriendListObjects)) {
+        List<FriendInformation> foundFriends = friendRepository.selectAllFriends(sessionUser.getUsername());
+        if (Objects.isNull(foundFriends)) {
             throw new FriendNotExistsException(sessionUser);
         }
 
-        return foundFriendListObjects;
+        return foundFriends;
     }
 
     public FriendInformation getFriendShip(User sessionUser, String friendId) {
