@@ -68,7 +68,6 @@ public class FriendServiceTests {
         AddFriendRequest request = AddFriendRequest.builder()
                 .friendId(FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername())
                 .friendName(FriendServiceTestsConstants.TEST_FRIEND_NAME_USER_DECIDED)
-                .createdAt(LocalDateTime.now())
                 .build();
         AddFriendResponse response = friendService.addFriend(sessionUser, request);
 
@@ -90,7 +89,6 @@ public class FriendServiceTests {
         AddFriendRequest request = AddFriendRequest.builder()
                 .friendId(FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername())
                 .friendName(FriendServiceTestsConstants.TEST_FRIEND_NAME_USER_DECIDED)
-                .createdAt(LocalDateTime.now())
                 .build();
         friendService.addFriend(sessionUser, request);
 

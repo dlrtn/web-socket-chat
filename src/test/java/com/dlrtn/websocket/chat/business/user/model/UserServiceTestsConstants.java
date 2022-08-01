@@ -29,7 +29,7 @@ public class UserServiceTestsConstants {
             .password(TEST_PASSWORD)
             .build();
 
-    public static final ChangeUserProfileRequest TEST_CHANGE_USER_PROFILE_REQUEST = ChangeUserProfileRequest.builder()
+    public static final ChangeUserRequest TEST_CHANGE_USER_PROFILE_REQUEST = ChangeUserRequest.builder()
             .existingPassword(TEST_PASSWORD)
             .newPassword(TEST_NEW_PASSWORD)
             .newRealName(TEST_NEW_REAL_NAME)

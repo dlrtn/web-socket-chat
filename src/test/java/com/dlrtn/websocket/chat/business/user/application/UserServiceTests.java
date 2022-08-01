@@ -46,8 +46,7 @@ public class UserServiceTests {
 
     private User getSessionUser() {
         return Optional.of(getSessionId())
-                .map(userSessionRepository::findById)
-                .orElseThrow(() -> new CommonException("Failed to get session User"))
+                .flatMap(userSessionRepository::findById)
                 .orElseThrow(() -> new CommonException("Failed to get session User"))
                 .getSessionUser();
     }
@@ -57,11 +56,10 @@ public class UserServiceTests {
     void join_user_test() {
         SignUpRequest requestBody = UserServiceTestsConstants.TEST_SIGN_UP_REQUEST;
 
-        SignUpResponse firstSignUpResponse = userService.signUp(requestBody);
-        SignUpResponse secondSignUpResponse = userService.signUp(requestBody);
+        SignUpResponse signUpResponse = userService.signUp(requestBody);
 
-        Assertions.assertEquals(ResponseMessage.SUCCESS, firstSignUpResponse.getMessage());
-        Assertions.assertEquals("Failed by existed user id", secondSignUpResponse.getMessage().toString());
+        Assertions.assertEquals(ResponseMessage.SUCCESS, signUpResponse.getMessage());
+        Assertions.assertThrows(AlreadyExistsUseridException.class, () -> userService.signUp(requestBody));
     }
 
     @DisplayName("유저 로그인 기능 부분 테스트")
@@ -79,14 +77,14 @@ public class UserServiceTests {
     void update_user_test() {
         String sessionId = getSessionId();
         User sessionUser = getSessionUser();
-        ChangeUserProfileRequest request = UserServiceTestsConstants.TEST_CHANGE_USER_PROFILE_REQUEST;
+        ChangeUserRequest request = UserServiceTestsConstants.TEST_CHANGE_USER_PROFILE_REQUEST;
 
-        ChangeUserProfileResponse response = userService.changeUserProfile(sessionId, sessionUser, request);
-        User profileChangedUser = userService.getSessionUser(sessionId);
+        ChangeUserResponse response = userService.changeUser(sessionId, sessionUser, request);
+        User profileChangedUser = userSessionRepository.findById(sessionId).orElseThrow().getSessionUser();
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(response.isSuccess()),
-                () -> Assertions.assertFalse(userService.hasNotMatchedPassword(profileChangedUser, request.getNewPassword())),
+                () -> Assertions.assertFalse(userService.validatePassword(profileChangedUser, request.getNewPassword())),
                 () -> Assertions.assertEquals(request.getNewRealName(), profileChangedUser.getRealName()));
     }
 
