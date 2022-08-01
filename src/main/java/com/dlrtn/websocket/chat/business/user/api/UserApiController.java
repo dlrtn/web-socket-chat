@@ -64,12 +64,12 @@ public class UserApiController {
 
     @Operation(summary = "회원 정보수정")
     @PatchMapping("/{userId}/modifying")
-    public ChangeUserProfileResponse changeUser(
+    public ChangeUserResponse changeUser(
             @SessionId String sessionId,
             @SessionUser User sessionUser,
-            @Valid @RequestBody ChangeUserProfileRequest requestBody
+            @Valid @RequestBody ChangeUserRequest requestBody
     ) {
-        return userService.changeUserProfile(sessionId, sessionUser, requestBody);
+        return userService.changeUser(sessionId, sessionUser, requestBody);
     }
 
     @Operation(summary = "회원 정보삭제")
