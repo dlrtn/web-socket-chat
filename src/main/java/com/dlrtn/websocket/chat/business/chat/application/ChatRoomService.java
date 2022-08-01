@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
+import com.dlrtn.websocket.chat.business.chat.model.ChatRoomState;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
@@ -41,14 +42,10 @@ public class ChatRoomService {
         return CreateChatRoomResponse.success();
     }
 
-    public List<ChatRoom> getChatRooms(String userId) {
+    public List<ChatRoomState> getChatRooms(String userId) {
         return Optional.ofNullable(userId)
                 .map(chatRoomRepository::selectByUserId)
                 .orElseThrow(() -> new CommonException(String.format("Error with userId : %s", userId)));
-    }
-
-    public ChatRoom getChatRoom(String userId, String chatId) {
-        return chatRoomRepository.selectByChatId(userId, chatId);
     }
 
     public ChangeChatRoomResponse changeChatRoom(String userId, String chatId, ChangeChatRoomRequest changeChatRoomRequest) {

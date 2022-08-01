@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.repository;
 
+import com.dlrtn.websocket.chat.business.chat.model.ChatRoomState;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
@@ -27,19 +28,15 @@ public class ChatRoomRepository {
                 .execute();
     }
 
-    public List<ChatRoom> selectByUserId(String userId) {
+    public List<ChatRoomState> selectByUserId(String userId) {
         return dslContext.select(
-                        TB_CHATROOM.CHATID,
-                        TB_CHATROOM.CHATNAME,
-                        TB_CHATROOM.CHAT_HOST,
-                        TB_CHATROOM.CHAT_TYPE,
-                        TB_CHATROOM.CHAT_PASSWORD
+                        TB_CHATROOM.CHATNAME
                 )
                 .from(TB_CHATROOM)
                 .join(TB_CHATROOM_MEMBER)
                 .on(TB_CHATROOM.CHATID.eq(TB_CHATROOM_MEMBER.CHATID))
                 .where(TB_CHATROOM_MEMBER.USERID.eq(userId))
-                .fetchInto(ChatRoom.class);
+                .fetchInto(ChatRoomState.class);
     }
 
     public ChatRoom selectByChatId(String userId, String chatId) {

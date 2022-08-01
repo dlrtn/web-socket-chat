@@ -17,7 +17,7 @@ public class ChatRoomMemberService {
 
     private final ChatRoomMemberRepository chatRoomMemberRepository;
 
-    public List<ChatMember> getAllChatMembers(String chatId) {
+    public List<ChatMember> getChatMembers(String chatId) {
         return chatRoomMemberRepository.selectChatRoomMembers(chatId);
     }
 
