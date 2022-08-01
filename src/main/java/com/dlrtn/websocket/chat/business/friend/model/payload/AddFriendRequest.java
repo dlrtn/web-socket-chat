@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 public class AddFriendRequest {
 
-    private final String userName;
+    private final String username;
 
     private final String friendId;
 
