@@ -49,6 +49,7 @@ public class FriendRepository {
                 .join(TB_FRIEND)
                 .on(TB_FRIEND.USER_ID.eq(TB_USER.USERNAME))
                 .where(TB_FRIEND.USER_ID.eq(userName))
+                .orderBy(TB_FRIEND.ISFAVORITE.desc())
                 .fetchInto(FriendState.class);
     }
 
@@ -88,7 +89,7 @@ public class FriendRepository {
                 .execute();
     }
 
-    public boolean existsFriendInBlockedList(String userName, String friendId) {
+    public boolean existsFriendInBlockList(String userName, String friendId) {
         return dslContext.select()
                 .from(TB_FRIEND)
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_FRIEND.USER_ID.eq(userName)))

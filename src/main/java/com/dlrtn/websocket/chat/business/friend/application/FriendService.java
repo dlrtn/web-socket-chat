@@ -1,6 +1,7 @@
 package com.dlrtn.websocket.chat.business.friend.application;
 
-import com.dlrtn.websocket.chat.business.friend.exception.FriendNotExistsException;
+import com.dlrtn.websocket.chat.business.friend.exception.FriendAlreadyExistsException;
+import com.dlrtn.websocket.chat.business.friend.exception.FriendNotFoundException;
 import com.dlrtn.websocket.chat.business.friend.model.FriendState;
 import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
 import com.dlrtn.websocket.chat.business.friend.model.payload.*;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,8 +26,8 @@ public class FriendService {
 
     @Transactional
     public AddFriendResponse addFriend(User sessionUser, AddFriendRequest request) {
-        if (Objects.nonNull(friendRepository.selectFriend(sessionUser.getUsername(), request.getFriendId()))) {
-            throw new FriendNotExistsException(sessionUser);
+        if (Objects.isNull(friendRepository.selectFriend(sessionUser.getUsername(), request.getFriendId()))) {
+            throw new FriendAlreadyExistsException(sessionUser);
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -44,16 +47,15 @@ public class FriendService {
         try {
             friendRepository.deleteUserFromFriendList(sessionUser.getUsername(), friendId);
             return DeleteFriendResponse.success();
-        }
-        catch (Exception e) {
-            throw new CommonException(sessionUser.getUsername() ,e); //CommonException message에 오류난 유저 아이디, cause 넘겨 받아 처리
+        } catch (Exception e) {
+            throw new CommonException(sessionUser.getUsername(), e);
         }
     }
 
     public FriendState getFriendProfile(User sessionUser, String friendId) {
         FriendState foundFriend = friendRepository.selectFriend(sessionUser.getUsername(), friendId);
         if (Objects.isNull(foundFriend)) {
-            throw new FriendNotExistsException(sessionUser);
+            throw new FriendNotFoundException(sessionUser);
         }
 
         return foundFriend;
@@ -62,25 +64,16 @@ public class FriendService {
     public List<FriendState> getFriends(User sessionUser) {
         List<FriendState> foundFriends = friendRepository.selectAllFriends(sessionUser.getUsername());
         if (Objects.isNull(foundFriends)) {
-            throw new FriendNotExistsException(sessionUser);
+            throw new FriendNotFoundException(sessionUser);
         }
 
         return foundFriends;
     }
 
-    public FriendState getFriendShip(User sessionUser, String friendId) {
-        FriendState foundFriendState = friendRepository.selectFriend(sessionUser.getUsername(), friendId);
-        if (Objects.isNull(foundFriendState)) {
-            throw new FriendNotExistsException(sessionUser);
-        }
-
-        return foundFriendState;
-    }
-
     @Transactional
     public ChangeFriendStateResponse changeFriendState(User sessionUser, String friendId, ChangeFriendStateRequest request) {
         if (Objects.isNull(friendRepository.selectFriend(sessionUser.getUsername(), friendId))) {
-            throw new FriendNotExistsException(sessionUser);
+            throw new FriendNotFoundException(sessionUser);
         }
         friendRepository.updateFriendState(sessionUser.getUsername(), friendId, request);
 
@@ -88,7 +81,7 @@ public class FriendService {
     }
 
     public boolean isExistInBlockList(User sessionUser, String friendId) {
-        return friendRepository.existsFriendInBlockedList(sessionUser.getUsername(), friendId);
+        return friendRepository.existsFriendInBlockList(sessionUser.getUsername(), friendId);
     }
 
 }

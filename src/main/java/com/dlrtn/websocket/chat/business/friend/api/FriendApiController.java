@@ -20,14 +20,14 @@ public class FriendApiController {
 
     private final FriendService friendService;
 
-    @GetMapping("/{userId}/friend")
-    public List<FriendState> getFriendList(
+    @GetMapping("/{userId}/friends")
+    public List<FriendState> getFriends(
             @SessionUser User sessionUser
     ) {
         return friendService.getFriends(sessionUser);
     }
 
-    @PutMapping("/{userId}/friend")
+    @PutMapping("/{userId}/friends")
     public AddFriendResponse addFriend(
             @SessionUser User sessionUser,
             @Valid @RequestBody AddFriendRequest request) {
