@@ -7,11 +7,11 @@ import javax.validation.constraints.NotBlank;
 
 @Builder
 @Getter
-public class ChangeUserProfileRequest {
+public class ChangeUserRequest {
 
-    private String newRealName; // 이름 변경 안할 경우
+    private String newRealName;
 
-    private String newPassword; // 패스워드 변경 안할 경우
+    private String newPassword;
 
     @NotBlank
     private String existingPassword;

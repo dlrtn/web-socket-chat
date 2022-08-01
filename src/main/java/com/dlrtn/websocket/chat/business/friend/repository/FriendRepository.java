@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.business.friend.repository;
 
+import com.dlrtn.websocket.chat.business.friend.model.FriendState;
 import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
-import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateRequest;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.dlrtn.websocket.chat.business.chat.model.domain.generated.study_db.tables.TbFriend.TB_FRIEND;
 import static com.dlrtn.websocket.chat.business.chat.model.domain.generated.study_db.tables.TbUser.TB_USER;
+import static com.dlrtn.websocket.chat.util.LocalDateTimeUtils.convertLocalDateTimeToString;
 
 @RequiredArgsConstructor
 @Repository
@@ -18,57 +19,54 @@ public class FriendRepository {
 
     private final DSLContext dslContext;
 
-    public void insertIntoFriendList(User user, String friendId) {
+    public void insertIntoFriendList(String userName, Friend friend) {
         dslContext.insertInto(TB_FRIEND,
                         TB_FRIEND.USER_ID,
-                        TB_FRIEND.FRIEND_ID)
-                .values(user.getUsername(),
-                        friendId)
+                        TB_FRIEND.FRIEND_ID,
+                        TB_FRIEND.FRIEND_NAME,
+                        TB_FRIEND.CREATED_AT)
+                .values(userName,
+                        friend.getFriendId(),
+                        friend.getFriendName(),
+                        convertLocalDateTimeToString(friend.getCreatedAt()))
                 .execute();
     }
 
-    public void deleteUserFromFriendList(User user, String friendId) {
+    public void deleteUserFromFriendList(String userName, String friendId) {
         dslContext.delete(TB_FRIEND)
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId)
-                        .and(TB_FRIEND.USER_ID.eq(user.getUsername())))
+                        .and(TB_FRIEND.USER_ID.eq(userName)))
                 .execute();
     }
 
-    public List<User> selectAllFriends(User user) {
+    public List<FriendState> selectAllFriends(String userName) {
         return dslContext.select(
-                        TB_USER.USER_NO,
-                        TB_USER.USERNAME,
-                        TB_USER.PASSWORD,
-                        TB_USER.AUTH_ROLE,
-                        TB_USER.REAL_NAME,
-                        TB_USER.CREATED_AT,
-                        TB_USER.UPDATED_AT
+                        TB_FRIEND.FRIEND_NAME,
+                        TB_FRIEND.ISFAVORITE,
+                        TB_FRIEND.ISBLOCKED
                 )
                 .from(TB_USER)
                 .join(TB_FRIEND)
                 .on(TB_FRIEND.USER_ID.eq(TB_USER.USERNAME))
-                .where(TB_FRIEND.USER_ID.eq(user.getUsername()))
-                .fetchInto(User.class);
+                .where(TB_FRIEND.USER_ID.eq(userName))
+                .orderBy(TB_FRIEND.ISFAVORITE.desc())
+                .fetchInto(FriendState.class);
     }
 
-    public User selectFriend(User user, String friendId) {
+    public FriendState selectFriend(String userName, String friendId) {
         return dslContext.select(
-                        TB_USER.USER_NO,
-                        TB_USER.USERNAME,
-                        TB_USER.PASSWORD,
-                        TB_USER.REAL_NAME,
-                        TB_USER.AUTH_ROLE,
-                        TB_USER.CREATED_AT,
-                        TB_USER.UPDATED_AT
+                        TB_FRIEND.FRIEND_NAME,
+                        TB_FRIEND.ISFAVORITE,
+                        TB_FRIEND.ISBLOCKED
                 )
                 .from(TB_USER)
                 .join(TB_FRIEND)
                 .on(TB_FRIEND.FRIEND_ID.eq(TB_USER.USERNAME))
-                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_FRIEND.USER_ID.eq(user.getUsername())))
-                .fetchOneInto(User.class);
+                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_FRIEND.USER_ID.eq(userName)))
+                .fetchOneInto(FriendState.class);
     }
 
-    public Friend selectFriendRelation(User user, String friendId) {
+    public Friend selectFriendRelation(String userName, String friendId) {
         return dslContext.select(
                         TB_FRIEND.ID,
                         TB_FRIEND.USER_ID,
@@ -78,23 +76,23 @@ public class FriendRepository {
                         TB_FRIEND.CREATED_AT
                 )
                 .from(TB_FRIEND)
-                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_USER.USERNAME.eq(user.getUsername())))
+                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_USER.USERNAME.eq(userName)))
                 .fetchOneInto(Friend.class);
     }
 
-    public void updateFriendState(User user, String friendId, ChangeFriendStateRequest request) {
+    public void updateFriendState(String userName, String friendId, ChangeFriendStateRequest request) {
         dslContext.update(TB_FRIEND)
                 .set(TB_FRIEND.ISFAVORITE.cast(Boolean.class), request.isFavorite())
                 .set(TB_FRIEND.ISBLOCKED.cast(Boolean.class), request.isBlocked())
                 .where(TB_FRIEND.FRIEND_ID.eq(friendId)
-                        .and(TB_FRIEND.USER_ID.eq(user.getUsername())))
+                        .and(TB_FRIEND.USER_ID.eq(userName)))
                 .execute();
     }
 
-    public boolean existsFriendInBlockedList(User user, String friendId) {
+    public boolean existsFriendInBlockList(String userName, String friendId) {
         return dslContext.select()
                 .from(TB_FRIEND)
-                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_FRIEND.USER_ID.eq(user.getUsername())))
+                .where(TB_FRIEND.FRIEND_ID.eq(friendId).and(TB_FRIEND.USER_ID.eq(userName)))
                 .execute() == 1;
     }
 

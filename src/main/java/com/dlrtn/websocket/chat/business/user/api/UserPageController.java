@@ -9,30 +9,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static com.dlrtn.websocket.chat.common.model.PagePathConstants.*;
 
 @Controller
-@RequestMapping(API + USER)
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserPageController {
 
     @Operation(summary = "회원 가입 페이지")
-    @GetMapping(SIGNUP)
+    @GetMapping("/sign-up")
     public String getSignUpPage() {
         return SIGNUP;
     }
 
     @Operation(summary = "회원 로그인 페이지")
-    @GetMapping(LOGIN)
+    @GetMapping("/sign-in")
     public String getSignInPage() {
         return LOGIN;
     }
 
     @Operation(summary = "회원 정보 수정 페이지")
-    @GetMapping(MODIFYING)
+    @GetMapping("/{userId}/modifying")
     public String getChangeUserInfoPage() {
         return MODIFYING;
     }
 
     @Operation(summary = "회원 탈퇴 페이지")
-    @GetMapping(WITHDRAWAL)
+    @GetMapping("/{userId}/withdrawal")
     public String getWithdrawalUserPage() {
         return WITHDRAWAL;
     }

@@ -1,12 +1,9 @@
 package com.dlrtn.websocket.chat.business.friend.application;
 
-import com.dlrtn.websocket.chat.business.friend.model.domain.Friend;
-import com.dlrtn.websocket.chat.business.friend.model.payload.AddFriendResponse;
-import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateRequest;
-import com.dlrtn.websocket.chat.business.friend.model.payload.ChangeFriendStateResponse;
-import com.dlrtn.websocket.chat.business.friend.model.payload.DeleteFriendResponse;
-import com.dlrtn.websocket.chat.business.user.application.UserService;
+import com.dlrtn.websocket.chat.business.friend.model.FriendState;
 import com.dlrtn.websocket.chat.business.friend.model.FriendServiceTestsConstants;
+import com.dlrtn.websocket.chat.business.friend.model.payload.*;
+import com.dlrtn.websocket.chat.business.user.application.UserService;
 import com.dlrtn.websocket.chat.business.user.model.UserServiceTestsConstants;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.SignInResponse;
@@ -17,6 +14,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -67,9 +65,13 @@ public class FriendServiceTests {
     void add_friend_test() {
         User sessionUser = getSessionUser();
 
-        AddFriendResponse response = friendService.addFriend(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername());
+        AddFriendRequest request = AddFriendRequest.builder()
+                .friendId(FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername())
+                .friendName(FriendServiceTestsConstants.TEST_FRIEND_NAME_USER_DECIDED)
+                .build();
+        AddFriendResponse response = friendService.addFriend(sessionUser, request);
 
-        String foundFriendId = friendService.getFriendShip(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername()).getFriendId();
+        String foundFriendId = FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername();
 
         User foundUser = userRepository.findByUsername(foundFriendId);
 
@@ -84,10 +86,15 @@ public class FriendServiceTests {
     void delete_friend_test() {
         User sessionUser = getSessionUser();
 
-        friendService.addFriend(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername());
+        AddFriendRequest request = AddFriendRequest.builder()
+                .friendId(FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername())
+                .friendName(FriendServiceTestsConstants.TEST_FRIEND_NAME_USER_DECIDED)
+                .build();
+        friendService.addFriend(sessionUser, request);
+
         DeleteFriendResponse response = friendService.deleteFriend(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername());
 
-        String foundFriendId = friendService.getFriendShip(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername()).getFriendId();
+        String foundFriendId = FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername();
 
         User foundUser = userRepository.findByUsername(foundFriendId);
 
@@ -108,13 +115,12 @@ public class FriendServiceTests {
 
         ChangeFriendStateResponse response = friendService.changeFriendState(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername(), request);
 
-        Friend friendRelation = friendService.getFriendShip(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername());
+        FriendState friendstate = friendService.getFriendShip(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername());
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(response.isSuccess()),
-                () -> Assertions.assertEquals(friendRelation.getFriendId(), FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername()),
-                () -> Assertions.assertTrue(friendRelation.isBlocked()),
-                () -> Assertions.assertFalse(friendRelation.isFavorite()));
+                () -> Assertions.assertTrue(friendstate.isBlocked()),
+                () -> Assertions.assertFalse(friendstate.isFavorite()));
     }
 
     @DisplayName("회원 즐겨찾기 추가 기능 테스트")
@@ -129,13 +135,12 @@ public class FriendServiceTests {
 
         ChangeFriendStateResponse response = friendService.changeFriendState(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername(), request);
 
-        Friend friendRelation = friendService.getFriendShip(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername());
+        FriendState friendstate = friendService.getFriendShip(sessionUser, FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername());
 
         Assertions.assertAll(
                 () -> Assertions.assertTrue(response.isSuccess()),
-                () -> Assertions.assertEquals(friendRelation.getFriendId(), FriendServiceTestsConstants.TEST_FRIEND_SIGN_UP_REQUEST.getUsername()),
-                () -> Assertions.assertFalse(friendRelation.isBlocked()),
-                () -> Assertions.assertTrue(friendRelation.isFavorite()));
+                () -> Assertions.assertFalse(friendstate.isBlocked()),
+                () -> Assertions.assertTrue(friendstate.isFavorite()));
     }
 
 }

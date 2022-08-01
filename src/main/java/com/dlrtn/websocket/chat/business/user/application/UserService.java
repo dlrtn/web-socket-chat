@@ -1,7 +1,8 @@
 package com.dlrtn.websocket.chat.business.user.application;
 
 import com.dlrtn.websocket.chat.business.user.exception.AlreadyExistsUseridException;
-import com.dlrtn.websocket.chat.business.user.exception.UserInfoNotMatchedException;
+import com.dlrtn.websocket.chat.business.user.exception.FailedToSignOutException;
+import com.dlrtn.websocket.chat.business.user.exception.FailedToUserAuthenticationException;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.business.user.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.repository.UserRepository;
@@ -27,7 +28,7 @@ public class UserService {
     private final UserSessionRepository sessionRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public boolean hasNotMatchedPassword(User user, String password) {
+    public boolean validatePassword(User user, String password) {
         return Optional.ofNullable(user)
                 .map(User::getPassword)
                 .filter(userPw -> passwordEncoder.matches(password, userPw))
@@ -60,13 +61,13 @@ public class UserService {
     }
 
     public SignInResponse signIn(String sessionId, SignInRequest request) {
-        if (sessionRepository.existsById(sessionId)) {
+        if (Objects.nonNull(sessionId) && sessionRepository.existsById(sessionId)) {
             return SignInResponse.successWith(sessionId);
         }
 
         User foundUser = userRepository.findByUsername(request.getUsername());
-        if (hasNotMatchedPassword(foundUser, request.getPassword())) {
-            throw new UserInfoNotMatchedException();
+        if (validatePassword(foundUser, request.getPassword())) {
+            throw new FailedToUserAuthenticationException();
         }
 
         String newSessionId = UUID.randomUUID().toString();
@@ -80,15 +81,19 @@ public class UserService {
     }
 
     public SignOutResponse signOut(String sessionId) {
-        sessionRepository.deleteById(sessionId);
+        try {
+            sessionRepository.deleteById(sessionId);
+            return SignOutResponse.success();
+        } catch (Exception e) {
+            throw new FailedToSignOutException();
+        }
 
-        return SignOutResponse.success();
     }
 
     @Transactional
-    public ChangeUserProfileResponse changeUserProfile(String sessionId, User sessionUser, ChangeUserProfileRequest request) {
-        if (hasNotMatchedPassword(sessionUser, request.getExistingPassword())) {
-            return ChangeUserProfileResponse.success();
+    public ChangeUserResponse changeUser(String sessionId, User sessionUser, ChangeUserRequest request) {
+        if (validatePassword(sessionUser, request.getExistingPassword())) {
+            return ChangeUserResponse.success();
         }
 
         String newRealName = StringUtils.defaultIfEmpty(request.getNewRealName(), sessionUser.getRealName());
@@ -107,13 +112,13 @@ public class UserService {
                         .sessionUser(changedUser)
                         .build());
 
-        return ChangeUserProfileResponse.success();
+        return ChangeUserResponse.success();
     }
 
     @Transactional
     public WithdrawUserResponse withdrawUser(User sessionUser, WithdrawUserRequest request) {
-        if (hasNotMatchedPassword(sessionUser, request.getPassword())) {
-            throw new UserInfoNotMatchedException();
+        if (validatePassword(sessionUser, request.getPassword())) {
+            throw new FailedToUserAuthenticationException();
         }
         userRepository.delete(sessionUser.getUsername());
 
