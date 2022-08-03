@@ -2,7 +2,7 @@ package com.dlrtn.websocket.chat.business.chat.application;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
-import com.dlrtn.websocket.chat.business.chat.repository.ChatRoomMemberRepository;
+import com.dlrtn.websocket.chat.business.chat.repository.ChatMemberRepository;
 import com.dlrtn.websocket.chat.common.model.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,17 +13,17 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ChatRoomMemberService {
+public class ChatMemberService {
 
-    private final ChatRoomMemberRepository chatRoomMemberRepository;
+    private final ChatMemberRepository chatMemberRepository;
 
     public List<ChatMember> getChatMembers(String chatId) {
-        return chatRoomMemberRepository.selectChatRoomMembers(chatId);
+        return chatMemberRepository.selectChatMembers(chatId);
     }
 
     public CommonResponse changeChatMemberRole(String userId, String chatId, ChatMemberRole role) {
-        if (chatRoomMemberRepository.existsChatRoomMember(userId, chatId)) {
-            chatRoomMemberRepository.updateChatRoomMemberRole(userId, role);
+        if (chatMemberRepository.existsChatMember(userId, chatId)) {
+            chatMemberRepository.updateChatMemberRole(userId, role);
             return CommonResponse.success();
         }
 

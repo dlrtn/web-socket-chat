@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.business.chat.repository;
 
-import com.dlrtn.websocket.chat.business.chat.model.ChatRoomState;
-import com.dlrtn.websocket.chat.business.chat.model.domain.ChatRoom;
+import com.dlrtn.websocket.chat.business.chat.model.ChatState;
+import com.dlrtn.websocket.chat.business.chat.model.domain.Chat;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -13,22 +13,22 @@ import static com.dlrtn.websocket.chat.business.chat.model.domain.generated.stud
 
 @Repository
 @RequiredArgsConstructor
-public class ChatRoomRepository {
+public class ChatRepository {
 
     private final DSLContext dslContext;
 
-    public void insertChatRoom(ChatRoom chatRoom) {
+    public void insertChat(Chat chat) {
         dslContext.insertInto(TB_CHATROOM,
                         TB_CHATROOM.CHATID,
                         TB_CHATROOM.CHATNAME,
                         TB_CHATROOM.CHAT_TYPE)
-                .values(chatRoom.getChatId(),
-                        chatRoom.getChatName(),
-                        chatRoom.getChatType().name())
+                .values(chat.getChatId(),
+                        chat.getChatName(),
+                        chat.getChatType().name())
                 .execute();
     }
 
-    public List<ChatRoomState> selectByUserId(String userId) {
+    public List<ChatState> selectByUserId(String userId) {
         return dslContext.select(
                         TB_CHATROOM.CHATNAME
                 )
@@ -36,24 +36,24 @@ public class ChatRoomRepository {
                 .join(TB_CHATROOM_MEMBER)
                 .on(TB_CHATROOM.CHATID.eq(TB_CHATROOM_MEMBER.CHATID))
                 .where(TB_CHATROOM_MEMBER.USERID.eq(userId))
-                .fetchInto(ChatRoomState.class);
+                .fetchInto(ChatState.class);
     }
 
-    public ChatRoom selectByChatId(String userId, String chatId) {
+    public Chat selectByChatId(String userId, String chatId) {
         return dslContext.select()
                 .from(TB_CHATROOM)
                 .where(TB_CHATROOM.CHATID.eq(chatId).and(TB_CHATROOM_MEMBER.USERID.eq(userId)))
-                .fetchOneInto(ChatRoom.class);
+                .fetchOneInto(Chat.class);
     }
 
-    public void updateChatRoom(String chatId, String name) {
+    public void updateChat(String chatId, String name) {
         dslContext.update(TB_CHATROOM)
                 .set(TB_CHATROOM.CHATNAME, name)
                 .where(TB_CHATROOM.CHATID.eq(chatId))
                 .execute();
     }
 
-    public void deleteChatRoom(String userId, String chatId) {
+    public void deleteChat(String userId, String chatId) {
         dslContext.delete(TB_CHATROOM_MEMBER)
                 .where(TB_CHATROOM_MEMBER.CHATID.eq(chatId)
                         .and(TB_CHATROOM_MEMBER.USERID.eq(userId)))

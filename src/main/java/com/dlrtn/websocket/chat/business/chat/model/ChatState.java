@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class ChatRoomState {
+public class ChatState {
 
     private final String chatName;
 

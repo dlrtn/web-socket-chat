@@ -12,18 +12,18 @@ import static com.dlrtn.websocket.chat.business.chat.model.domain.generated.stud
 
 @Repository
 @RequiredArgsConstructor
-public class ChatRoomMemberRepository {
+public class ChatMemberRepository {
 
     private final DSLContext dslContext;
 
-    public List<ChatMember> selectChatRoomMembers(String chatId) {
+    public List<ChatMember> selectChatMembers(String chatId) {
         return dslContext.select()
                 .from(TB_CHATROOM_MEMBER)
                 .where(TB_CHATROOM_MEMBER.CHATID.eq(chatId))
                 .fetchInto(ChatMember.class);
     }
 
-    public void updateChatRoomMemberRole(String userId, ChatMemberRole role) {
+    public void updateChatMemberRole(String userId, ChatMemberRole role) {
         dslContext.update(TB_CHATROOM_MEMBER)
                 .set(TB_CHATROOM_MEMBER.ROLE, role.name())
                 .where(TB_CHATROOM_MEMBER.USERID.eq(userId))
@@ -37,7 +37,7 @@ public class ChatRoomMemberRepository {
                 .fetchOneInto(ChatMember.class);
     }
 
-    public boolean existsChatRoomMember(String userId, String chatId) {
+    public boolean existsChatMember(String userId, String chatId) {
         return dslContext.select()
                 .from(TB_CHATROOM_MEMBER)
                 .where(TB_CHATROOM_MEMBER.CHATID.eq(chatId).and(TB_CHATROOM_MEMBER.USERID.eq(userId)))
