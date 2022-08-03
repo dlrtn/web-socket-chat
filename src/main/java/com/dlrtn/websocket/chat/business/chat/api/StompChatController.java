@@ -20,6 +20,13 @@ public class StompChatController {
         template.convertAndSend("/sub", message);
     }
 
+    @MessageMapping(value = "/users/{userId}/private/{chatId}/message")
+    public void privateMessage(ChatMessage message,
+                            @DestinationVariable String userId,
+                            @DestinationVariable String chatId) {
+        template.convertAndSend("/sub", message);
+    }
+
     @MessageMapping(value = "/users/{userId}/chats/{chatId}/join")
     public void groupJoin(ChatMessage message,
                           @DestinationVariable String userId,
