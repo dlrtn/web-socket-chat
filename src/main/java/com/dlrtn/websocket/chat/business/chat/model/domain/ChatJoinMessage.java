@@ -1,4 +1,4 @@
-package com.dlrtn.websocket.chat.business.chat.model;
+package com.dlrtn.websocket.chat.business.chat.model.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
