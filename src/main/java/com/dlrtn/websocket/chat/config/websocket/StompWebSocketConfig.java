@@ -11,15 +11,15 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp/chat")
-                .setAllowedOrigins("*");
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/sub"); //구독 경로 "/sub/chats/chatId
+        registry.setApplicationDestinationPrefixes("/pub");  //발행 경로 "/pub/hello => MessageMapping Annotation
     }
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/sub");
-        registry.setApplicationDestinationPrefixes("/pub");
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("*");
     }
 
 }
