@@ -1,5 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.api;
 
+import com.dlrtn.websocket.chat.business.chat.application.WebSocketService;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMessage;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.common.aop.SessionUser;
@@ -15,28 +16,39 @@ public class StompChatController {
 
     private final SimpMessagingTemplate template;
 
+    private final WebSocketService webSocketService;
+
     @MessageMapping(value = "/users/{userId}/self/{chatId}/message")
     public void selfMessage(ChatMessage message,
+                            @SessionUser User sessionUser,
                             @DestinationVariable String chatId) {
-        template.convertAndSend("/sub/chats/" + chatId, message);
+        webSocketService.sendSelfMessage(sessionUser, message);
+    }
+
+    @MessageMapping(value = "/users/{userId}/private/{chatId}/message")
+    public void privateMessage(@SessionUser User sessionUser,
+                               @DestinationVariable String chatId) {
+        webSocketService.sendPrivateJoinMessage(sessionUser, chatId);
     }
 
     @MessageMapping(value = "/users/{userId}/private/{chatId}/message")
     public void privateMessage(ChatMessage message,
+                               @SessionUser User sessionUser,
                                @DestinationVariable String chatId) {
-        template.convertAndSend("/sub/chats/" + chatId, message);
+        webSocketService.sendPrivateMessage(sessionUser, message);
     }
 
     @MessageMapping(value = "/users/{userId}/chats/{chatId}/join")
     public void groupJoin(@SessionUser User sessionUser,
                           @DestinationVariable String chatId) {
-        template.convertAndSend("/sub/chats/" + chatId, sessionUser.getRealName() + "님이 채팅방에 참여하였습니다.");
+        webSocketService.sendGroupJoinMessage(sessionUser, chatId);
     }
 
     @MessageMapping(value = "/users/{userId}/chats/{chatId}/message")
     public void groupMessage(ChatMessage message,
+                             @SessionUser User sessionUser,
                              @DestinationVariable String chatId) {
-        template.convertAndSend("/sub/chats/" + chatId, message);
+        webSocketService.sendGroupMessage(sessionUser, message);
     }
 
 }
