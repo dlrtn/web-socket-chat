@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.repository;
 
-import com.dlrtn.websocket.chat.business.chat.model.ChatState;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatState;
 import com.dlrtn.websocket.chat.business.chat.model.domain.Chat;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;

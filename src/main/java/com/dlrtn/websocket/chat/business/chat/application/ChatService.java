@@ -1,6 +1,6 @@
 package com.dlrtn.websocket.chat.business.chat.application;
 
-import com.dlrtn.websocket.chat.business.chat.model.ChatState;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatState;
 import com.dlrtn.websocket.chat.business.chat.model.domain.Chat;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMember;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMemberRole;
