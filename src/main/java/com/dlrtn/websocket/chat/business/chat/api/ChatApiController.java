@@ -1,7 +1,7 @@
 package com.dlrtn.websocket.chat.business.chat.api;
 
 import com.dlrtn.websocket.chat.business.chat.application.ChatService;
-import com.dlrtn.websocket.chat.business.chat.model.ChatState;
+import com.dlrtn.websocket.chat.business.chat.model.domain.ChatState;
 import com.dlrtn.websocket.chat.business.chat.model.payload.*;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import com.dlrtn.websocket.chat.common.aop.SessionUser;
