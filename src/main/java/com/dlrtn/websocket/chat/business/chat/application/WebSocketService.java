@@ -3,10 +3,16 @@ package com.dlrtn.websocket.chat.business.chat.application;
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMessage;
 import com.dlrtn.websocket.chat.business.chat.model.domain.MessageType;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class WebSocketService {
 
     @Autowired
