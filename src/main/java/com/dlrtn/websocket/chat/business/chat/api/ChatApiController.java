@@ -20,24 +20,24 @@ public class ChatApiController {
     private final ChatService chatService;
 
     @GetMapping("/{userId}/chats")
-    public List<ChatState> getChatRooms(@SessionUser User sessionUser) {
+    public List<ChatState> getChats(@SessionUser User sessionUser) {
         return chatService.getChats(sessionUser);
     }
 
     @PostMapping("/{userId}/chats")
-    public CreateChatResponse createChatRoom(@SessionUser User sessionUser,
+    public CreateChatResponse createChat(@SessionUser User sessionUser,
                                              @Valid @RequestBody CreateChatRequest createChatRequest) {
         return chatService.createChat(sessionUser, createChatRequest);
     }
 
     @DeleteMapping("/{userId}/chats/{chatId}")
-    public ExitChatResponse exitChatRoom(@SessionUser User sessionUser,
+    public ExitChatResponse exitChat(@SessionUser User sessionUser,
                                          @PathVariable String chatId) {
         return chatService.exitChat(sessionUser, chatId);
     }
 
     @PutMapping("/{userId}/chats/{chatId}")
-    public ChangeChatResponse changeChatRoom(@SessionUser User sessionUser,
+    public ChangeChatResponse changeChat(@SessionUser User sessionUser,
                                              @PathVariable String chatId,
                                              @Valid @RequestBody ChangeChatRequest changeChatRequest) {
         return chatService.changeChat(sessionUser, chatId, changeChatRequest);
