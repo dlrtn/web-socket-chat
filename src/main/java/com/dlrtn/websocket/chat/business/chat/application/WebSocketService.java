@@ -2,6 +2,7 @@ package com.dlrtn.websocket.chat.business.chat.application;
 
 import com.dlrtn.websocket.chat.business.chat.model.domain.ChatMessage;
 import com.dlrtn.websocket.chat.business.chat.model.domain.MessageType;
+import com.dlrtn.websocket.chat.business.chat.repository.ChatMessageRepository;
 import com.dlrtn.websocket.chat.business.user.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,22 +16,26 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WebSocketService {
 
-    @Autowired
-    private SimpMessagingTemplate template;
+    private final SimpMessagingTemplate template;
+
+    private final ChatMessageRepository chatMessageRepository;
 
     @Async
     public void sendSelfMessage(User user, ChatMessage message) {
         sendMessageToChatSubscribers(message);
+        chatMessageRepository.insertChatMessage(message);
     }
 
     @Async
     public void sendPrivateMessage(User user, ChatMessage message) {
         sendMessageToChatSubscribers(message);
+        chatMessageRepository.insertChatMessage(message);
     }
 
     @Async
     public void sendGroupMessage(User user, ChatMessage message) {
         sendMessageToChatSubscribers(message);
+        chatMessageRepository.insertChatMessage(message);
     }
 
     @Async
