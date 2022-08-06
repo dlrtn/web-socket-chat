@@ -9,9 +9,11 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/ws")
 public class StompChatController {
 
     private final SimpMessagingTemplate template;
@@ -25,7 +27,7 @@ public class StompChatController {
         webSocketService.sendSelfMessage(sessionUser, message);
     }
 
-    @MessageMapping(value = "/users/{userId}/private/{chatId}/message")
+    @MessageMapping(value = "/users/{userId}/private/{chatId}/join")
     public void privateMessage(@SessionUser User sessionUser,
                                @DestinationVariable String chatId) {
         webSocketService.sendPrivateJoinMessage(sessionUser, chatId);
