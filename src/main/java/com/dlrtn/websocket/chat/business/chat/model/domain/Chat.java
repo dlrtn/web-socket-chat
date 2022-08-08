@@ -7,14 +7,14 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class ChatMessage {
+public class Chat {
 
-    private MessageType type;
+    private final String chatId;
 
-    private String chatId;
+    private final String chatName;
 
-    private String sender;
+    private final String chatHostUser;
 
-    private String message;
+    private final ChatType chatType;
 
 }

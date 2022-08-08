@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Getter
-public class CreateChatRoomRequest {
+public class CreateChatRequest {
 
     @NotBlank
     private final String chatRoomName;
@@ -22,6 +22,6 @@ public class CreateChatRoomRequest {
     @NotBlank
     private final String chatRoomPassword;
 
-    private final List<String> chatMembers;
+    private final List<String> chatMemberIds;
 
 }

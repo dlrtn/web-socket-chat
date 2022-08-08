@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class ChangeChatRoomResponse {
+public class ExitChatResponse {
 
     private final boolean success;
 
@@ -15,11 +15,11 @@ public class ChangeChatRoomResponse {
 
     private final String description;
 
-    public static ChangeChatRoomResponse success() {
+    public static ExitChatResponse success() {
         return successWith(ResponseMessage.SUCCESS);
     }
 
-    public static ChangeChatRoomResponse successWith(ResponseMessage message) {
+    public static ExitChatResponse successWith(ResponseMessage message) {
         return of(true, message, message.getDescription());
     }
 
