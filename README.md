@@ -1,2 +1,2 @@
 # web-socket-chat
-DaddyProgrammer's websocket example 
+chating server using websocekt lib
