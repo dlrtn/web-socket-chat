@@ -2,27 +2,26 @@
 
 ---
 
-## ÇÁ·ÎÁ§Æ® Á¤º¸
+## í”„ë¡œì íŠ¸ ì •ë³´
 
+
+> ê°œë°œê¸°ê°„: 2022.03 ~ 2022.08  
+> ê¸°ìˆ ìŠ¤íƒ: Java, SpringBoot
 ---
+## í”„ë¡œì íŠ¸ ì†Œê°œ
 
-> °³¹ß±â°£: 2022.03 ~ 2022.08  
-> ±â¼ú½ºÅÃ: Java, SpringBoot
----
-## ÇÁ·ÎÁ§Æ® ¼Ò°³
 
----
-WebSocket ¶óÀÌºê·¯¸®¸¦ »ç¿ëÇÑ Ã¤ÆÃ ¼­ºñ½º   
-### ÇÁ·ÎÁ§Æ® ¸ñÀû
-- Redis, Mysql µî ´Ù¾çÇÑ ½ºÅÃ °æÇè ¹× SpringBoot Àü¹ÝÀû ÀÌÇØ¸¦ À§ÇÔ
-- WebSocket Protocol ±â¹ÝÀÇ Ã¤ÆÃ¼­¹ö ±¸ÃàÀ» ÅëÇÑ Http Åë½Å ÀÌÇØ
-- Layer Architecture ÇüÅÂÀÇ ÇÁ·ÎÁ§Æ® ±¸Á¶ °æÇè
-- AOP, DI °³³ä ÇÐ½À
+WebSocket ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ ì‚¬ìš©í•œ ì±„íŒ… ì„œë¹„ìŠ¤   
+### í”„ë¡œì íŠ¸ ëª©ì 
+- Redis, Mysql ë“± ë‹¤ì–‘í•œ ìŠ¤íƒ ê²½í—˜ ë° SpringBoot ì „ë°˜ì  ì´í•´ë¥¼ ìœ„í•¨
+- WebSocket Protocol ê¸°ë°˜ì˜ ì±„íŒ…ì„œë²„ êµ¬ì¶•ì„ í†µí•œ Http í†µì‹  ì´í•´
+- Layer Architecture í˜•íƒœì˜ í”„ë¡œì íŠ¸ êµ¬ì¡° ê²½í—˜
+- AOP, DI ê°œë… í•™ìŠµ
 
-### ±¸ÇöÇÏ°íÀÚ Çß´ø ±â´É
-- Session ±â¹ÝÀÇ ·Î±×ÀÎ ±¸Çö
-- WebSocket ±â¹ÝÀÇ Ã¤ÆÃ ±â´É ±¸Çö
-- Ä£±¸ Ãß°¡ ¹× °ü¸® ±â´É
+### êµ¬í˜„í•˜ê³ ìž í–ˆë˜ ê¸°ëŠ¥
+- Session ê¸°ë°˜ì˜ ë¡œê·¸ì¸ êµ¬í˜„
+- WebSocket ê¸°ë°˜ì˜ ì±„íŒ… ê¸°ëŠ¥ êµ¬í˜„
+- ì¹œêµ¬ ì¶”ê°€ ë° ê´€ë¦¬ ê¸°ëŠ¥
 
 ---
 
